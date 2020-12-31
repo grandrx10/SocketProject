@@ -210,20 +210,20 @@ function Player(username){
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true){
 			this.jump = false;
-			this.ySpeed = 15;
+			this.ySpeed = 7;
 			this.dir = "up";
 		} else if(dir == "up" && this.secondJump == true){
 			this.secondJump = false;
-			this.ySpeed = 15;
+			this.ySpeed = 7;
 			this.dir = "up";
 		}
 		if (dir == "down") {
 			this.dir = "down";
 		} else if (dir == "left") {
-			this.xSpeed = 8;
+			this.xSpeed = 4;
 			this.dir = "left";
 		} else if (dir == "right") {
-			this.xSpeed = -8;
+			this.xSpeed = -4;
 			this.dir = "right";
 		} else {
 			this.xSpeed = 0;
