@@ -31,13 +31,13 @@ platforms.push(new Platform(1100, 310, 100, 20, 0));
 function newConnection(socket) {
 	console.log('new connection: ' + socket.id);
 	if (Object.keys(players).length >= 1){
-		io.sockets.emit('framerate', 40);
+		io.sockets.emit('framerate', 60);
 	}
 	socket.on('disconnect', () => {	
 		console.log('lost connection: ' + socket.id);
 		delete(players[socket.id]);
 		if (Object.keys(players).length == 1){
-			io.sockets.emit('framerate', 60);
+			io.sockets.emit('framerate', 100);
 		}
   	});
 	
@@ -172,7 +172,7 @@ function Bullet(x, y, dir, shooter) {
 	this.shooter = shooter;
 	this.x = x;
 	this.y = y;
-	this.speed = 15;
+	this.speed = 7;
 	this.dir = dir;
 	this.move = function(){
 		if(this.dir == "up"){

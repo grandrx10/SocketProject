@@ -5,7 +5,7 @@ var bullets = [];
 var deadPlayers = [];
 var gameStart = false;
 var userNameSubmitted = false;
-var framesPerSecond = 60;
+var framesPerSecond = 100;
 
 function setup(){
     createCanvas(1200,600);
