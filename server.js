@@ -30,7 +30,9 @@ platforms.push(new Platform(1100, 310, 100, 20, 0));
 
 function newConnection(socket) {
 	console.log('new connection: ' + socket.id);
-	io.sockets.emit('framerate', 40);
+	if (Object.keys(players).length >= 1){
+		io.sockets.emit('framerate', 40);
+	}
 	socket.on('disconnect', () => {	
 		console.log('lost connection: ' + socket.id);
 		delete(players[socket.id]);
