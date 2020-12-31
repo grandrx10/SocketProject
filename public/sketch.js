@@ -9,7 +9,7 @@ var userNameSubmitted = false;
 function setup(){
     createCanvas(1200,600);
     background(51);
-    frameRate(60);
+    frameRate(10);
 
     socket = io.connect();
     socket.on('players', test);

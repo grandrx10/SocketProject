@@ -51,7 +51,7 @@ function newConnection(socket) {
 	function bulletTravel(){ 
 		//console.log(players);
 		//console.log(socket.id);
-		if (players[player].canShoot){
+		if (players[socket.id].canShoot){
 			b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, players[socket.id].dir, socket.id);
 			bullets.push(b);
 			//players[player].canShoot = false;
