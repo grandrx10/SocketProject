@@ -210,11 +210,11 @@ function Player(username){
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true){
 			this.jump = false;
-			this.ySpeed = 7;
+			this.ySpeed = 15;
 			this.dir = "up";
 		} else if(dir == "up" && this.secondJump == true){
 			this.secondJump = false;
-			this.ySpeed = 7;
+			this.ySpeed = 15;
 			this.dir = "up";
 		}
 		if (dir == "down") {
