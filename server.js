@@ -102,8 +102,8 @@ function newConnection(socket) {
 			deadPlayers[player].y -= deadPlayers[player].ySpeed;
 			deadPlayers[player].x -= deadPlayers[player].xSpeed;
 
-			if (deadPlayers[player].x > 980){
-				deadPlayers[player].x = 960;
+			if (deadPlayers[player].x > 1160){
+				deadPlayers[player].x = 1160;
 			} else if (deadPlayers[player].x < 0){
 				deadPlayers[player].x = 0;
 			}
@@ -210,11 +210,11 @@ function Player(username){
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true){
 			this.jump = false;
-			this.ySpeed = 15;
+			this.ySpeed = 9;
 			this.dir = "up";
 		} else if(dir == "up" && this.secondJump == true){
 			this.secondJump = false;
-			this.ySpeed = 15;
+			this.ySpeed = 9;
 			this.dir = "up";
 		}
 		if (dir == "down") {
