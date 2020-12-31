@@ -79,7 +79,7 @@ function newConnection(socket) {
 		// update player position
 		//console.log(deadPlayers);
 		for (player in players){
-			players[player].ySpeed -= 1;
+			players[player].ySpeed -= 0.5;
 			players[player].y -= players[player].ySpeed;
 			players[player].x -= players[player].xSpeed;
 
