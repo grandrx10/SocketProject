@@ -51,11 +51,11 @@ function newConnection(socket) {
 	function bulletTravel(){ 
 		//console.log(players);
 		//console.log(socket.id);
-		if (players[socket.id].canShoot){
-			b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, players[socket.id].dir, socket.id);
-			bullets.push(b);
+		//if (players[socket.id].canShoot){
+		b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, players[socket.id].dir, socket.id);
+		bullets.push(b);
 			//players[player].canShoot = false;
-		}
+		//}
 	}
 	
 	function processUsername(username){
