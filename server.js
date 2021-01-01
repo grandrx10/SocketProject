@@ -96,10 +96,7 @@ function newConnection(socket) {
 			}
 			// ability cooldown
 			if (players[player].canShoot == false){
-				setInterval(function(){ players[player].canShoot = true;}, 3000);
-			} else {
-				console.log("I'm running")
-				clearInterval(function(){ players[player].canShoot = true;});
+				setInterval(bulletCooldown(), 3000);
 			}
 
 		}
@@ -244,4 +241,9 @@ function Platform(x, y, width, height, speed) {
 	this.width = width;
 	this.height = height;
 	this.speed = speed;
+}
+
+function bulletCooldown(){
+	players[player].canShoot = true;
+	clearInterval(bulletCooldown());
 }
