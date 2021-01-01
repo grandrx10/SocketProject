@@ -2,7 +2,7 @@
 //importing the express module
 var express = require('express');
 var app = express();
-var server = app.listen(process.env.PORT || 5000);
+var server = app.listen(process.env.PORT || 3000);
 app.use(express.static('public'));
 
 console.log("server is running");
@@ -17,7 +17,6 @@ var bullets = [];
 var platforms = [];
 var deadPlayers = [];
 //let startTime = second();
-var shootingTime = setInterval(bulletCooldown(), 3000);
 
 platforms.push(new Platform(0, 500, 300, 20, 0));
 platforms.push(new Platform(900, 500, 300, 20, 0));
@@ -61,7 +60,8 @@ function newConnection(socket) {
 		if (Object.keys(players).indexOf(socket.id) != -1 && players[socket.id].canShoot){
 			b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, players[socket.id].dir, socket.id);
 			bullets.push(b);
-			players[player].canShoot = false;
+			//players[player].canShoot = false;
+			//players[player].timing = true;
 		}
 	}
 	
@@ -96,9 +96,14 @@ function newConnection(socket) {
 				players[player].secondJump = true;
 			}
 			// ability cooldown
-			if (players[player].canShoot == false){
-				var shootingTime = setInterval(bulletCooldown(), 3000);
-			}
+			// if (players[player].canShoot == false && players[player].timing == true){
+			// 	players[player].shootingTime = setInterval(bulletCooldown, 3000);
+			// 	players[player].timing = false;
+			// 	console.log("This function runs first")
+			// } else if (players[player].timing == false && players[player].canShoot == true){
+			// 	clearInterval(players[player].shootingTime);
+			// 	console.log("I run")
+			// }
 
 		}
 		// dead player physics
@@ -211,6 +216,8 @@ function Player(username){
 	this.secondJump = true;
 	this.username = username;
 	this.canShoot = true;
+	this.timing = false;
+	this.shootingTime;
 
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true){
@@ -246,5 +253,4 @@ function Platform(x, y, width, height, speed) {
 
 function bulletCooldown(){
 	players[player].canShoot = true;
-	clearInterval(shootingTime);
 }
