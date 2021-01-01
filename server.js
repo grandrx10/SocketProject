@@ -57,11 +57,10 @@ function newConnection(socket) {
 	function bulletTravel(){ 
 		//console.log(players);
 		//console.log(socket.id);
-		if (Object.keys(players).indexOf(socket.id) != -1){
-		//if (players[socket.id].canShoot){
+		if (Object.keys(players).indexOf(socket.id) != -1 && players[socket.id].canShoot){
 			b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, players[socket.id].dir, socket.id);
 			bullets.push(b);
-			//players[player].canShoot = false;
+			players[player].canShoot = false;
 		}
 	}
 	
@@ -95,6 +94,11 @@ function newConnection(socket) {
 				players[player].jump = true;
 				players[player].secondJump = true;
 			}
+			// ability cooldown
+			if (players[player].canShoot == false){
+				setInterval(function(){ players[player].canShoot }, 3000);
+			}
+
 		}
 		// dead player physics
 		for (player in deadPlayers){
