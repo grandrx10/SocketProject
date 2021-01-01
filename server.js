@@ -96,7 +96,7 @@ function newConnection(socket) {
 			}
 			// ability cooldown
 			if (players[player].canShoot == false){
-				setInterval(function(){ players[player].canShoot }, 3000);
+				setInterval(function(){ players[player].canShoot = true;}, 3000);
 			}
 
 		}
