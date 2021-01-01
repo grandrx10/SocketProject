@@ -98,7 +98,7 @@ function newConnection(socket) {
 			if (players[player].canShoot == false){
 				setInterval(function(){ players[player].canShoot = true;}, 3000);
 			} else {
-				clearInterval();
+				clearInterval(function(){ players[player].canShoot = true;});
 			}
 
 		}
