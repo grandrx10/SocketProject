@@ -96,7 +96,7 @@ function newConnection(socket) {
 			}
 			// ability cooldown
 			if (players[player].canShoot == false){
-				setInterval(bulletCooldown(), 3000);
+				var shootingTime = setInterval(bulletCooldown(), 3000);
 			}
 
 		}
@@ -245,5 +245,5 @@ function Platform(x, y, width, height, speed) {
 
 function bulletCooldown(){
 	players[player].canShoot = true;
-	clearInterval(bulletCooldown());
+	clearInterval(shootingTime);
 }
