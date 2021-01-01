@@ -17,6 +17,7 @@ var bullets = [];
 var platforms = [];
 var deadPlayers = [];
 //let startTime = second();
+var shootingTime = setInterval(bulletCooldown(), 3000);
 
 platforms.push(new Platform(0, 500, 300, 20, 0));
 platforms.push(new Platform(900, 500, 300, 20, 0));
