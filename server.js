@@ -51,7 +51,7 @@ function newConnection(socket) {
 	function bulletTravel(abilityKey){ 
 		if (Object.keys(players).indexOf(socket.id) != -1){
 			if (players[socket.id].class == "mage" && players[socket.id].canShoot && abilityKey == 74){
-				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE");
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE", "blast");
 				bullets.push(b);
 				players[player].canShoot = false;
 				let bulletTimer = setInterval(function(){
@@ -60,7 +60,7 @@ function newConnection(socket) {
 				}, 700)
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility1 && abilityKey == 75){
-				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW");
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW", "stun");
 				bullets.push(b);
 				players[player].canAbility1 = false;
 				let ability1Timer = setInterval(function(){
@@ -108,8 +108,9 @@ function newConnection(socket) {
 		for (player in players){
 			players[player].ySpeed -= 0.5;
 			players[player].y -= players[player].ySpeed;
-			players[player].x -= players[player].xSpeed;
-
+			if (players[player].stun == false){
+				players[player].x -= players[player].xSpeed;
+			}
 			if (players[player].x > 1180){
 				players[player].x = 1180;
 			} else if (players[player].x < 0){
@@ -177,7 +178,16 @@ function newConnection(socket) {
 			// check hit
 			for (player in players){
 				if (bullets[i].x > players[player].x && bullets[i].x < players[player].x + 20 && bullets[i].y > players[player].y && bullets[i].y < players[player].y + 40 && player != bullets[i].shooter){
-					players[player].hp -= 20;
+					if (bullets[i].type == "blast"){ 
+						players[player].hp -= 20;
+					} else if (bullets[i].type == "stun"){ 
+						players[player].hp -= 10;
+						players[player].stun = true;
+						let stunTimer = setInterval(function(){
+							players[player].stun = false;
+							clearInterval(stunTimer);
+						}, 700)
+					}
 					bulletsToRemove.push(i);
 					if (players[player].hp < 0){
 						players[player].hp = 0;
@@ -198,7 +208,7 @@ function newConnection(socket) {
 		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers]);
 	}
 }
-function Bullet(x, y, width, height, dir, shooter, speed, colour) {
+function Bullet(x, y, width, height, dir, shooter, speed, colour, type) {
 	this.shooter = shooter;
 	this.x = x;
 	this.y = y;
@@ -207,6 +217,7 @@ function Bullet(x, y, width, height, dir, shooter, speed, colour) {
 	this.speed = speed;
 	this.dir = dir;
 	this.colour = colour;
+	this.type = type;
 	this.move = function(){
 		if(this.dir == "up"){
 			this.y -= this.speed;
@@ -242,13 +253,14 @@ function Player(username){
 	this.canAbility1 = true;
 	this.canAbility2 = true;
 	this.class = "mage";
+	this.stun = false;
 
 	this.move = function(dir){
-		if(dir == "up" && this.jump == true){
+		if(dir == "up" && this.jump == true && this.stun == false){
 			this.jump = false;
 			this.ySpeed = 10;
 			this.dir = "up";
-		} else if(dir == "up" && this.secondJump == true){
+		} else if(dir == "up" && this.secondJump == true && this.stun == false){
 			this.secondJump = false;
 			this.ySpeed = 10;
 			this.dir = "up";
