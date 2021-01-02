@@ -142,5 +142,6 @@ function update(returnList){
 }
 
 function respawn(){
+    console.log("This happened here.????")
     $('#myModal').appendTo('body').modal('show');
 }

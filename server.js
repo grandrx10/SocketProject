@@ -165,8 +165,9 @@ function newConnection(socket) {
 				}
 				if (players[player].hp == 0) {
 					deadPlayers.push(players[player]);
-					delete players[player];
+					console.log("THIS happened.")
 					io.to(player).emit("dead", 1);
+					delete players[player];
 				}
 			}
 		}
