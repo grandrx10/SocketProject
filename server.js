@@ -51,29 +51,38 @@ function newConnection(socket) {
 	function bulletTravel(abilityKey){ 
 		if (Object.keys(players).indexOf(socket.id) != -1){
 			if (players[socket.id].class == "mage" && players[socket.id].canShoot && abilityKey == 74){
-				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 15, players[socket.id].dir, socket.id);
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE");
 				bullets.push(b);
 				players[player].canShoot = false;
 				let bulletTimer = setInterval(function(){
 					players[player].canShoot = true;
 					clearInterval(bulletTimer);
-				}, 1000)
+				}, 700)
+			}
+			else if (players[socket.id].class == "mage" && players[socket.id].canShoot && abilityKey == 75){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW");
+				bullets.push(b);
+				players[player].canShoot = false;
+				let ability1Timer = setInterval(function(){
+					players[player].canAbility1 = true;
+					clearInterval(ability1Timer);
+				}, 1500)
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility2 && abilityKey == 76){
 				if(players[socket.id].dir == "left"){
-					players[socket.id].x -= 60;
+					players[socket.id].x -= 100;
 				} else if (players[socket.id].dir == "right"){
-					players[socket.id].x += 60;
+					players[socket.id].x += 100;
 				} else if (players[socket.id].dir == "up"){
-					players[socket.id].y -= 60;
+					players[socket.id].y -= 100;
 				} else if (players[socket.id].dir == "down"){
-					players[socket.id].y += 60;
+					players[socket.id].y += 100;
 				}
 				players[socket.id].canAbility2 = false;
 				let ability2Timer = setInterval(function(){
 					players[socket.id].canAbility2 = true;
 					clearInterval(ability2Timer);
-				}, 3000)
+				}, 2500)
 			}
 		}
 	}
@@ -189,14 +198,15 @@ function newConnection(socket) {
 		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers]);
 	}
 }
-function Bullet(x, y, width, height, dir, shooter) {
+function Bullet(x, y, width, height, dir, shooter, speed, colour) {
 	this.shooter = shooter;
 	this.x = x;
 	this.y = y;
 	this.width = width;
 	this.height = height;
-	this.speed = 10;
+	this.speed = speed;
 	this.dir = dir;
+	this.colour = colour;
 	this.move = function(){
 		if(this.dir == "up"){
 			this.y -= this.speed;
@@ -229,6 +239,7 @@ function Player(username){
 	this.secondJump = true;
 	this.username = username;
 	this.canShoot = true;
+	this.canAbility1 = true;
 	this.canAbility2 = true;
 	this.class = "mage";
 
