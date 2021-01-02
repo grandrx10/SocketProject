@@ -5,17 +5,15 @@ var bullets = [];
 var deadPlayers = [];
 var gameStart = false;
 var userNameSubmitted = false;
-var framesPerSecond = 100;
 
 function setup(){
     createCanvas(1200,600);
     background(51);
-    frameRate(framesPerSecond);
+    frameRate(60);
 
     socket = io.connect();
     socket.on('players', test);
     socket.on("dead", respawn);
-    socket.on('framerate', updateFrameRate);
 
     $(document).ready(function() {
         //username modal start     
@@ -54,10 +52,8 @@ function setup(){
 }
 
 function draw() {
-    frameRate(framesPerSecond);
     background(220);
     if (gameStart){
-        socket.emit('update', 1)
         socket.on('returnUpdate', update);
     }
     for (var i = 0; i < platforms.length; i++) {
@@ -147,8 +143,4 @@ function update(returnList){
 
 function respawn(){
     $('#myModal').appendTo('body').modal('show');
-}
-
-function updateFrameRate(fr){
-    framesPerSecond = fr;
 }
