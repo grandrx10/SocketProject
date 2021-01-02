@@ -54,8 +54,11 @@ function newConnection(socket) {
 		if (Object.keys(players).indexOf(socket.id) != -1 && players[socket.id].canShoot){
 			b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, players[socket.id].dir, socket.id);
 			bullets.push(b);
-			//players[player].canShoot = false;
-			//players[player].timing = true;
+			players[player].canShoot = false;
+			let bulletTimer = setInterval(function(){
+				players[player].canShoot = true;
+				clearInterval(bulletTimer);
+			}, 3000)
 		}
 	}
 	
@@ -94,15 +97,7 @@ function newConnection(socket) {
 				players[player].jump = true;
 				players[player].secondJump = true;
 			}
-			// ability cooldown
-			// if (players[player].canShoot == false && players[player].timing == true){
-			// 	players[player].shootingTime = setInterval(bulletCooldown, 3000);
-			// 	players[player].timing = false;
-			// 	console.log("This function runs first")
-			// } else if (players[player].timing == false && players[player].canShoot == true){
-			// 	clearInterval(players[player].shootingTime);
-			// 	console.log("I run")
-			// }
+			
 
 		}
 		// dead player physics
@@ -216,8 +211,6 @@ function Player(username){
 	this.secondJump = true;
 	this.username = username;
 	this.canShoot = true;
-	this.timing = false;
-	this.shootingTime;
 
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true){
