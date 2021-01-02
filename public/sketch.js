@@ -11,7 +11,7 @@ function setup(){
     background(51);
     frameRate(60);
 
-    socket = io.connect();
+    socket = io();
     socket.on('players', test);
     socket.on("dead", respawn);
 

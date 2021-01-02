@@ -170,7 +170,7 @@ function newConnection(socket) {
 				}
 			}
 		}
-		for (i in bulletsToRemove){
+		for (var i = bulletsToRemove.length - 1; i > 0; i--){
 			bullets.splice(i, 1);
 		}
 
