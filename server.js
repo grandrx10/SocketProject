@@ -58,7 +58,7 @@ function newConnection(socket) {
 			let bulletTimer = setInterval(function(){
 				players[player].canShoot = true;
 				clearInterval(bulletTimer);
-			}, 500)
+			}, 1000)
 		}
 	}
 	
