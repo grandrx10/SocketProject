@@ -77,7 +77,7 @@ function draw() {
             } else{
                 fill("RED")
             }
-            rect(bullets[i].x, bullets[i].y, 10, 10);
+            rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
         }
     }
 
@@ -118,9 +118,10 @@ function draw() {
 }
 
 function keyPressed(){
-    if (keyCode == 32) {
-        console.log('space was pressed')
-        socket.emit('shoot', 1);
+    if (keyCode == 74) {
+        socket.emit('shoot', 74);
+    } else if (keyCode == 76) {
+        socket.emit('shoot', 76);
     }
     if (keyIsDown(87)){
         key = "up";

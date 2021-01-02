@@ -48,17 +48,33 @@ function newConnection(socket) {
 		}
 	}
 
-	function bulletTravel(){ 
-		//console.log(players);
-		//console.log(socket.id);
-		if (Object.keys(players).indexOf(socket.id) != -1 && players[socket.id].canShoot){
-			b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, players[socket.id].dir, socket.id);
-			bullets.push(b);
-			players[player].canShoot = false;
-			let bulletTimer = setInterval(function(){
-				players[player].canShoot = true;
-				clearInterval(bulletTimer);
-			}, 1000)
+	function bulletTravel(abilityKey){ 
+		if (Object.keys(players).indexOf(socket.id) != -1){
+			if (players[socket.id].class == "mage" && players[socket.id].canShoot && abilityKey == 74){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 15, players[socket.id].dir, socket.id);
+				bullets.push(b);
+				players[player].canShoot = false;
+				let bulletTimer = setInterval(function(){
+					players[player].canShoot = true;
+					clearInterval(bulletTimer);
+				}, 1000)
+			}
+			else if (players[socket.id].class == "mage" && players[socket.id].canAbility2 && abilityKey == 76){
+				if(players[socket.id].dir == "left"){
+					player[socket.id].x -= 60;
+				} else if (players[socket.id].dir == "right"){
+					player[socket.id].x += 60;
+				} else if (players[socket.id].dir == "up"){
+					player[socket.id].y -= 60;
+				} else if (players[socket.id].dir == "down"){
+					player[socket.id].y += 60;
+				}
+				players[player].canAbility2 = false;
+				let ability2Timer = setInterval(function(){
+					players[player].canAbility2 = true;
+					clearInterval(ability2Timer);
+				}, 3000)
+			}
 		}
 	}
 	
@@ -173,11 +189,13 @@ function newConnection(socket) {
 		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers]);
 	}
 }
-function Bullet(x, y, dir, shooter) {
+function Bullet(x, y, width, height, dir, shooter) {
 	this.shooter = shooter;
 	this.x = x;
 	this.y = y;
-	this.speed = 7;
+	this.width = width;
+	this.height = height;
+	this.speed = 10;
 	this.dir = dir;
 	this.move = function(){
 		if(this.dir == "up"){
@@ -211,6 +229,8 @@ function Player(username){
 	this.secondJump = true;
 	this.username = username;
 	this.canShoot = true;
+	this.canAbility2 = true;
+	this.class = "mage";
 
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true){
@@ -225,10 +245,10 @@ function Player(username){
 		if (dir == "down") {
 			this.dir = "down";
 		} else if (dir == "left") {
-			this.xSpeed = 4;
+			this.xSpeed = 6;
 			this.dir = "left";
 		} else if (dir == "right") {
-			this.xSpeed = -4;
+			this.xSpeed = -6;
 			this.dir = "right";
 		} else {
 			this.xSpeed = 0;
@@ -242,8 +262,4 @@ function Platform(x, y, width, height, speed) {
 	this.width = width;
 	this.height = height;
 	this.speed = speed;
-}
-
-function bulletCooldown(){
-	players[player].canShoot = true;
 }
