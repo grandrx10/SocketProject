@@ -59,10 +59,10 @@ function newConnection(socket) {
 					clearInterval(bulletTimer);
 				}, 700)
 			}
-			else if (players[socket.id].class == "mage" && players[socket.id].canShoot && abilityKey == 75){
+			else if (players[socket.id].class == "mage" && players[socket.id].canAbility1 && abilityKey == 75){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW");
 				bullets.push(b);
-				players[player].canShoot = false;
+				players[player].canAbility1 = false;
 				let ability1Timer = setInterval(function(){
 					players[player].canAbility1 = true;
 					clearInterval(ability1Timer);
