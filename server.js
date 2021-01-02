@@ -69,9 +69,9 @@ function newConnection(socket) {
 				} else if (players[socket.id].dir == "down"){
 					player[socket.id].y += 60;
 				}
-				players[socket.id].canAbility2 = false;
+				player[socket.id].canAbility2 = false;
 				let ability2Timer = setInterval(function(){
-					players[socket.id].canAbility2 = true;
+					player[socket.id].canAbility2 = true;
 					clearInterval(ability2Timer);
 				}, 3000)
 			}
