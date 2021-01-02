@@ -72,11 +72,7 @@ function draw() {
 
     if (bullets != []) {
         for (var i = 0; i < bullets.length; i++) {
-            if (bullets[i].shooter == socket.id){
-                fill("BLUE");
-            } else{
-                fill("RED")
-            }
+            fill(bullets[i].colour)
             rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
         }
     }
@@ -120,7 +116,10 @@ function draw() {
 function keyPressed(){
     if (keyCode == 74) {
         socket.emit('shoot', 74);
-    } else if (keyCode == 76) {
+    } if (keyCode == 75) {
+        socket.emit('shoot', 75);
+    }
+    else if (keyCode == 76) {
         socket.emit('shoot', 76);
     }
     if (keyIsDown(87)){
