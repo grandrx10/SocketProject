@@ -61,17 +61,17 @@ function newConnection(socket) {
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility2 && abilityKey == 76){
 				if(players[socket.id].dir == "left"){
-					player[socket.id].x -= 60;
+					players[socket.id].x -= 60;
 				} else if (players[socket.id].dir == "right"){
-					player[socket.id].x += 60;
+					players[socket.id].x += 60;
 				} else if (players[socket.id].dir == "up"){
-					player[socket.id].y -= 60;
+					players[socket.id].y -= 60;
 				} else if (players[socket.id].dir == "down"){
-					player[socket.id].y += 60;
+					players[socket.id].y += 60;
 				}
-				player[socket.id].canAbility2 = false;
+				players[socket.id].canAbility2 = false;
 				let ability2Timer = setInterval(function(){
-					player[socket.id].canAbility2 = true;
+					players[socket.id].canAbility2 = true;
 					clearInterval(ability2Timer);
 				}, 3000)
 			}
