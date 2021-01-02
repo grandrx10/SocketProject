@@ -171,7 +171,7 @@ function newConnection(socket) {
 			}
 		}
 		for (var i = bulletsToRemove.length - 1; i > 0; i--){
-			bullets.splice(i, 1);
+			bullets.splice(bulletsToRemove[i], 1);
 		}
 
 		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers]);
