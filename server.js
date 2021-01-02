@@ -168,7 +168,7 @@ function newConnection(socket) {
 			}
 		}
 
-
+		
 		var bulletsToRemove = [];
 		for (var i = 0; i < bullets.length; i++) {
 			bullets[i].move();
@@ -177,6 +177,7 @@ function newConnection(socket) {
 			}
 			// check hit
 			for (player in players){
+				console.log(players[player].stun)
 				if (bullets[i].x > players[player].x && bullets[i].x < players[player].x + 20 && bullets[i].y > players[player].y && bullets[i].y < players[player].y + 40 && player != bullets[i].shooter){
 					if (bullets[i].type == "blast"){ 
 						players[player].hp -= 20;
