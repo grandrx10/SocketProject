@@ -53,19 +53,19 @@ function newConnection(socket) {
 			if (players[socket.id].class == "mage" && players[socket.id].canShoot && abilityKey == 74){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE", "blast");
 				bullets.push(b);
-				players[player].canShoot = false;
-				players[player].bulletTimer = setInterval(function(){
-					players[player].canShoot = true;
-					clearInterval(players[player].bulletTimer);
+				players[socket.id].canShoot = false;
+				players[socket.id].bulletTimer = setInterval(function(){
+					players[socket.id].canShoot = true;
+					clearInterval(players[socket.id].bulletTimer);
 				}, 700)
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility1 && abilityKey == 75){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW", "stun");
 				bullets.push(b);
-				players[player].canAbility1 = false;
-				players[player].ability1Timer = setInterval(function(){
-					players[player].canAbility1 = true;
-					clearInterval(players[player].ability1Timer);
+				players[socket.id].canAbility1 = false;
+				players[socket.id].ability1Timer = setInterval(function(){
+					players[socket.id].canAbility1 = true;
+					clearInterval(players[socket.id].ability1Timer);
 				}, 1500)
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility2 && abilityKey == 76){
@@ -79,9 +79,9 @@ function newConnection(socket) {
 					players[socket.id].y += 100;
 				}
 				players[socket.id].canAbility2 = false;
-				players[player].ability2Timer = setInterval(function(){
+				players[socket.id].ability2Timer = setInterval(function(){
 					players[socket.id].canAbility2 = true;
-					clearInterval(players[player].ability2Timer);
+					clearInterval(players[socket.id].ability2Timer);
 				}, 2500)
 			}
 		}
