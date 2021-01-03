@@ -18,10 +18,10 @@ var platforms = [];
 var deadPlayers = [];
 //let startTime = second();
 var updateTimer = null;
-var bulletTimer = {};
-var ability1Timer = {};
-var ability2Timer = {};
-var stunTimer = {};
+var gameTime = 0;
+setInterval(function(){
+	gameTime++;
+}, 100)
 
 platforms.push(new Platform(0, 500, 300, 20, 0));
 platforms.push(new Platform(900, 500, 300, 20, 0));
@@ -58,19 +58,13 @@ function newConnection(socket) {
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE", "blast");
 				bullets.push(b);
 				players[socket.id].canShoot = false;
-				bulletTimer[socket.id] = setInterval(function(){
-					players[socket.id].canShoot = true;
-					clearInterval(bulletTimer[socket.id]);
-				}, 600)
+				players[socket.id].canShootCooldown = gameTime;
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility1 && abilityKey == 75){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW", "stun");
 				bullets.push(b);
 				players[socket.id].canAbility1 = false;
-				ability1Timer[socket.id] = setInterval(function(){
-					players[socket.id].canAbility1 = true;
-					clearInterval(ability1Timer[socket.id]);
-				}, 1500)
+				players[socket.id].canAbility1Cooldown = gameTime;
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility2 && abilityKey == 76){
 				if(players[socket.id].dir == "left"){
@@ -83,10 +77,7 @@ function newConnection(socket) {
 					players[socket.id].y += 100;
 				}
 				players[socket.id].canAbility2 = false;
-				ability2Timer[socket.id] = setInterval(function(){
-					players[socket.id].canAbility2 = true;
-					clearInterval(ability2Timer[socket.id]);
-				}, 2500)
+				players[socket.id].canAbility2Cooldown = gameTime;
 			}
 		}
 	}
@@ -109,7 +100,23 @@ function newConnection(socket) {
 	function update(){
 		// update player position
 		//console.log(deadPlayers);
-		//THIS NEEDS TO BE FIXED WHYYYYYYYYYYYYYY
+		for (player in players){
+			if (gameTime - players[player].canShootCooldown > 7){
+				players[player].canShoot = true;
+			}
+			if (gameTime - players[player].canAbility1Cooldown > 12){
+				players[player].canAbility1 = true;
+			}
+			if (gameTime - players[player].canAbility2Cooldown > 20){
+				players[player].canAbility2 = true;
+			}
+			if (gameTime - players[player].stunCooldown > 7){
+				players[player].stun = false;
+			}
+		}
+
+
+		// works now
 		for (player in players){
 			players[player].ySpeed -= 0.5;
 			players[player].y -= players[player].ySpeed;
@@ -187,12 +194,7 @@ function newConnection(socket) {
 					if (bullets[i].type == "stun"){ 
 						players[player].hp -= 10;
 						players[player].stun = true;
-						console.log("STUNNED")
-						//FIX THIS STUPID CODE WHY DOES NOT WORK JESUS I"M GONNA HURT SOMETHINGGGGGGGGGGG
-						stunTimer[socket.id] = setInterval(function(){
-							players[player].stun = false;
-							clearInterval(stunTimer[socket.id]);
-						}, 2000)
+						players[player].stunCooldown = gameTime;
 					}
 					bulletsToRemove.push(i);
 					if (players[player].hp < 0){
@@ -260,7 +262,10 @@ function Player(username){
 	this.canAbility2 = true;
 	this.class = "mage";
 	this.stun = false;
-	this.startStun = false;
+	this.canShootCooldown = 0;
+	this.canAbility1Cooldown = 0;
+	this.canAbility2Cooldown = 0;
+	this.stunCooldown = 0;
 
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true && this.stun == false){
