@@ -73,7 +73,11 @@ function draw() {
     if (bullets != []) {
         for (var i = 0; i < bullets.length; i++) {
             fill(bullets[i].colour)
-            rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
+            if (bullets[i].dir == "up" || bullets[i].dir == "down"){
+                rect(bullets[i].x, bullets[i].y, bullets[i].height, bullets[i].width);
+            } else {
+                rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
+            }
         }
     }
 

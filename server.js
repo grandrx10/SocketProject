@@ -52,7 +52,7 @@ function newConnection(socket) {
 		}
 	}
 
-	function bulletTravel(abilityKey){ 
+	function bulletTravel(abilityKey){
 		if (Object.keys(players).indexOf(socket.id) != -1){
 			if (players[socket.id].class == "mage" && players[socket.id].canShoot && abilityKey == 74){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE", "blast");
@@ -61,7 +61,7 @@ function newConnection(socket) {
 				bulletTimer[socket.id] = setInterval(function(){
 					players[socket.id].canShoot = true;
 					clearInterval(bulletTimer[socket.id]);
-				}, 700)
+				}, 600)
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility1 && abilityKey == 75){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW", "stun");
@@ -109,13 +109,8 @@ function newConnection(socket) {
 	function update(){
 		// update player position
 		//console.log(deadPlayers);
+		//THIS NEEDS TO BE FIXED WHYYYYYYYYYYYYYY
 		for (player in players){
-			if (players[player].stun == true){
-				stunTimer[player] = setInterval(function(){
-					players[player].stun = false;
-					clearInterval(stunTimer[player]);
-				}, 700)
-			}
 			players[player].ySpeed -= 0.5;
 			players[player].y -= players[player].ySpeed;
 			if (players[player].stun == false){
@@ -185,13 +180,19 @@ function newConnection(socket) {
 			}
 			// check hit
 			for (player in players){
-				console.log(players[player].stun)
 				if (bullets[i].x > players[player].x && bullets[i].x < players[player].x + 20 && bullets[i].y > players[player].y && bullets[i].y < players[player].y + 40 && player != bullets[i].shooter){
 					if (bullets[i].type == "blast"){ 
 						players[player].hp -= 20;
-					} else if (bullets[i].type == "stun" && players[player].stun == false){ 
+					}
+					if (bullets[i].type == "stun"){ 
 						players[player].hp -= 10;
 						players[player].stun = true;
+						console.log("STUNNED")
+						//FIX THIS STUPID CODE WHY DOES NOT WORK JESUS I"M GONNA HURT SOMETHINGGGGGGGGGGG
+						stunTimer[socket.id] = setInterval(function(){
+							players[player].stun = false;
+							clearInterval(stunTimer[socket.id]);
+						}, 2000)
 					}
 					bulletsToRemove.push(i);
 					if (players[player].hp < 0){
@@ -259,6 +260,7 @@ function Player(username){
 	this.canAbility2 = true;
 	this.class = "mage";
 	this.stun = false;
+	this.startStun = false;
 
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true && this.stun == false){
