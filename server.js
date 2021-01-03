@@ -127,8 +127,12 @@ function newConnection(socket) {
 				players[player].jump = true;
 				players[player].secondJump = true;
 			}
-			
-
+		}
+		if (players[socket.id].stun == true){
+			stunTimer[socket.id] = setInterval(function(){
+				players[socket.id].stun = false;
+				clearInterval(stunTimer[socket.id]);
+			}, 700)
 		}
 		// dead player physics
 		for (player in deadPlayers){
@@ -188,10 +192,6 @@ function newConnection(socket) {
 					} else if (bullets[i].type == "stun" && players[player].stun == false){ 
 						players[player].hp -= 10;
 						players[player].stun = true;
-						stunTimer[socket.id] = setInterval(function(){
-							players[socket.id].stun = false;
-							clearInterval(stunTimer[socket.id]);
-						}, 700)
 					}
 					bulletsToRemove.push(i);
 					if (players[player].hp < 0){
