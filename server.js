@@ -185,7 +185,7 @@ function newConnection(socket) {
 				if (bullets[i].x > players[player].x && bullets[i].x < players[player].x + 20 && bullets[i].y > players[player].y && bullets[i].y < players[player].y + 40 && player != bullets[i].shooter){
 					if (bullets[i].type == "blast"){ 
 						players[player].hp -= 20;
-					} else if (bullets[i].type == "stun"){ 
+					} else if (bullets[i].type == "stun" && players[player].stun == false){ 
 						players[player].hp -= 10;
 						players[player].stun = true;
 						stunTimer[socket.id] = setInterval(function(){
