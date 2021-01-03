@@ -110,6 +110,12 @@ function newConnection(socket) {
 		// update player position
 		//console.log(deadPlayers);
 		for (player in players){
+			if (players[player].stun == true){
+				stunTimer[player] = setInterval(function(){
+					players[player].stun = false;
+					clearInterval(stunTimer[player]);
+				}, 700)
+			}
 			players[player].ySpeed -= 0.5;
 			players[player].y -= players[player].ySpeed;
 			if (players[player].stun == false){
@@ -127,12 +133,6 @@ function newConnection(socket) {
 				players[player].jump = true;
 				players[player].secondJump = true;
 			}
-		}
-		if (players[socket.id].stun == true){
-			stunTimer[socket.id] = setInterval(function(){
-				players[socket.id].stun = false;
-				clearInterval(stunTimer[socket.id]);
-			}, 700)
 		}
 		// dead player physics
 		for (player in deadPlayers){
