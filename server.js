@@ -189,7 +189,7 @@ function newConnection(socket) {
 						players[player].hp -= 10;
 						players[player].stun = true;
 						stunTimer[socket.id] = setInterval(function(){
-							players[player].stun = false;
+							players[socket.id].stun = false;
 							clearInterval(stunTimer[socket.id]);
 						}, 700)
 					}
