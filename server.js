@@ -188,9 +188,9 @@ function newConnection(socket) {
 					} else if (bullets[i].type == "stun"){ 
 						players[player].hp -= 10;
 						players[player].stun = true;
-						stunTimer[player] = setInterval(function(){
+						stunTimer[socket.id] = setInterval(function(){
 							players[player].stun = false;
-							clearInterval(stunTimer[player]);
+							clearInterval(stunTimer[socket.id]);
 						}, 700)
 					}
 					bulletsToRemove.push(i);
