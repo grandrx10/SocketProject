@@ -54,18 +54,18 @@ function newConnection(socket) {
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE", "blast");
 				bullets.push(b);
 				players[player].canShoot = false;
-				let bulletTimer = setInterval(function(){
+				players[player].bulletTimer = setInterval(function(){
 					players[player].canShoot = true;
-					clearInterval(bulletTimer);
+					clearInterval(players[player].bulletTimer);
 				}, 700)
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility1 && abilityKey == 75){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW", "stun");
 				bullets.push(b);
 				players[player].canAbility1 = false;
-				let ability1Timer = setInterval(function(){
+				players[player].ability1Timer = setInterval(function(){
 					players[player].canAbility1 = true;
-					clearInterval(ability1Timer);
+					clearInterval(players[player].ability1Timer);
 				}, 1500)
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canAbility2 && abilityKey == 76){
@@ -79,9 +79,9 @@ function newConnection(socket) {
 					players[socket.id].y += 100;
 				}
 				players[socket.id].canAbility2 = false;
-				let ability2Timer = setInterval(function(){
+				players[player].ability2Timer = setInterval(function(){
 					players[socket.id].canAbility2 = true;
-					clearInterval(ability2Timer);
+					clearInterval(players[player].ability2Timer);
 				}, 2500)
 			}
 		}
@@ -184,9 +184,9 @@ function newConnection(socket) {
 					} else if (bullets[i].type == "stun"){ 
 						players[player].hp -= 10;
 						players[player].stun = true;
-						let stunTimer = setInterval(function(){
+						players[player].stunTimer = setInterval(function(){
 							players[player].stun = false;
-							clearInterval(stunTimer);
+							clearInterval(players[player].stunTimer);
 						}, 700)
 					}
 					bulletsToRemove.push(i);
@@ -251,6 +251,10 @@ function Player(username){
 	this.secondJump = true;
 	this.username = username;
 	this.canShoot = true;
+	this.bulletTimer;
+	this.ability1Timer;
+	this.ability2Timer;
+	this.stunTimer;
 	this.canAbility1 = true;
 	this.canAbility2 = true;
 	this.class = "mage";
