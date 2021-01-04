@@ -110,10 +110,10 @@ function draw() {
             } else {
                 fill("red");
             }
-            rect(players[player].x, players[player].y, 20, 40);
+            rect(players[player].x, players[player].y, 20, players[player].height);
             if (players[player].stun == true){
                 fill("YELLOW")
-                rect(players[player].x + 5, players[player].y - 25, 10, 10);
+                rect(players[player].x + 5, players[player].y - 35, 10, 10);
             }
             fill("white")
             rect(players[player].x - 10, players[player].y - 10, 40, 5);

@@ -161,6 +161,11 @@ function newConnection(socket) {
 				players[player].hp = 0;
 			}
 			if (players[player].hp == 0) {
+				for (var i = 0; i < bullets.length; i++) {
+					if (bullets[i].type == "beam" && players[player].ultimateDuration > 0){
+						bulletsToRemove.push(i);
+					}
+				}
 				players[player].deadTime = gameTime;
 				deadPlayers.push(players[player]);
 				console.log("THIS happened.")
@@ -189,8 +194,8 @@ function newConnection(socket) {
 			}
 			if (players[player].y < 0){
 				players[player].y = 0
-			} else if (players[player].y > 560){
-				players[player].y = 560;
+			} else if (players[player].y + players[player].height > 600){
+				players[player].y = 600 - players[player].height;
 				players[player].jump = true;
 				players[player].secondJump = true;
 			}
@@ -221,8 +226,8 @@ function newConnection(socket) {
 				platforms[i].speed = -platforms[i].speed;
 			}
 			for (player in players){
-				if (players[player].x + 20 > platforms[i].x && players[player].x < platforms[i].x + platforms[i].width && players[player].y + 40 > platforms[i].y && players[player].y < platforms[i].y + platforms[i].height) {
-					players[player].y = platforms[i].y - 40
+				if (players[player].x + 20 > platforms[i].x && players[player].x < platforms[i].x + platforms[i].width && players[player].y + players[player].height > platforms[i].y && players[player].y < platforms[i].y + platforms[i].height) {
+					players[player].y = platforms[i].y - players[player].height;
 					players[player].ySpeed = 0;
 					players[player].jump = true;
 					players[player].secondJump = true;
@@ -262,7 +267,7 @@ function newConnection(socket) {
 						bulletsToRemove.push(i);
 					}
 					if (bullets[i].type == "beam"){ 
-						players[player].hp -= 3;
+						players[player].hp -= 2;
 					}
 				}
 			}
@@ -314,6 +319,7 @@ function Player(username){
 		this.y = Math.floor(Math.random() * Math.floor(400));;
 	}
 	this.dir = "up";
+	this.height = 40;
 	this.ySpeed = 0;
 	this.xSpeed = 0;
 	this.hp = 100;
@@ -340,21 +346,27 @@ function Player(username){
 			this.jump = false;
 			this.ySpeed = 10;
 			this.dir = "up";
+			this.height = 40;
 		} else if(dir == "up" && this.secondJump == true && this.stun == false){
 			this.secondJump = false;
 			this.ySpeed = 10;
 			this.dir = "up";
+			this.height = 40;
 		}
-		if (dir == "down") {
-			this.dir = "down";
-		} else if (dir == "left") {
+		if (dir == "left") {
 			this.xSpeed = 6;
 			this.dir = "left";
+			this.height = 40;
 		} else if (dir == "right") {
 			this.xSpeed = -6;
 			this.dir = "right";
+			this.height = 40;
+		} else if (dir == "down") {
+			this.dir = "down";
+			this.height = 25;
 		} else {
 			this.xSpeed = 0;
+			this.height = 40;
 		}
 	}
 }
