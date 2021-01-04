@@ -44,6 +44,7 @@ if (map == 1){
 	platforms.push(new Platform(1000, 200, 200, 20, 0.5));
 	platforms.push(new Platform(0, 350, 200, 20, -0.5));
 	platforms.push(new Platform(500, 50, 200, 20, 0.2));
+	bullets.push(new Bullet(2 + 5, 600 + 15, 18, 12, "left", 12, 15, "BLUE", "blast"))
 }
 
 function newConnection(socket) {
@@ -161,6 +162,11 @@ function newConnection(socket) {
 				players[player].hp = 0;
 			}
 			if (players[player].hp == 0) {
+				for (var i = 0; i < bullets.length; i++) {
+					if (bullets[i].type == "beam" && player == bullets[i].shooter){
+						bullets.splice(i, 1)
+					}
+				}
 				players[player].deadTime = gameTime;
 				deadPlayers.push(players[player]);
 				console.log("THIS happened.")
@@ -246,7 +252,7 @@ function newConnection(socket) {
 			}
 			// check hit
 			for (player in players){
-				if (gameTime - players[player].ultimateDuration > 12 && bullets[i].type == "beam" && gameTime - players[player].ultimateDuration < 14){
+				if (gameTime - players[player].ultimateDuration > 12 && bullets[i].type == "beam" && gameTime - players[player].ultimateDuration < 14 && player == bullets[i].shooter){
 					bulletsToRemove.push(i);
 					console.log("REMOVE.")
 				}
