@@ -196,6 +196,7 @@ function newConnection(socket) {
 		
 		var bulletsToRemove = [];
 		for (var i = 0; i < bullets.length; i++) {
+			bullets[i].move();
 			if (checkRemove(bullets[i])){
 				bulletsToRemove.push(i);
 			}
