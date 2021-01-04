@@ -5,6 +5,7 @@ var bullets = [];
 var deadPlayers = [];
 var gameStart = false;
 var userNameSubmitted = false;
+var map;
 
 function setup(){
     createCanvas(1200,600);
@@ -56,6 +57,10 @@ function draw() {
     if (gameStart){
         socket.on('returnUpdate', update);
     }
+    if (map == 2){
+        fill(220,20,60)
+        rect(0, 540, 1200, 60)
+    }
     for (var i = 0; i < platforms.length; i++) {
         if (platforms[i].speed === 0) {
             fill(4, 207, 95);
@@ -73,7 +78,7 @@ function draw() {
     if (bullets != []) {
         for (var i = 0; i < bullets.length; i++) {
             fill(bullets[i].colour)
-            if (bullets[i].dir == "up" || bullets[i].dir == "down"){
+            if (bullets[i].dir == "up" && bullets[i].type != "beam" || bullets[i].dir == "down" && bullets[i].type != "beam"){
                 rect(bullets[i].x, bullets[i].y, bullets[i].height, bullets[i].width);
             } else {
                 rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
@@ -150,6 +155,7 @@ function update(returnList){
     players = returnList[1];
     platforms = returnList[2];
     deadPlayers = returnList[3];
+    map = returnList[4];
 }
 
 function respawn(){

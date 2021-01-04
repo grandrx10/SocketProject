@@ -17,21 +17,34 @@ var bullets = [];
 var platforms = [];
 var deadPlayers = [];
 //let startTime = second();
+var map = 2;
 var updateTimer = null;
 var gameTime = 0;
 setInterval(function(){
 	gameTime++;
 }, 100)
 
-platforms.push(new Platform(0, 500, 300, 20, 0));
-platforms.push(new Platform(900, 500, 300, 20, 0));
-platforms.push(new Platform(300, 370, 200, 20, 0));
-platforms.push(new Platform(550, 350, 100, 20, 3));
-platforms.push(new Platform(700, 370, 200, 20, 0));
-platforms.push(new Platform(200, 200, 350, 20, 0));
-platforms.push(new Platform(650, 200, 350, 20, 0));
-platforms.push(new Platform(0, 310, 100, 20, 0));
-platforms.push(new Platform(1100, 310, 100, 20, 0));
+if (map == 1){
+	platforms.push(new Platform(0, 500, 300, 20, 0));
+	platforms.push(new Platform(900, 500, 300, 20, 0));
+	platforms.push(new Platform(300, 370, 200, 20, 0));
+	platforms.push(new Platform(550, 350, 100, 20, 3));
+	platforms.push(new Platform(700, 370, 200, 20, 0));
+	platforms.push(new Platform(200, 200, 350, 20, 0));
+	platforms.push(new Platform(650, 200, 350, 20, 0));
+	platforms.push(new Platform(0, 310, 100, 20, 0));
+	platforms.push(new Platform(1100, 310, 100, 20, 0));
+	bullets.push(new Bullet(2 + 5, 600 + 15, 18, 12, "left", 12, 15, "BLUE", "blast"))
+} else if (map == 2){
+	platforms.push(new Platform(300, 500, 600, 20, 0));
+	platforms.push(new Platform(200, 500, 100, 20, 2));
+	platforms.push(new Platform(900, 500, 100, 20, -2));
+	platforms.push(new Platform(300, 100, 200, 20, 0.5));
+	platforms.push(new Platform(700, 300, 200, 20, -0.5));
+	platforms.push(new Platform(1000, 200, 200, 20, 0.5));
+	platforms.push(new Platform(0, 350, 200, 20, -0.5));
+	platforms.push(new Platform(500, 50, 200, 20, 0.2));
+}
 
 function newConnection(socket) {
 	console.log('new connection: ' + socket.id);
@@ -80,10 +93,23 @@ function newConnection(socket) {
 				players[socket.id].canAbility2Cooldown = gameTime;
 			}
 			else if (players[socket.id].class == "mage" && players[socket.id].canUltimate && abilityKey == 72){
-				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 1000, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
+				console.log("I shoot")
+				if (players[socket.id].dir == "right"){
+					b = new Bullet(players[socket.id].x + 20, players[socket.id].y - 10, 1200, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
+				} else if (players[socket.id].dir == "left"){
+					b = new Bullet(0, players[socket.id].y - 10, players[socket.id].x, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
+				}
+				else if (players[socket.id].dir == "down"){
+					b = new Bullet(players[socket.id].x - 10, players[socket.id].y + 40, 60, 1200, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
+				}
+				else if (players[socket.id].dir == "up"){
+					b = new Bullet(players[socket.id].x - 10, 0, 60, players[socket.id].y, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
+				}
 				bullets.push(b);
+				players[socket.id].stun = true;
+				players[socket.id].stunCooldown2 = gameTime;
 				players[socket.id].canUltimate = false;
-				players[socket.id].canUltimateCooldown = gameTime;
+				players[socket.id].canUltimateCooldown= gameTime;
 				players[socket.id].ultimateDuration = gameTime;
 			}
 		}
@@ -108,7 +134,7 @@ function newConnection(socket) {
 		// update player position
 		//console.log(deadPlayers);
 		for (player in players){
-			if (gameTime - players[player].canShootCooldown > 7){
+			if (gameTime - players[player].canShootCooldown > 6){
 				players[player].canShoot = true;
 			}
 			if (gameTime - players[player].canAbility1Cooldown > 12){
@@ -117,11 +143,29 @@ function newConnection(socket) {
 			if (gameTime - players[player].canAbility2Cooldown > 20){
 				players[player].canAbility2 = true;
 			}
-			if (gameTime - players[player].stunCooldown > 7){
-				players[player].stun = false;
+			if (gameTime - players[player].canUltimateCooldown > 150){
+				players[player].canUltimate = true;
 			}
-			if (gameTime - players[player].canUltimateCooldown > 20){
-				players[player].canUlimate = true;
+			if (gameTime - players[player].stunCooldown > 7 && players[player].stunCooldown != 0){
+				players[player].stun = false;
+				players[player].stunCooldown = 0
+			} else if (gameTime - players[player].stunCooldown2 > 12 && players[player].stunCooldown2 != 0){
+				players[player].stun = false;
+				players[player].stunCooldown2 = 0
+			}
+
+			if (players[player].y + 40>= 540 && map == 2){
+				players[player].hp -= 5;
+			}
+			if (players[player].hp < 0){
+				players[player].hp = 0;
+			}
+			if (players[player].hp == 0) {
+				players[player].deadTime = gameTime;
+				deadPlayers.push(players[player]);
+				console.log("THIS happened.")
+				io.to(player).emit("dead", 1);
+				delete players[player];
 			}
 		}
 		for(player in deadPlayers){
@@ -202,8 +246,9 @@ function newConnection(socket) {
 			}
 			// check hit
 			for (player in players){
-				if (gameTime - players[player].ultimateDuration > 10 && bullets[i].type == "beam" && players[player].canUltimate == false){
+				if (gameTime - players[player].ultimateDuration > 12 && bullets[i].type == "beam" && gameTime - players[player].ultimateDuration < 14){
 					bulletsToRemove.push(i);
+					console.log("REMOVE.")
 				}
 				if (players[player].x + 20> bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter){
 					if (bullets[i].type == "blast"){ 
@@ -219,24 +264,14 @@ function newConnection(socket) {
 					if (bullets[i].type == "beam"){ 
 						players[player].hp -= 3;
 					}
-					if (players[player].hp < 0){
-						players[player].hp = 0;
-					}
-				}
-				if (players[player].hp == 0) {
-					players[player].deadTime = gameTime;
-					deadPlayers.push(players[player]);
-					console.log("THIS happened.")
-					io.to(player).emit("dead", 1);
-					delete players[player];
 				}
 			}
 		}
-		for (var i = bulletsToRemove.length; i > 0; i--){
+		for (var i = bulletsToRemove.length -1; i > 0; i--){
 			bullets.splice(bulletsToRemove[i], 1);
 		}
 
-		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers]);
+		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map]);
 	}
 }
 function Bullet(x, y, width, height, dir, shooter, speed, colour, type) {
@@ -271,8 +306,13 @@ function checkRemove(bullet){
 }
 
 function Player(username){
-	this.x = Math.floor(Math.random() * Math.floor(1000));;
-	this.y = Math.floor(Math.random() * Math.floor(600));;
+	if (map == 1){
+		this.x = Math.floor(Math.random() * Math.floor(1000));;
+		this.y = Math.floor(Math.random() * Math.floor(600));;
+	} else if (map == 2){
+		this.x = Math.floor(Math.random() * Math.floor(1000));;
+		this.y = Math.floor(Math.random() * Math.floor(400));;
+	}
 	this.dir = "up";
 	this.ySpeed = 0;
 	this.xSpeed = 0;
@@ -290,6 +330,7 @@ function Player(username){
 	this.canAbility1Cooldown = 0;
 	this.canAbility2Cooldown = 0;
 	this.stunCooldown = 0;
+	this.stunCooldown2 = 0;
 	this.canUltimateCooldown = 0;
 	this.ultimateDuration = 0;
 	this.deadTime = 0;
