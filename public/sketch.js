@@ -127,8 +127,11 @@ function keyPressed(){
     } if (keyCode == 75) {
         socket.emit('shoot', 75);
     }
-    else if (keyCode == 76) {
+    if (keyCode == 76) {
         socket.emit('shoot', 76);
+    }
+    if (keyCode == 72) {
+        socket.emit('shoot', 72);
     }
     if (keyIsDown(87)){
         key = "up";

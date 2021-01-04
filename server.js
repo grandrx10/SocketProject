@@ -79,6 +79,13 @@ function newConnection(socket) {
 				players[socket.id].canAbility2 = false;
 				players[socket.id].canAbility2Cooldown = gameTime;
 			}
+			// else if (players[socket.id].class == "mage" && players[socket.id].canUltimate && abilityKey == 72){
+			// 	b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 1000, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
+			// 	bullets.push(b);
+			// 	players[socket.id].canUltimate = false;
+			// 	players[socket.id].canUltimateCooldown = gameTime;
+			// 	players[socket.id].ultimateDuration = gameTime;
+			// }
 		}
 	}
 	
@@ -112,6 +119,14 @@ function newConnection(socket) {
 			}
 			if (gameTime - players[player].stunCooldown > 7){
 				players[player].stun = false;
+			}
+			if (gameTime - players[player].canUltimateCooldown > 150){
+				players[player].canUlimate = true;
+			}
+		}
+		for(player in deadPlayers){
+			if (gameTime - deadPlayers[player].deadTime > 30){
+				deadPlayers.splice(player, 1)
 			}
 		}
 
@@ -187,21 +202,29 @@ function newConnection(socket) {
 			}
 			// check hit
 			for (player in players){
-				if (bullets[i].x > players[player].x && bullets[i].x < players[player].x + 20 && bullets[i].y > players[player].y && bullets[i].y < players[player].y + 40 && player != bullets[i].shooter){
+				if (gameTime - players[player].ultimateDuration > 10 && bullets[i].type == "beam"){
+					bulletsToRemove.push(i);
+				}
+				if (players[player].x + 20> bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  platforms[i].y + platforms[i].height && player != bullets[i].shooter){
 					if (bullets[i].type == "blast"){ 
 						players[player].hp -= 20;
+						bulletsToRemove.push(i);
 					}
 					if (bullets[i].type == "stun"){ 
 						players[player].hp -= 10;
 						players[player].stun = true;
 						players[player].stunCooldown = gameTime;
+						bulletsToRemove.push(i);
 					}
-					bulletsToRemove.push(i);
+					if (bullets[i].type == "beam"){ 
+						players[player].hp -= 3;
+					}
 					if (players[player].hp < 0){
 						players[player].hp = 0;
 					}
 				}
 				if (players[player].hp == 0) {
+					players[player].deadTime = gameTime;
 					deadPlayers.push(players[player]);
 					console.log("THIS happened.")
 					io.to(player).emit("dead", 1);
@@ -260,12 +283,16 @@ function Player(username){
 	this.canShoot = true;
 	this.canAbility1 = true;
 	this.canAbility2 = true;
+	this.canUltimate = true;
 	this.class = "mage";
 	this.stun = false;
 	this.canShootCooldown = 0;
 	this.canAbility1Cooldown = 0;
 	this.canAbility2Cooldown = 0;
 	this.stunCooldown = 0;
+	this.canUltimateCooldown = 0;
+	this.ultimateDuration = 0;
+	this.deadTime = 0;
 
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true && this.stun == false){
