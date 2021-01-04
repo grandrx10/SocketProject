@@ -205,7 +205,7 @@ function newConnection(socket) {
 				if (gameTime - players[player].ultimateDuration > 10 && bullets[i].type == "beam" && players[player].canUltimate == false){
 					bulletsToRemove.push(i);
 				}
-				if (players[player].x + 20> bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  platforms[i].y + platforms[i].height && player != bullets[i].shooter){
+				if (players[player].x + 20> bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter){
 					if (bullets[i].type == "blast"){ 
 						players[player].hp -= 20;
 						bulletsToRemove.push(i);
