@@ -161,11 +161,6 @@ function newConnection(socket) {
 				players[player].hp = 0;
 			}
 			if (players[player].hp == 0) {
-				for (var i = 0; i < bullets.length; i++) {
-					if (bullets[i].type == "beam" && players[player].ultimateDuration > 0){
-						bulletsToRemove.push(i);
-					}
-				}
 				players[player].deadTime = gameTime;
 				deadPlayers.push(players[player]);
 				console.log("THIS happened.")
