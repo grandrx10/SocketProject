@@ -79,13 +79,13 @@ function newConnection(socket) {
 				players[socket.id].canAbility2 = false;
 				players[socket.id].canAbility2Cooldown = gameTime;
 			}
-			// else if (players[socket.id].class == "mage" && players[socket.id].canUltimate && abilityKey == 72){
-			// 	b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 1000, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
-			// 	bullets.push(b);
-			// 	players[socket.id].canUltimate = false;
-			// 	players[socket.id].canUltimateCooldown = gameTime;
-			// 	players[socket.id].ultimateDuration = gameTime;
-			// }
+			else if (players[socket.id].class == "mage" && players[socket.id].canUltimate && abilityKey == 72){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 1000, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
+				bullets.push(b);
+				players[socket.id].canUltimate = false;
+				players[socket.id].canUltimateCooldown = gameTime;
+				players[socket.id].ultimateDuration = gameTime;
+			}
 		}
 	}
 	
@@ -120,7 +120,7 @@ function newConnection(socket) {
 			if (gameTime - players[player].stunCooldown > 7){
 				players[player].stun = false;
 			}
-			if (gameTime - players[player].canUltimateCooldown > 150){
+			if (gameTime - players[player].canUltimateCooldown > 20){
 				players[player].canUlimate = true;
 			}
 		}
@@ -196,13 +196,12 @@ function newConnection(socket) {
 		
 		var bulletsToRemove = [];
 		for (var i = 0; i < bullets.length; i++) {
-			bullets[i].move();
 			if (checkRemove(bullets[i])){
 				bulletsToRemove.push(i);
 			}
 			// check hit
 			for (player in players){
-				if (gameTime - players[player].ultimateDuration > 10 && bullets[i].type == "beam"){
+				if (gameTime - players[player].ultimateDuration > 10 && bullets[i].type == "beam" && players[player].canUltimate == false){
 					bulletsToRemove.push(i);
 				}
 				if (players[player].x + 20> bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  platforms[i].y + platforms[i].height && player != bullets[i].shooter){
@@ -232,7 +231,7 @@ function newConnection(socket) {
 				}
 			}
 		}
-		for (var i = bulletsToRemove.length - 1; i > 0; i--){
+		for (var i = bulletsToRemove.length; i > 0; i--){
 			bullets.splice(bulletsToRemove[i], 1);
 		}
 
