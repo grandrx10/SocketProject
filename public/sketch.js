@@ -110,31 +110,65 @@ function draw() {
     }
     if(gameStart){
         for(player in players) {
-            if(socket.id == player){
-                fill(87, 109, 255);
-            } else {
-                fill("red");
-            }
-            rect(players[player].x, players[player].y, 20, players[player].height);
-            if (players[player].stun == true){
-                fill("WHITE")
-                rect(players[player].x - 5, players[player].y - 30, 30, 5);
-                fill("YELLOW")
-                if ((gameTime - players[player].stunCooldown) < players[player].stunTime){
-                    rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown)/players[player].stunTime * 30, 5);
-                } else if ((gameTime - players[player].stunCooldown2) < players[player].stunTime){
-                    rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown2)/players[player].stunTime * 30, 5);
+            if (players[player].invis == true){
+                if(socket.id == player){
+                    fill(204, 255, 255);
+                    rect(players[player].x, players[player].y, 20, players[player].height);
+                    // healthbars
+                    fill("white")
+                    rect(players[player].x - 10, players[player].y - 10, 40, 5);
+                    fill("green")
+                    rect(players[player].x - 10, players[player].y - 10, 40 * players[player].hp/100, 5);
+                    // usernames
+                    textAlign(CENTER);
+                    fill("black");
+                    text(players[player].username, players[player].x + 10, players[player].y - 15);
+                    fill("white")
+                    rect(players[player].x - 5, players[player].y - 35, 30, 5);
+                    fill("black")
+                    if ((gameTime - players[player].invisCooldown) < players[player].invisTime){
+                        rect(players[player].x - 5, players[player].y - 35, (gameTime - players[player].invisCooldown)/players[player].invisTime * 30, 5);
+                    }
+                    if (players[player].xAcceleration == 12){
+                        fill("white")
+                        rect(players[player].x - 5, players[player].y - 40, 30, 5);
+                        fill(255, 178, 102)
+                        rect(players[player].x - 5, players[player].y - 40, (gameTime - players[player].speedCooldown)/players[player].speedTime * 30, 5);
+                    }
                 }
+            } else {
+                if(socket.id == player){
+                    fill(87, 109, 255);
+                } else {
+                    fill("red");
+                }
+                rect(players[player].x, players[player].y, 20, players[player].height);
+                if (players[player].stun == true){
+                    fill("WHITE")
+                    rect(players[player].x - 5, players[player].y - 30, 30, 5);
+                    fill("YELLOW")
+                    if ((gameTime - players[player].stunCooldown) < players[player].stunTime){
+                        rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown)/players[player].stunTime * 30, 5);
+                    } else if ((gameTime - players[player].stunCooldown2) < players[player].stunTime){
+                        rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown2)/players[player].stunTime * 30, 5);
+                    }
+                }
+                if (players[player].xAcceleration == 12){
+                    fill("white")
+                    rect(players[player].x - 5, players[player].y - 40, 30, 5);
+                    fill(255, 178, 102)
+                    rect(players[player].x - 5, players[player].y - 40, (gameTime - players[player].speedCooldown)/players[player].speedTime * 30, 5);
+                }
+                // healthbars
+                fill("white")
+                rect(players[player].x - 10, players[player].y - 10, 40, 5);
+                fill("green")
+                rect(players[player].x - 10, players[player].y - 10, 40 * players[player].hp/100, 5);
+                // usernames
+                textAlign(CENTER);
+                fill("black");
+                text(players[player].username, players[player].x + 10, players[player].y - 15);
             }
-            // healthbars
-            fill("white")
-            rect(players[player].x - 10, players[player].y - 10, 40, 5);
-            fill("green")
-            rect(players[player].x - 10, players[player].y - 10, 40 * players[player].hp/100, 5);
-            // usernames
-            textAlign(CENTER);
-            fill("black");
-            text(players[player].username, players[player].x + 10, players[player].y - 15);
             // Cooldowns
             if(socket.id == player){
                 // BASIC ABILITY
