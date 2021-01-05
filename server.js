@@ -70,35 +70,81 @@ function newConnection(socket) {
 		if (Object.keys(players).indexOf(socket.id) != -1){
 			//Mercenary Abilities
 			if (players[socket.id].class == "mercenary" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
-				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 5, players[socket.id].dir, socket.id, 15, (112,128,144), "bullet");
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 5, players[socket.id].dir, socket.id, 25, (112,128,144), "bullet");
 				bullets.push(b);
 				players[socket.id].canShoot = false;
+				players[player].shootTime = 1.5;
 				players[socket.id].canShootCooldown = gameTime;
+			}
+			else if (players[socket.id].class == "mercenary" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 32, 35, 8, players[socket.id].dir, socket.id, -10, "PURPLE", "trap");
+				bullets.push(b);
+				players[socket.id].canAbility1 = false;
+				players[player].a1Time = 50;
+				players[socket.id].canAbility1Cooldown = gameTime;
+			}
+			else if (players[socket.id].class == "mercenary" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
+				if(players[socket.id].dir == "left" || players[socket.id].dir == "right"){
+					b = new Bullet(players[socket.id].x + 5, players[socket.id].y, 10, 10, players[socket.id].dir, socket.id, 8, "ORANGE", "shotgun");
+					bullets.push(b);
+					b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 10, 10, players[socket.id].dir, socket.id, 8, "ORANGE", "shotgun");
+					bullets.push(b);
+					b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 30, 10, 10, players[socket.id].dir, socket.id, 8, "ORANGE", "shotgun");
+					bullets.push(b);
+				} else {
+					b = new Bullet(players[socket.id].x - 10, players[socket.id].y +5, 10, 10, players[socket.id].dir, socket.id, 8, "ORANGE", "shotgun");
+					bullets.push(b);
+					b = new Bullet(players[socket.id].x + 5, players[socket.id].y +5, 10, 10, players[socket.id].dir, socket.id, 8, "ORANGE", "shotgun");
+					bullets.push(b);
+					b = new Bullet(players[socket.id].x + 20, players[socket.id].y +5, 10, 10, players[socket.id].dir, socket.id, 8, "ORANGE", "shotgun");
+					bullets.push(b);
+				}
+				players[socket.id].canAbility2 = false;
+				players[player].a2Time = 25;
+				players[socket.id].canAbility2Cooldown = gameTime;
+				if(players[socket.id].dir == "left"){
+					players[socket.id].x -= -60;
+				} else if (players[socket.id].dir == "right"){
+					players[socket.id].x += -60;
+				} else if (players[socket.id].dir == "up"){
+					players[socket.id].y -= -60;
+				} else if (players[socket.id].dir == "down"){
+					players[socket.id].y += -60;
+				}
+			} else if (players[socket.id].class == "mercenary" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 5, 50, 25, players[socket.id].dir, socket.id, 30, "RED", "rocket");
+				bullets.push(b);
+				players[socket.id].canUltimate = false;
+				players[player].ultTime = 150;
+				players[socket.id].canUltimateCooldown = gameTime;
 			}
 			// Spellslinger ABILITIES
 			if (players[socket.id].class == "spellslinger" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE", "blast");
 				bullets.push(b);
 				players[socket.id].canShoot = false;
+				players[player].shootTime = 6;
 				players[socket.id].canShootCooldown = gameTime;
 			}
 			else if (players[socket.id].class == "spellslinger" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW", "stun");
 				bullets.push(b);
 				players[socket.id].canAbility1 = false;
+				players[player].a1Time = 12;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			}
 			else if (players[socket.id].class == "spellslinger" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				if(players[socket.id].dir == "left"){
-					players[socket.id].x -= 100;
+					players[socket.id].x -= 150;
 				} else if (players[socket.id].dir == "right"){
-					players[socket.id].x += 100;
+					players[socket.id].x += 150;
 				} else if (players[socket.id].dir == "up"){
-					players[socket.id].y -= 100;
+					players[socket.id].y -= 150;
 				} else if (players[socket.id].dir == "down"){
-					players[socket.id].y += 100;
+					players[socket.id].y += 150;
 				}
 				players[socket.id].canAbility2 = false;
+				players[player].a2Time = 30;
 				players[socket.id].canAbility2Cooldown = gameTime;
 			}
 			else if (players[socket.id].class == "spellslinger" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
@@ -116,8 +162,10 @@ function newConnection(socket) {
 				}
 				bullets.push(b);
 				players[socket.id].stun = true;
+				players[player].stunTime = 12
 				players[socket.id].stunCooldown2 = gameTime;
 				players[socket.id].canUltimate = false;
+				players[player].ultTime = 150;
 				players[socket.id].canUltimateCooldown= gameTime;
 				players[socket.id].ultimateDuration = gameTime;
 			}
@@ -146,26 +194,35 @@ function newConnection(socket) {
 		//console.log(deadPlayers);
 		for (player in players){
 			//cooldowns for the mercenary
-			if (gameTime - players[player].canShootCooldown > 3 && players[player].class == "mercenary"){
+			if (gameTime - players[player].canShootCooldown > players[player].shootTime && players[player].class == "mercenary"){
 				players[player].canShoot = true;
 			}
-			// cooldowns for spellslinger
-			if (gameTime - players[player].canShootCooldown > 6 && players[player].class == "spellslinger"){
-				players[player].canShoot = true;
-			}
-			if (gameTime - players[player].canAbility1Cooldown > 12 && players[player].class == "spellslinger"){
+			if (gameTime - players[player].canAbility1Cooldown > players[player].a1Time && players[player].class == "mercenary"){
 				players[player].canAbility1 = true;
 			}
-			if (gameTime - players[player].canAbility2Cooldown > 20 && players[player].class == "spellslinger"){
+			if (gameTime - players[player].canAbility2Cooldown > players[player].a2Time && players[player].class == "mercenary"){
 				players[player].canAbility2 = true;
 			}
-			if (gameTime - players[player].canUltimateCooldown > 150 && players[player].class == "spellslinger"){
+			if (gameTime - players[player].canUltimateCooldown > players[player].ultTime && players[player].class == "mercenary"){
 				players[player].canUltimate = true;
 			}
-			if (gameTime - players[player].stunCooldown > 7 && players[player].stunCooldown != 0){
+			// cooldowns for spellslinger
+			if (gameTime - players[player].canShootCooldown > players[player].shootTime && players[player].class == "spellslinger"){
+				players[player].canShoot = true;
+			}
+			if (gameTime - players[player].canAbility1Cooldown > players[player].a1Time && players[player].class == "spellslinger"){
+				players[player].canAbility1 = true;
+			}
+			if (gameTime - players[player].canAbility2Cooldown > players[player].a2Time && players[player].class == "spellslinger"){
+				players[player].canAbility2 = true;
+			}
+			if (gameTime - players[player].canUltimateCooldown > players[player].ultTime && players[player].class == "spellslinger"){
+				players[player].canUltimate = true;
+			}
+			if (gameTime - players[player].stunCooldown > players[player].stunTime && players[player].stunCooldown != 0){
 				players[player].stun = false;
 				players[player].stunCooldown = 0
-			} else if (gameTime - players[player].stunCooldown2 > 12 && players[player].stunCooldown2 != 0){
+			} else if (gameTime - players[player].stunCooldown2 > players[player].stunTime && players[player].stunCooldown2 != 0){
 				players[player].stun = false;
 				players[player].stunCooldown2 = 0
 			}
@@ -261,7 +318,21 @@ function newConnection(socket) {
 		
 		var bulletsToRemove = [];
 		for (var i = 0; i < bullets.length; i++) {
-			bullets[i].move();
+
+			if (bullets[i].type == "trap"){
+				bullets[i].y -= bullets[i].speed;
+				if (bullets[i].y > 592){
+					bullets[i].y = 592;
+				}
+				for (var j = 0; j < platforms.length; j++) {
+					if (bullets[i].x + 20 > platforms[j].x && bullets[i].x < platforms[j].x + platforms[j].width && bullets[i].y + bullets[i].height > platforms[j].y && bullets[i].y < platforms[j].y + platforms[j].height) {
+						bullets[i].y = platforms[j].y - bullets[i].height;
+					}
+				}
+			} else{
+				bullets[i].move();
+			}
+
 			if (checkRemove(bullets[i])){
 				bulletsToRemove.push(i);
 			}
@@ -277,19 +348,43 @@ function newConnection(socket) {
 						players[player].hp -= 10;
 						bulletsToRemove.push(i);
 					}
+					else if (bullets[i].type == "trap"){ 
+						players[player].hp -= 30;
+						players[player].stun = true;
+						players[player].stunTime = 12
+						players[player].stunCooldown2 = gameTime;
+						bulletsToRemove.push(i);
+					}
+					else if (bullets[i].type == "shotgun"){ 
+						players[player].hp -= 20;
+						bulletsToRemove.push(i);
+					} else if (bullets[i].type == "rocket"){ 
+						players[player].hp -= 60;
+						bulletsToRemove.push(i);
+						if(bullets[i].dir == "left"){
+							players[player].x -= 80;
+						} else if (bullets[i].dir == "right"){
+							players[player].x += 80;
+						} else if (bullets[i].dir == "up"){
+							players[player].y -= 80;
+						} else if (bullets[i].dir == "down"){
+							players[player].y += 80;
+						}
+					}
 					// spellslinger detection
 					if (bullets[i].type == "blast"){ 
 						players[player].hp -= 20;
 						bulletsToRemove.push(i);
 					}
-					if (bullets[i].type == "stun"){ 
+					else if (bullets[i].type == "stun"){ 
 						players[player].hp -= 10;
 						players[player].stun = true;
+						players[player].stunTime = 7;
 						players[player].stunCooldown = gameTime;
 						bulletsToRemove.push(i);
 					}
-					if (bullets[i].type == "beam"){ 
-						players[player].hp -= 2;
+					else if (bullets[i].type == "beam"){ 
+						players[player].hp -= 1.5;
 					}
 				}
 			}
@@ -298,7 +393,7 @@ function newConnection(socket) {
 			bullets.splice(bulletsToRemove[i], 1);
 		}
 
-		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map]);
+		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime]);
 	}
 }
 function Bullet(x, y, width, height, dir, shooter, speed, colour, type) {
@@ -311,15 +406,17 @@ function Bullet(x, y, width, height, dir, shooter, speed, colour, type) {
 	this.dir = dir;
 	this.colour = colour;
 	this.type = type;
-	this.move = function(){
-		if(this.dir == "up"){
-			this.y -= this.speed;
-		} else if (this.dir == "down") {	
-			this.y += this.speed;
-		} else if (this.dir == "left") {
-			this.x -= this.speed;
-		} else if (this.dir == "right") {
-			this.x += this.speed;
+	if (this.type != "trap"){
+		this.move = function(){
+			if(this.dir == "up"){
+				this.y -= this.speed;
+			} else if (this.dir == "down") {	
+				this.y += this.speed;
+			} else if (this.dir == "left") {
+				this.x -= this.speed;
+			} else if (this.dir == "right") {
+				this.x += this.speed;
+			}
 		}
 	}
 }
@@ -349,6 +446,11 @@ function Player(username, chosenClass){
 	this.secondJump = true;
 	this.username = username;
 	this.canShoot = true;
+	this.a1Time = 0;
+	this.a2Time = 0;
+	this.shootTime = 0;
+	this.ultTime = 0;
+	this.stunTime = 0;
 	this.canAbility1 = true;
 	this.canAbility2 = true;
 	this.canUltimate = true;
