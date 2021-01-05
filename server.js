@@ -17,7 +17,7 @@ var bullets = [];
 var platforms = [];
 var deadPlayers = [];
 //let startTime = second();
-var map = 2;
+var map = 1;
 var updateTimer = null;
 var gameTime = 0;
 setInterval(function(){
@@ -68,19 +68,27 @@ function newConnection(socket) {
 
 	function bulletTravel(abilityKey){
 		if (Object.keys(players).indexOf(socket.id) != -1){
-			if (players[socket.id].class == "mage" && players[socket.id].canShoot && abilityKey == 74){
+			//Mercenary Abilities
+			if (players[socket.id].class == "mercenary" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 5, players[socket.id].dir, socket.id, 15, (112,128,144), "bullet");
+				bullets.push(b);
+				players[socket.id].canShoot = false;
+				players[socket.id].canShootCooldown = gameTime;
+			}
+			// Spellslinger ABILITIES
+			if (players[socket.id].class == "spellslinger" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE", "blast");
 				bullets.push(b);
 				players[socket.id].canShoot = false;
 				players[socket.id].canShootCooldown = gameTime;
 			}
-			else if (players[socket.id].class == "mage" && players[socket.id].canAbility1 && abilityKey == 75){
+			else if (players[socket.id].class == "spellslinger" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 10, players[socket.id].dir, socket.id, 20, "YELLOW", "stun");
 				bullets.push(b);
 				players[socket.id].canAbility1 = false;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			}
-			else if (players[socket.id].class == "mage" && players[socket.id].canAbility2 && abilityKey == 76){
+			else if (players[socket.id].class == "spellslinger" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				if(players[socket.id].dir == "left"){
 					players[socket.id].x -= 100;
 				} else if (players[socket.id].dir == "right"){
@@ -93,7 +101,7 @@ function newConnection(socket) {
 				players[socket.id].canAbility2 = false;
 				players[socket.id].canAbility2Cooldown = gameTime;
 			}
-			else if (players[socket.id].class == "mage" && players[socket.id].canUltimate && abilityKey == 72){
+			else if (players[socket.id].class == "spellslinger" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				console.log("I shoot")
 				if (players[socket.id].dir == "right"){
 					b = new Bullet(players[socket.id].x + 20, players[socket.id].y - 10, 1200, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
@@ -118,9 +126,11 @@ function newConnection(socket) {
 	
 	function processUsername(username){
 		if(username == "") {
-			players[socket.id] = new Player(socket.id);
+			players[socket.id] = new Player(socket.id, "spellslinger");
+		} else if (username == "Merc") {
+			players[socket.id] = new Player(username, "mercenary");
 		} else {
-			players[socket.id] = new Player(username);
+			players[socket.id] = new Player(username, "spellslinger");
 		}
 		io.sockets.emit('players',players);
 		gameStart = true;
@@ -135,16 +145,21 @@ function newConnection(socket) {
 		// update player position
 		//console.log(deadPlayers);
 		for (player in players){
-			if (gameTime - players[player].canShootCooldown > 6){
+			//cooldowns for the mercenary
+			if (gameTime - players[player].canShootCooldown > 3 && players[player].class == "mercenary"){
 				players[player].canShoot = true;
 			}
-			if (gameTime - players[player].canAbility1Cooldown > 12){
+			// cooldowns for spellslinger
+			if (gameTime - players[player].canShootCooldown > 6 && players[player].class == "spellslinger"){
+				players[player].canShoot = true;
+			}
+			if (gameTime - players[player].canAbility1Cooldown > 12 && players[player].class == "spellslinger"){
 				players[player].canAbility1 = true;
 			}
-			if (gameTime - players[player].canAbility2Cooldown > 20){
+			if (gameTime - players[player].canAbility2Cooldown > 20 && players[player].class == "spellslinger"){
 				players[player].canAbility2 = true;
 			}
-			if (gameTime - players[player].canUltimateCooldown > 150){
+			if (gameTime - players[player].canUltimateCooldown > 150 && players[player].class == "spellslinger"){
 				players[player].canUltimate = true;
 			}
 			if (gameTime - players[player].stunCooldown > 7 && players[player].stunCooldown != 0){
@@ -257,6 +272,12 @@ function newConnection(socket) {
 					console.log("REMOVE.")
 				}
 				if (players[player].x + 20> bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter){
+					// mercenary detection
+					if (bullets[i].type == "bullet"){ 
+						players[player].hp -= 10;
+						bulletsToRemove.push(i);
+					}
+					// spellslinger detection
 					if (bullets[i].type == "blast"){ 
 						players[player].hp -= 20;
 						bulletsToRemove.push(i);
@@ -311,7 +332,7 @@ function checkRemove(bullet){
 	}
 }
 
-function Player(username){
+function Player(username, chosenClass){
 	if (map == 1){
 		this.x = Math.floor(Math.random() * Math.floor(1000));;
 		this.y = Math.floor(Math.random() * Math.floor(600));;
@@ -331,7 +352,7 @@ function Player(username){
 	this.canAbility1 = true;
 	this.canAbility2 = true;
 	this.canUltimate = true;
-	this.class = "mage";
+	this.class = chosenClass;
 	this.stun = false;
 	this.canShootCooldown = 0;
 	this.canAbility1Cooldown = 0;
