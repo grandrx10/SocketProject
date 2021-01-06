@@ -17,7 +17,7 @@ var bullets = [];
 var platforms = [];
 var deadPlayers = [];
 //let startTime = second();
-var map = 1;
+var map = 2;
 var updateTimer = null;
 var gameTime = 0;
 setInterval(function(){
@@ -72,7 +72,7 @@ function newConnection(socket) {
 			if (players[socket.id].class == "assassin" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				for (player in players){
 					// retry this please fix this later
-					if (players[player].x + 20> players[socket.id].x && players[player].x < players[socket.id].x + players[socket.id].width && players[socket.id].y + 40 > players[socket.id].y && players[player].y <  players[socket.id].y + players[socket.id].height && player != socket.id){
+					if (players[player].x + 20>= players[socket.id].x && players[player].x <= players[socket.id].x + players[socket.id].width && players[socket.id].y >= players[socket.id].y && players[player].y <=  players[socket.id].y + players[socket.id].height && player != socket.id){
 						players[player].hp -= 35;
 					}
 				}
