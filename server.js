@@ -17,7 +17,7 @@ var bullets = [];
 var platforms = [];
 var deadPlayers = [];
 //let startTime = second();
-var map = 2;
+var map = 1;
 var updateTimer = null;
 var gameTime = 0;
 setInterval(function(){
@@ -112,7 +112,7 @@ function newConnection(socket) {
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 32, 35, 8, players[socket.id].dir, socket.id, -10, "PURPLE", "trap");
 				bullets.push(b);
 				players[socket.id].canAbility1 = false;
-				players[socket.id].a1Time = 50;
+				players[socket.id].a1Time = 70;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			}
 			else if (players[socket.id].class == "mercenary" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
@@ -396,7 +396,7 @@ function newConnection(socket) {
 						bulletsToRemove.push(i);
 					}
 					else if (bullets[i].type == "trap"){ 
-						players[player].hp -= 30;
+						players[player].hp -= 10;
 						players[player].stun = true;
 						players[player].stunTime = 12
 						players[player].stunCooldown2 = gameTime;
