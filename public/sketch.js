@@ -7,6 +7,7 @@ var gameStart = false;
 var userNameSubmitted = false;
 var map;
 var gameTime;
+var walls = [];
 
 function setup(){
     createCanvas(1200,600);
@@ -71,6 +72,11 @@ function draw() {
         rect(platforms[i].x, platforms[i].y, platforms[i].width, platforms[i].height);
     }
 
+    for (var i = 0; i < walls.length; i++) {
+        fill(205, 249, 138);
+        rect(walls[i].x, walls[i].y, walls[i].width, walls[i].height);
+    }
+
     for (player in deadPlayers){
         fill("RED")
         rect(deadPlayers[player].x, deadPlayers[player].y, 40, 20);
@@ -110,6 +116,16 @@ function draw() {
     }
     if(gameStart){
         for(player in players) {
+            if (players[player].class == "assassin" && (gameTime - players[player].canShootCooldown) < players[player].shootTime){
+                fill(76, 0, 153);
+                if (players[player].dir == "left"){
+                    rect(players[player].x - 20, players[player].y+10, 20, 15);
+                } else if (players[player].dir == "right"){
+                    rect(players[player].x + 20, players[player].y+10, 20, 15);
+                } else {
+                    rect(players[player].x + 20, players[player].y+10, 20, 15);
+                }
+            }
             if (players[player].invis == true){
                 if(socket.id == player){
                     fill(204, 255, 255);
@@ -152,6 +168,12 @@ function draw() {
                     } else if ((gameTime - players[player].stunCooldown2) < players[player].stunTime){
                         rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown2)/players[player].stunTime * 30, 5);
                     }
+                }
+                if(players[player].class == "tank" && players[player].ultimateDuration != 0){
+                    fill("white")
+                    rect(players[player].x - 5, players[player].y - 40, 30, 5);
+                    fill(255, 178, 102)
+                    rect(players[player].x - 5, players[player].y - 40, (gameTime - players[player].ultimateDuration)/players[player].ultDurTime * 30, 5);
                 }
                 if (players[player].xAcceleration == 12){
                     fill("white")
@@ -263,6 +285,7 @@ function update(returnList){
     deadPlayers = returnList[3];
     map = returnList[4];
     gameTime = returnList[5];
+    walls = returnList[6];
 }
 
 function respawn(){
