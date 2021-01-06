@@ -119,17 +119,25 @@ function draw() {
             if (players[player].class == "assassin" && (gameTime - players[player].canShootCooldown) < players[player].shootTime){
                 fill(76, 0, 153);
                 if (players[player].dir == "left"){
-                    rect(players[player].x - 20, players[player].y+10, 20, 15);
+                    rect(players[player].x - 20, players[player].y+10, 20, 12);
                 } else if (players[player].dir == "right"){
-                    rect(players[player].x + 20, players[player].y+10, 20, 15);
+                    rect(players[player].x + 20, players[player].y+10, 20, 12);
                 } else {
-                    rect(players[player].x + 20, players[player].y+10, 20, 15);
+                    rect(players[player].x + 20, players[player].y+10, 20, 12);
                 }
             }
             if (players[player].invis == true){
                 if(socket.id == player){
                     fill(204, 255, 255);
                     rect(players[player].x, players[player].y, 20, players[player].height);
+                    fill("BLACK")
+                    if (players[player].dir == "left"){
+                        rect(players[player].x, players[player].y + 10, 14, 6)
+                    } else if (players[player].dir == "up"){
+                        rect(players[player].x, players[player].y + 10, 14, 6)
+                    } else {
+                        rect(players[player].x + 6, players[player].y + 10, 14, 6)
+                    }
                     // healthbars
                     fill("white")
                     rect(players[player].x - 10, players[player].y - 10, 40, 5);
@@ -167,6 +175,38 @@ function draw() {
                         rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown)/players[player].stunTime * 30, 5);
                     } else if ((gameTime - players[player].stunCooldown2) < players[player].stunTime){
                         rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown2)/players[player].stunTime * 30, 5);
+                    }
+                }
+                if(players[player].class == "assassin"){
+                    fill("BLACK")
+                    if (players[player].dir == "left"){
+                        rect(players[player].x, players[player].y + 10, 14, 6)
+                    } else if (players[player].dir == "up"){
+                        rect(players[player].x, players[player].y + 10, 14, 6)
+                    } else {
+                        rect(players[player].x + 6, players[player].y + 10, 14, 6)
+                    }
+                } else if (players[player].class == "tank"){
+                    fill(66, 245, 239)
+                    rect(players[player].x - 2, players[player].y + 5, 24, 10)
+                } else if (players[player].class == "mercenary"){
+                    fill(66, 47, 79)
+                    if (players[player].dir == "left"){
+                        rect(players[player].x, players[player].y, 20, 8)
+                        rect(players[player].x - 6, players[player].y + 8, 26, 8)
+                    } else if (players[player].dir == "up"){
+                        rect(players[player].x, players[player].y, 20, 8)
+                        rect(players[player].x - 6, players[player].y + 8, 26, 8)
+                    } else {
+                        rect(players[player].x, players[player].y, 20, 8)
+                        rect(players[player].x, players[player].y + 8, 26, 8)
+                    }
+                } else if (players[player].class == "spellslinger"){
+                    fill(161, 94, 0)
+                    if (players[player].height == 25){
+                        rect(players[player].x - 1, players[player].y + 15, 22, 10);
+                    } else {
+                        rect(players[player].x - 1, players[player].y + 15, 22, 25);
                     }
                 }
                 if(players[player].class == "tank" && players[player].ultimateDuration != 0){

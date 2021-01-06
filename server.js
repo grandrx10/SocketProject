@@ -193,7 +193,7 @@ function newConnection(socket) {
 			}
 			// Spellslinger ABILITIES
 			if (players[socket.id].class == "spellslinger" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
-				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 15, "BLUE", "blast");
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 18, "BLUE", "blast");
 				bullets.push(b);
 				players[socket.id].canShoot = false;
 				players[socket.id].shootTime = 6;
@@ -234,7 +234,7 @@ function newConnection(socket) {
 				}
 				bullets.push(b);
 				players[socket.id].stun = true;
-				players[socket.id].stunTime = 12
+				players[socket.id].stunTime = 12;
 				players[socket.id].stunCooldown2 = gameTime;
 				players[socket.id].canUltimate = false;
 				players[socket.id].ultTime = 150;
@@ -276,7 +276,7 @@ function newConnection(socket) {
 				players[player].slowCooldown = 0;
 				players[player].stunCooldown = 0;
 				players[player].stunCooldown2 = 0;
-			} else {
+			} else if (players[player].class == "tank" ) {
 				players[player].ultimateDuration = 0;
 			}
 			//cooldowns for the mercenary
@@ -420,9 +420,16 @@ function newConnection(socket) {
 					} else if(walls[i].dir ==  "right"){
 						walls[i].x = players[player].x + 45;
 						walls[i].y = players[player].y - 10;
+					} else if (walls[i].dir == "up") {
+						walls[i].x = players[player].x + 15;
+						walls[i].y = players[player].y - 20;
+						walls[i].width = 50;
+						walls[i].height = 15;
 					} else {
-						walls[i].x = players[player].x + 45;
-						walls[i].y = players[player].y - 10;
+						walls[i].x = players[player].x - 15;
+						walls[i].y = players[player].y + 60;
+						walls[i].width = 50;
+						walls[i].height = 15;
 					}
 				}
 				if (players[player].x + 20 > walls[i].x && players[player].x < walls[i].x + walls[i].width && players[player].y + players[player].height > walls[i].y && players[player].y < walls[i].y + walls[i].height) {
@@ -470,7 +477,7 @@ function newConnection(socket) {
 			}
 			// check hit
 			for (player in players){
-				if (gameTime - players[player].ultimateDuration > 12 && bullets[i].type == "beam" && gameTime - players[player].ultimateDuration < 14 && player == bullets[i].shooter){
+				if (gameTime - players[player].ultimateDuration > 12 && bullets[i].type == "beam" && gameTime - players[player].ultimateDuration < 14 && player == bullets[i].shooter && players[player].ultimateDuration != 0){
 					bulletsToRemove.push(i);
 				}
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter){
