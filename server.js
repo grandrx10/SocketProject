@@ -18,9 +18,10 @@ var platforms = [];
 var walls = [];
 var deadPlayers = [];
 //let startTime = second();
-var map = 1;
+var map = 2;
 var updateTimer = null;
 var gameTime = 0;
+var mapWidth = 2400
 setInterval(function(){
 	gameTime++;
 }, 100)
@@ -35,6 +36,15 @@ if (map == 1){
 	platforms.push(new Platform(650, 200, 350, 20, 0));
 	platforms.push(new Platform(0, 310, 100, 20, 0));
 	platforms.push(new Platform(1100, 310, 100, 20, 0));
+	platforms.push(new Platform(1200, 500, 300, 20, 0));
+	platforms.push(new Platform(2100, 500, 300, 20, 0));
+	platforms.push(new Platform(1500, 370, 200, 20, 0));
+	platforms.push(new Platform(1750, 350, 100, 20, 3));
+	platforms.push(new Platform(1900, 370, 200, 20, 0));
+	platforms.push(new Platform(1400, 200, 350, 20, 0));
+	platforms.push(new Platform(1850, 200, 350, 20, 0));
+	platforms.push(new Platform(1200, 310, 100, 20, 0));
+	platforms.push(new Platform(2300, 310, 100, 20, 0));
 	bullets.push(new Bullet(2 + 5, 600 + 15, 18, 12, "left", 12, 15, "BLUE", "blast"))
 } else if (map == 2){
 	platforms.push(new Platform(300, 500, 600, 20, 0));
@@ -45,6 +55,15 @@ if (map == 1){
 	platforms.push(new Platform(1000, 200, 200, 20, 0.5));
 	platforms.push(new Platform(0, 350, 200, 20, -0.5));
 	platforms.push(new Platform(500, 50, 200, 20, 0.2));
+	// mirror
+	platforms.push(new Platform(1500, 500, 600, 20, 0));
+	platforms.push(new Platform(1400, 500, 100, 20, 2));
+	platforms.push(new Platform(2100, 500, 100, 20, -2));
+	platforms.push(new Platform(1500, 100, 200, 20, 0.5));
+	platforms.push(new Platform(1900, 300, 200, 20, -0.5));
+	platforms.push(new Platform(2200, 200, 200, 20, 0.5));
+	platforms.push(new Platform(1200, 350, 200, 20, -0.5));
+	platforms.push(new Platform(1700, 50, 200, 20, 0.2));
 	bullets.push(new Bullet(2 + 5, 600 + 15, 18, 12, "left", 12, 15, "BLUE", "blast"))
 }
 
@@ -92,7 +111,7 @@ function newConnection(socket) {
 			} else if (players[socket.id].class == "tank" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
 				players[socket.id].hp += 40
 				players[socket.id].canAbility1 = false;
-				players[socket.id].a1Time = 40;
+				players[socket.id].a1Time = 60;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			} else if (players[socket.id].class == "tank" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				walls.push(new Wall(players[socket.id].x + 10, players[socket.id].y, 15, 50, socket.id, players[socket.id].dir));
@@ -176,8 +195,10 @@ function newConnection(socket) {
 				players[socket.id].a2Time = 25;
 				players[socket.id].canAbility2Cooldown = gameTime;
 				if(players[socket.id].dir == "left"){
+					players[player].BASE -= -60;
 					players[socket.id].x -= -60;
 				} else if (players[socket.id].dir == "right"){
+					players[player].BASE += -60;
 					players[socket.id].x += -60;
 				} else if (players[socket.id].dir == "up"){
 					players[socket.id].y -= -60;
@@ -209,8 +230,10 @@ function newConnection(socket) {
 			else if (players[socket.id].class == "spellslinger" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				if(players[socket.id].dir == "left"){
 					players[socket.id].x -= 150;
+					players[player].BASE -= 150;
 				} else if (players[socket.id].dir == "right"){
 					players[socket.id].x += 150;
+					players[player].BASE += 150;
 				} else if (players[socket.id].dir == "up"){
 					players[socket.id].y -= 150;
 				} else if (players[socket.id].dir == "down"){
@@ -222,7 +245,7 @@ function newConnection(socket) {
 			}
 			else if (players[socket.id].class == "spellslinger" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				if (players[socket.id].dir == "right"){
-					b = new Bullet(players[socket.id].x + 20, players[socket.id].y - 10, 1200, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
+					b = new Bullet(players[socket.id].x + 20, players[socket.id].y - 10, mapWidth - players[socket.id].x, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
 				} else if (players[socket.id].dir == "left"){
 					b = new Bullet(0, players[socket.id].y - 10, players[socket.id].x, 60, players[socket.id].dir, socket.id, 0, "CYAN", "beam");
 				}
@@ -266,6 +289,7 @@ function newConnection(socket) {
 	}
 
 	function update(){
+		// Draw borders
 		// update player position
 		//console.log(deadPlayers);
 		for (player in players){
@@ -350,12 +374,15 @@ function newConnection(socket) {
 			players[player].ySpeed -= 0.5;
 			players[player].y -= players[player].ySpeed;
 			if (players[player].stun == false){
+				players[player].BASE -= players[player].xSpeed;
 				players[player].x -= players[player].xSpeed;
 			}
-			if (players[player].x > 1180){
-				players[player].x = 1180;
+			if (players[player].x > mapWidth - players[player].width){
+				players[player].x = mapWidth - players[player].width;
+				players[player].BASE = mapWidth - players[player].width - 590;
 			} else if (players[player].x < 0){
 				players[player].x = 0;
+				players[player].BASE = -590;
 			}
 			if (players[player].y < 0){
 				players[player].y = 0
@@ -440,6 +467,7 @@ function newConnection(socket) {
 						players[player].x = walls[i].x - players[player].width;
 					} else if (players[player].x > walls[i].x + walls[i].width - 10) {
 						players[player].x = walls[i].x + walls[i].width;
+						players[player].BASE = walls[i].x + walls[i].width;
 					}
 					players[player].jump = true;
 					players[player].secondJump = true;
@@ -483,7 +511,7 @@ function newConnection(socket) {
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter){
 					// Tank detection
 					if (bullets[i].type == "scatter"){ 
-						players[player].hp -= 18;
+						players[player].hp -= 12;
 						bulletsToRemove.push(i);
 					}
 					// assassin detection
@@ -517,8 +545,10 @@ function newConnection(socket) {
 						bulletsToRemove.push(i);
 						if(bullets[i].dir == "left"){
 							players[player].x -= 80;
+							players[player].BASE -= 80;
 						} else if (bullets[i].dir == "right"){
 							players[player].x += 80;
+							players[player].BASE -= 80;
 						} else if (bullets[i].dir == "up"){
 							players[player].y -= 80;
 						} else if (bullets[i].dir == "down"){
@@ -576,7 +606,7 @@ function Bullet(x, y, width, height, dir, shooter, speed, colour, type) {
 }
 
 function checkRemove(bullet){
-	if (bullet.x > 1200 || bullet.x < 0 || bullet.y > 600 || bullet.y < 0){
+	if (bullet.x > mapWidth || bullet.x < 0 || bullet.y > 600 || bullet.y < 0){
 		return true;
 	} else{
 		return false;
@@ -584,13 +614,9 @@ function checkRemove(bullet){
 }
 
 function Player(username, chosenClass){
-	if (map == 1){
-		this.x = Math.floor(Math.random() * Math.floor(1000));;
-		this.y = Math.floor(Math.random() * Math.floor(600));;
-	} else if (map == 2){
-		this.x = Math.floor(Math.random() * Math.floor(1000));;
-		this.y = Math.floor(Math.random() * Math.floor(400));;
-	}
+	this.x = Math.floor(Math.random() * 2380) + 1;
+	this.y = 20;
+	this.BASE = this.x - 590;
 	this.dir = "up";
 	this.height = 40;
 	this.width = 20;

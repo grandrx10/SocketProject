@@ -8,6 +8,7 @@ var userNameSubmitted = false;
 var map;
 var gameTime;
 var walls = [];
+var mapWidth = 2400;
 
 function setup(){
     createCanvas(1200,600);
@@ -61,37 +62,41 @@ function draw() {
     }
     if (map == 2){
         fill(220,20,60)
-        rect(0, 540, 1200, 60)
+        rect(0, 540, mapWidth, 60)
     }
+    
     for (var i = 0; i < platforms.length; i++) {
+        fill("BLACK")
+        rect(-20 - players[socket.id].BASE, 0, 20, 600)
+        rect(mapWidth - players[socket.id].BASE, 0, 20, 600)
         if (platforms[i].speed === 0) {
             fill(4, 207, 95);
         } else {
             fill(247, 191, 60);
         }
-        rect(platforms[i].x, platforms[i].y, platforms[i].width, platforms[i].height);
+        rect(platforms[i].x - players[socket.id].BASE, platforms[i].y, platforms[i].width, platforms[i].height);
     }
 
     for (var i = 0; i < walls.length; i++) {
         fill(205, 249, 138);
-        rect(walls[i].x, walls[i].y, walls[i].width, walls[i].height);
+        rect(walls[i].x - players[socket.id].BASE, walls[i].y, walls[i].width, walls[i].height);
     }
 
     for (player in deadPlayers){
         fill("RED")
-        rect(deadPlayers[player].x, deadPlayers[player].y, 40, 20);
+        rect(deadPlayers[player].x - players[socket.id].BASE, deadPlayers[player].y, 40, 20);
     }
 
     if (bullets != []) {
         for (var i = 0; i < bullets.length; i++) {
             fill(bullets[i].colour)
             if (bullets[i].type == "beam" || bullets[i].type == "trap"){
-                rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
+                rect(bullets[i].x - players[socket.id].BASE, bullets[i].y, bullets[i].width, bullets[i].height);
             } else{
                 if (bullets[i].dir == "up" || bullets[i].dir == "down"){
-                    rect(bullets[i].x, bullets[i].y, bullets[i].height, bullets[i].width);
+                    rect(bullets[i].x - players[socket.id].BASE, bullets[i].y, bullets[i].height, bullets[i].width);
                 } else {
-                    rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
+                    rect(bullets[i].x- players[socket.id].BASE, bullets[i].y, bullets[i].width, bullets[i].height);
                 }
             }   
         }
@@ -119,117 +124,118 @@ function draw() {
             if (players[player].class == "assassin" && (gameTime - players[player].canShootCooldown) < players[player].shootTime){
                 fill(76, 0, 153);
                 if (players[player].dir == "left"){
-                    rect(players[player].x - 20, players[player].y+10, 20, 12);
+                    rect(players[player].x - 20 - players[socket.id].BASE, players[player].y+10, 20, 12);
                 } else if (players[player].dir == "right"){
-                    rect(players[player].x + 20, players[player].y+10, 20, 12);
+                    rect(players[player].x + 20 - players[socket.id].BASE, players[player].y+10, 20, 12);
                 } else {
-                    rect(players[player].x + 20, players[player].y+10, 20, 12);
+                    rect(players[player].x + 20 - players[socket.id].BASE, players[player].y+10, 20, 12);
                 }
             }
             if (players[player].invis == true){
                 if(socket.id == player){
                     fill(204, 255, 255);
-                    rect(players[player].x, players[player].y, 20, players[player].height);
+                    rect(players[player].x - players[socket.id].BASE, players[player].y, 20, players[player].height);
                     fill("BLACK")
                     if (players[player].dir == "left"){
-                        rect(players[player].x, players[player].y + 10, 14, 6)
+                        rect(players[player].x - players[socket.id].BASE, players[player].y + 10, 14, 6)
                     } else if (players[player].dir == "up"){
-                        rect(players[player].x, players[player].y + 10, 14, 6)
+                        rect(players[player].x - players[socket.id].BASE, players[player].y + 10, 14, 6)
                     } else {
-                        rect(players[player].x + 6, players[player].y + 10, 14, 6)
+                        rect(players[player].x + 6 - players[socket.id].BASE, players[player].y + 10, 14, 6)
                     }
                     // healthbars
                     fill("white")
-                    rect(players[player].x - 10, players[player].y - 10, 40, 5);
+                    rect(players[player].x - 10 - players[socket.id].BASE, players[player].y - 10, 40, 5);
                     fill("green")
-                    rect(players[player].x - 10, players[player].y - 10, 40 * players[player].hp/100, 5);
+                    rect(players[player].x - 10 - players[socket.id].BASE, players[player].y - 10, 40 * players[player].hp/100, 5);
                     // usernames
                     textAlign(CENTER);
                     fill("black");
-                    text(players[player].username, players[player].x + 10, players[player].y - 15);
+                    text(players[player].username, players[player].x + 10 - players[socket.id].BASE, players[player].y - 15);
                     fill("white")
-                    rect(players[player].x - 5, players[player].y - 35, 30, 5);
+                    rect(players[player].x - 5 - players[socket.id].BASE, players[player].y - 35, 30, 5);
                     fill("black")
                     if ((gameTime - players[player].invisCooldown) < players[player].invisTime){
-                        rect(players[player].x - 5, players[player].y - 35, (gameTime - players[player].invisCooldown)/players[player].invisTime * 30, 5);
+                        rect(players[player].x - 5 - players[socket.id].BASE, players[player].y - 35, (gameTime - players[player].invisCooldown)/players[player].invisTime * 30, 5);
                     }
                     if (players[player].xAcceleration == 12){
                         fill("white")
-                        rect(players[player].x - 5, players[player].y - 40, 30, 5);
+                        rect(players[player].x - 5 - players[socket.id].BASE, players[player].y - 40, 30, 5);
                         fill(255, 178, 102)
-                        rect(players[player].x - 5, players[player].y - 40, (gameTime - players[player].speedCooldown)/players[player].speedTime * 30, 5);
+                        rect(players[player].x - 5 - players[socket.id].BASE, players[player].y - 40, (gameTime - players[player].speedCooldown)/players[player].speedTime * 30, 5);
                     }
                 }
             } else {
                 if(socket.id == player){
                     fill(87, 109, 255);
+                    rect(590, players[player].y, 20, players[player].height);
                 } else {
                     fill("red");
+                    rect(players[player].x - players[socket.id].BASE, players[player].y, 20, players[player].height);
                 }
-                rect(players[player].x, players[player].y, 20, players[player].height);
                 if (players[player].stun == true){
                     fill("WHITE")
-                    rect(players[player].x - 5, players[player].y - 30, 30, 5);
+                    rect(players[player].x - 5- players[socket.id].BASE, players[player].y - 30, 30, 5);
                     fill("YELLOW")
                     if ((gameTime - players[player].stunCooldown) < players[player].stunTime){
-                        rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown)/players[player].stunTime * 30, 5);
+                        rect(players[player].x - 5- players[socket.id].BASE, players[player].y - 30, (gameTime - players[player].stunCooldown)/players[player].stunTime * 30, 5);
                     } else if ((gameTime - players[player].stunCooldown2) < players[player].stunTime){
-                        rect(players[player].x - 5, players[player].y - 30, (gameTime - players[player].stunCooldown2)/players[player].stunTime * 30, 5);
+                        rect(players[player].x - 5- players[socket.id].BASE, players[player].y - 30, (gameTime - players[player].stunCooldown2)/players[player].stunTime * 30, 5);
                     }
                 }
                 if(players[player].class == "assassin"){
                     fill("BLACK")
                     if (players[player].dir == "left"){
-                        rect(players[player].x, players[player].y + 10, 14, 6)
+                        rect(players[player].x - players[socket.id].BASE, players[player].y + 10, 14, 6)
                     } else if (players[player].dir == "up"){
-                        rect(players[player].x, players[player].y + 10, 14, 6)
+                        rect(players[player].x - players[socket.id].BASE, players[player].y + 10, 14, 6)
                     } else {
-                        rect(players[player].x + 6, players[player].y + 10, 14, 6)
+                        rect(players[player].x + 6 - players[socket.id].BASE, players[player].y + 10, 14, 6)
                     }
                 } else if (players[player].class == "tank"){
                     fill(66, 245, 239)
-                    rect(players[player].x - 2, players[player].y + 5, 24, 10)
+                    rect(players[player].x - 2 - players[socket.id].BASE, players[player].y + 5, 24, 10)
                 } else if (players[player].class == "mercenary"){
                     fill(66, 47, 79)
                     if (players[player].dir == "left"){
-                        rect(players[player].x, players[player].y, 20, 8)
-                        rect(players[player].x - 6, players[player].y + 8, 26, 8)
+                        rect(players[player].x - players[socket.id].BASE, players[player].y, 20, 8)
+                        rect(players[player].x - 6 - players[socket.id].BASE, players[player].y + 8, 26, 8)
                     } else if (players[player].dir == "up"){
-                        rect(players[player].x, players[player].y, 20, 8)
-                        rect(players[player].x - 6, players[player].y + 8, 26, 8)
+                        rect(players[player].x- players[socket.id].BASE, players[player].y, 20, 8)
+                        rect(players[player].x - 6 - players[socket.id].BASE, players[player].y + 8, 26, 8)
                     } else {
-                        rect(players[player].x, players[player].y, 20, 8)
-                        rect(players[player].x, players[player].y + 8, 26, 8)
+                        rect(players[player].x- players[socket.id].BASE, players[player].y, 20, 8)
+                        rect(players[player].x- players[socket.id].BASE, players[player].y + 8, 26, 8)
                     }
                 } else if (players[player].class == "spellslinger"){
                     fill(161, 94, 0)
                     if (players[player].height == 25){
-                        rect(players[player].x - 1, players[player].y + 15, 22, 10);
+                        rect(players[player].x - 1- players[socket.id].BASE, players[player].y + 15, 22, 10);
                     } else {
-                        rect(players[player].x - 1, players[player].y + 15, 22, 25);
+                        rect(players[player].x - 1- players[socket.id].BASE, players[player].y + 15, 22, 25);
                     }
                 }
                 if(players[player].class == "tank" && players[player].ultimateDuration != 0){
                     fill("white")
-                    rect(players[player].x - 5, players[player].y - 40, 30, 5);
+                    rect(players[player].x - 5- players[socket.id].BASE, players[player].y - 40, 30, 5);
                     fill(255, 178, 102)
-                    rect(players[player].x - 5, players[player].y - 40, (gameTime - players[player].ultimateDuration)/players[player].ultDurTime * 30, 5);
+                    rect(players[player].x - 5- players[socket.id].BASE, players[player].y - 40, (gameTime - players[player].ultimateDuration)/players[player].ultDurTime * 30, 5);
                 }
                 if (players[player].xAcceleration == 12){
                     fill("white")
-                    rect(players[player].x - 5, players[player].y - 40, 30, 5);
+                    rect(players[player].x - 5- players[socket.id].BASE, players[player].y - 40, 30, 5);
                     fill(255, 178, 102)
-                    rect(players[player].x - 5, players[player].y - 40, (gameTime - players[player].speedCooldown)/players[player].speedTime * 30, 5);
+                    rect(players[player].x - 5- players[socket.id].BASE, players[player].y - 40, (gameTime - players[player].speedCooldown)/players[player].speedTime * 30, 5);
                 }
                 // healthbars
                 fill("white")
-                rect(players[player].x - 10, players[player].y - 10, 40, 5);
+                rect(players[player].x - 10- players[socket.id].BASE, players[player].y - 10, 40, 5);
                 fill("green")
-                rect(players[player].x - 10, players[player].y - 10, 40 * players[player].hp/100, 5);
+                rect(players[player].x - 10- players[socket.id].BASE, players[player].y - 10, 40 * players[player].hp/100, 5);
                 // usernames
                 textAlign(CENTER);
                 fill("black");
-                text(players[player].username, players[player].x + 10, players[player].y - 15);
+                text(players[player].username, players[player].x + 10- players[socket.id].BASE, players[player].y - 15);
             }
             // Cooldowns
             if(socket.id == player){
