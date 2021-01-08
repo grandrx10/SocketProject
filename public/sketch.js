@@ -9,7 +9,10 @@ var map;
 var gameTime;
 var walls = [];
 var base = 0;
-var mapWidth = 2400;
+var mapWidth = 3600;
+var team1Kills = 0;
+var team2Kills = 0;
+var teamMode = true;
 
 function setup(){
     createCanvas(1200,600);
@@ -57,6 +60,7 @@ function setup(){
 }
 
 function draw() {
+    textSize(12)
     for (player in players){
         if (player == socket.id){
             base = players[socket.id].BASE;
@@ -152,7 +156,7 @@ function draw() {
                     // healthbars
                     fill("white")
                     rect(players[player].x - 10 - base, players[player].y - 10, 40, 5);
-                    fill("green")
+                    fill(44, 222, 0)
                     rect(players[player].x - 10 - base, players[player].y - 10, 40 * players[player].hp/100, 5);
                     // usernames
                     textAlign(CENTER);
@@ -175,8 +179,11 @@ function draw() {
                 if(socket.id == player){
                     fill(87, 109, 255);
                     rect(590, players[player].y, 20, players[player].height);
-                } else {
-                    fill("red");
+                } else if (players[player].team == players[socket.id].team && players[socket.id].team != 0) {
+                    fill("GREEN");
+                    rect(players[player].x - base, players[player].y, 20, players[player].height);
+                } else{
+                    fill("RED")
                     rect(players[player].x - base, players[player].y, 20, players[player].height);
                 }
                 if (players[player].stun == true){
@@ -236,7 +243,7 @@ function draw() {
                 // healthbars
                 fill("white")
                 rect(players[player].x - 10- base, players[player].y - 10, 40, 5);
-                fill("green")
+                fill(44, 222, 0)
                 rect(players[player].x - 10- base, players[player].y - 10, 40 * players[player].hp/100, 5);
                 // usernames
                 textAlign(CENTER);
@@ -298,9 +305,25 @@ function draw() {
                     fill("GREEN")
                     rect(30, 70, 100, 10);
                 } else{
-                    fill("YELLOW")
+                    fill("YELLOW");
                     rect(30, 70, (gameTime - players[player].canUltimateCooldown)/players[player].ultTime * 100, 10);
                 }
+                // Kills
+                fill("BLACK")
+                textSize(20);
+                text("Kills: " + players[socket.id].kills, 1100, 20);
+                // Kills TEAMS
+                if (teamMode == true){
+                    fill("RED")
+                    textSize(20);
+                    text("Team A Kills: " + team2Kills, 500, 20);
+                    fill("BLUE")
+                    text("Team B Kills: " + team1Kills, 700, 20);
+                }
+                textSize(20);
+                fill("black")
+                text(Math.round(gameTime/10), 600, 20)
+                textSize(12);
             }
         }
     }
@@ -338,6 +361,8 @@ function update(returnList){
     map = returnList[4];
     gameTime = returnList[5];
     walls = returnList[6];
+    team1Kills = returnList[7];
+    team2Kills = returnList[8];
 }
 
 function respawn(){
