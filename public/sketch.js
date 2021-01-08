@@ -13,6 +13,7 @@ var mapWidth = 3600;
 var team1Kills = 0;
 var team2Kills = 0;
 var teamMode = true;
+var team = 0;
 
 function setup(){
     createCanvas(1200,600);
@@ -177,13 +178,14 @@ function draw() {
                 }
             } else {
                 if(socket.id == player){
+                    team = players[socket.id].team
                     fill(87, 109, 255);
                     rect(590, players[player].y, 20, players[player].height);
                 } 
-                // else if (players[player].team == players[socket.id].team && players[socket.id].team != 0) {
-                //     fill("GREEN");
-                //     rect(players[player].x - base, players[player].y, 20, players[player].height);
-                // } 
+                else if (players[player].team == team) {
+                    fill("GREEN");
+                    rect(players[player].x - base, players[player].y, 20, players[player].height);
+                } 
                 else{
                     fill("RED")
                     rect(players[player].x - base, players[player].y, 20, players[player].height);
