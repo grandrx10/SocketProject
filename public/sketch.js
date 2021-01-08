@@ -308,22 +308,22 @@ function draw() {
                     fill("YELLOW");
                     rect(30, 70, (gameTime - players[player].canUltimateCooldown)/players[player].ultTime * 100, 10);
                 }
-                // Kills
-                fill("BLACK")
-                textSize(20);
-                text("Kills: " + players[socket.id].kills, 1100, 20);
-                // Kills TEAMS
-                if (teamMode == true){
-                    fill("RED")
-                    textSize(20);
-                    text("Team A Kills: " + team2Kills, 500, 20);
-                    fill("BLUE")
-                    text("Team B Kills: " + team1Kills, 700, 20);
-                }
-                textSize(20);
-                fill("black")
-                text(Math.round(gameTime/10), 600, 20)
-                textSize(12);
+                // // Kills
+                // fill("BLACK")
+                // textSize(20);
+                // text("Kills: " + players[socket.id].kills, 1100, 20);
+                // // Kills TEAMS
+                // if (teamMode == true){
+                //     fill("RED")
+                //     textSize(20);
+                //     text("Team A Kills: " + team2Kills, 500, 20);
+                //     fill("BLUE")
+                //     text("Team B Kills: " + team1Kills, 700, 20);
+                // }
+                // textSize(20);
+                // fill("black")
+                // text(Math.round(gameTime/10), 600, 20)
+                // textSize(12);
             }
         }
     }
