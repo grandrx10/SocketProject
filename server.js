@@ -351,8 +351,14 @@ function newConnection(socket) {
 				for (var i = 0; i < bullets.length; i++) {
 					if (bullets[i].type == "beam" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
-					} else if (bullets[i].type == "trap" && player == bullets[i].shooter){
+					}
+					else if (bullets[i].type == "trap" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
+					}
+				}
+				for (var i = 0; i < walls.length; i++) {
+					if (walls[i].user = socket.id){
+						walls.splice(i, 1)
 					}
 				}
 				players[player].deadTime = gameTime;
@@ -465,10 +471,10 @@ function newConnection(socket) {
 						players[player].ySpeed = 0;
 					} else if (players[player].x + 10 < walls[i].x) {
 						players[player].x = walls[i].x - players[player].width;
-						players[player].BASE = walls[i].x - players[player].width;
+						players[player].BASE = walls[i].x - players[player].width - 590
 					} else if (players[player].x > walls[i].x + walls[i].width - 10) {
 						players[player].x = walls[i].x + walls[i].width;
-						players[player].BASE = walls[i].x + walls[i].width;
+						players[player].BASE = walls[i].x + walls[i].width - 590;
 					}
 					players[player].jump = true;
 					players[player].secondJump = true;
