@@ -584,7 +584,7 @@ function newConnection(socket) {
 							players[player].BASE -= 80;
 						} else if (bullets[i].dir == "right"){
 							players[player].x += 80;
-							players[player].BASE -= 80;
+							players[player].BASE += 80;
 						} else if (bullets[i].dir == "up"){
 							players[player].y -= 80;
 						} else if (bullets[i].dir == "down"){
