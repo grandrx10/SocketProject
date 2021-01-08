@@ -22,7 +22,7 @@ var map = 2;
 var updateTimer = null;
 var gameTime = 0;
 var mapWidth = 3600
-var teamMode = false;
+var teamMode = true;
 var teamNumber =0;
 var team1Kills = 0;
 var team2Kills = 0;
@@ -667,23 +667,23 @@ function checkRemove(bullet){
 }
 
 function Player(username, chosenClass){
-	//if (teamMode == false){
-	this.x = Math.floor(Math.random() * 3580) + 1;
-	this.y = 20;
-	//this.team = teamNumber;
-	//teamNumber++;
-	// } else {
-	// 	if(teamNumber % 2 != 0){
-	// 		this.team = 1;
-	// 		this.x = Math.floor(Math.random() * 1180) + 2401;
-	// 		this.y = 20;
-	// 	} else {
-	// 		this.team = 2;
-	// 		this.x = Math.floor(Math.random() * 1180);
-	// 		this.y = 20;
-	// 	}
-	// 	teamNumber ++;
-	// }
+	if (teamMode == false){
+		this.x = Math.floor(Math.random() * 3580) + 1;
+		this.y = 20;
+		this.team = teamNumber;
+		teamNumber++;
+	} else {
+		if(teamNumber % 2 != 0){
+			this.team = 1;
+			this.x = Math.floor(Math.random() * 1180) + 2401;
+			this.y = 20;
+		} else {
+			this.team = 2;
+			this.x = Math.floor(Math.random() * 1180);
+			this.y = 20;
+		}
+		teamNumber ++;
+	}
 	this.BASE = this.x - 590;
 	this.dir = "up";
 	this.height = 40;
