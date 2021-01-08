@@ -179,10 +179,12 @@ function draw() {
                 if(socket.id == player){
                     fill(87, 109, 255);
                     rect(590, players[player].y, 20, players[player].height);
-                } else if (players[player].team == players[socket.id].team && players[socket.id].team != 0) {
-                    fill("GREEN");
-                    rect(players[player].x - base, players[player].y, 20, players[player].height);
-                } else{
+                } 
+                // else if (players[player].team == players[socket.id].team && players[socket.id].team != 0) {
+                //     fill("GREEN");
+                //     rect(players[player].x - base, players[player].y, 20, players[player].height);
+                // } 
+                else{
                     fill("RED")
                     rect(players[player].x - base, players[player].y, 20, players[player].height);
                 }
