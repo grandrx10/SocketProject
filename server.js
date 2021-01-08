@@ -195,10 +195,10 @@ function newConnection(socket) {
 				players[socket.id].a2Time = 25;
 				players[socket.id].canAbility2Cooldown = gameTime;
 				if(players[socket.id].dir == "left"){
-					players[player].BASE -= -60;
+					players[socket.id].BASE -= -60;
 					players[socket.id].x -= -60;
 				} else if (players[socket.id].dir == "right"){
-					players[player].BASE += -60;
+					players[socket.id].BASE += -60;
 					players[socket.id].x += -60;
 				} else if (players[socket.id].dir == "up"){
 					players[socket.id].y -= -60;
@@ -230,10 +230,10 @@ function newConnection(socket) {
 			else if (players[socket.id].class == "spellslinger" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				if(players[socket.id].dir == "left"){
 					players[socket.id].x -= 150;
-					players[player].BASE -= 150;
+					players[socket.id].BASE -= 150;
 				} else if (players[socket.id].dir == "right"){
 					players[socket.id].x += 150;
-					players[player].BASE += 150;
+					players[socket.id].BASE += 150;
 				} else if (players[socket.id].dir == "up"){
 					players[socket.id].y -= 150;
 				} else if (players[socket.id].dir == "down"){
@@ -448,7 +448,7 @@ function newConnection(socket) {
 						walls[i].x = players[player].x + 45;
 						walls[i].y = players[player].y - 10;
 					} else if (walls[i].dir == "up") {
-						walls[i].x = players[player].x + 15;
+						walls[i].x = players[player].x - 15;
 						walls[i].y = players[player].y - 20;
 						walls[i].width = 50;
 						walls[i].height = 15;
