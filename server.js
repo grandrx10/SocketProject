@@ -465,6 +465,7 @@ function newConnection(socket) {
 						players[player].ySpeed = 0;
 					} else if (players[player].x + 10 < walls[i].x) {
 						players[player].x = walls[i].x - players[player].width;
+						players[player].BASE = walls[i].x - players[player].width;
 					} else if (players[player].x > walls[i].x + walls[i].width - 10) {
 						players[player].x = walls[i].x + walls[i].width;
 						players[player].BASE = walls[i].x + walls[i].width;
@@ -485,6 +486,7 @@ function newConnection(socket) {
 				if (walls[j].x + walls[j].width> bullets[i].x && walls[j].x < bullets[i].x + bullets[i].width && walls[j].y + walls[j].height > bullets[i].y && walls[j].y <  bullets[i].y + bullets[i].height && bullets[i].type != "beam"){
 					bulletsToRemove.push(i);
 				}
+
 			}
 			if (bullets[i].type == "trap"){
 				bullets[i].y -= bullets[i].speed;
