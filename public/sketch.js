@@ -313,17 +313,17 @@ function draw() {
                 textSize(20);
                 text("Kills: " + players[socket.id].kills, 1100, 20);
                 // Kills TEAMS
-                if (teamMode == true){
-                    fill("RED")
-                    textSize(20);
-                    text("Team A Kills: " + team2Kills, 500, 20);
-                    fill("BLUE")
-                    text("Team B Kills: " + team1Kills, 700, 20);
-                }
-                textSize(20);
-                fill("black")
-                text(Math.round(gameTime/10), 600, 20)
-                textSize(12);
+                // if (teamMode == true){
+                //     fill("RED")
+                //     textSize(20);
+                //     text("Team A Kills: " + team2Kills, 500, 20);
+                //     fill("BLUE")
+                //     text("Team B Kills: " + team1Kills, 700, 20);
+                // }
+                // textSize(20);
+                // fill("black")
+                // text(Math.round(gameTime/10), 600, 20)
+                // textSize(12);
             }
         }
     }
