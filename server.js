@@ -163,6 +163,9 @@ function newConnection(socket) {
 				players[socket.id].canAbility2 = false;
 				players[socket.id].a2Time = 70;
 				players[socket.id].canAbility2Cooldown = gameTime;
+				players[socket.id].stun = true;
+				players[socket.id].stunCooldown = gameTime;
+				players[socket.id].stunTime = 3;
 			} else if (players[socket.id].class == "huntsman" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				players[socket.id].canUltimate = false;
 				players[socket.id].ultTime = 200;
