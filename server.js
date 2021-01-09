@@ -22,8 +22,8 @@ var map = 2;
 var updateTimer = null;
 var gameTime = 0;
 var mapWidth = 3600
-var teamMode = false;
-var teamNumber =0;
+var teamMode = true;
+var teamNumber = 0;
 var team1Kills = 0;
 var team2Kills = 0;
 
@@ -93,6 +93,8 @@ function newConnection(socket) {
 	socket.on('key', keyMsg);
 	socket.on('shoot', bulletTravel);
 	socket.on('username', processUsername);
+	
+	io.to(socket.id).emit("teamMode", teamMode)
 
 	function keyMsg(key){ //data is the key pressed
 		if(Object.keys(players).indexOf(socket.id) != -1){
@@ -283,17 +285,25 @@ function newConnection(socket) {
 		}
 	}
 	
-	function processUsername(username){
-		if(username == "") {
-			players[socket.id] = new Player(socket.id, "spellslinger");
-		} else if (username == "Merc") {
-			players[socket.id] = new Player(username, "mercenary");
-		} else if (username == "Assassin") {
-			players[socket.id] = new Player(username, "assassin");
-		} else if (username == "Tank") {
-			players[socket.id] = new Player(username, "tank");
+	function processUsername(usernameList){
+		// if(username == "") {
+		// 	players[socket.id] = new Player(socket.id, "spellslinger");
+		// } else if (username == "Merc") {
+		// 	players[socket.id] = new Player(username, "mercenary");
+		// } else if (username == "Assassin") {
+		// 	players[socket.id] = new Player(username, "assassin");
+		// } else if (username == "Tank") {
+		// 	players[socket.id] = new Player(username, "tank");
+		// } else {
+		// 	players[socket.id] = new Player(username, "spellslinger");
+		// }
+		var username = usernameList[0];
+		var characterClass = usernameList[1];
+		var team = usernameList[2];
+		if (username == ""){
+			players[socket.id] = new Player(socket.id, characterClass, team)
 		} else {
-			players[socket.id] = new Player(username, "spellslinger");
+			players[socket.id] = new Player(username, characterClass, team)
 		}
 		io.sockets.emit('players',players);
 		gameStart = true;
@@ -666,23 +676,16 @@ function checkRemove(bullet){
 	}
 }
 
-function Player(username, chosenClass){
+function Player(username, chosenClass, team){
 	if (teamMode == false){
 		this.x = Math.floor(Math.random() * 3580) + 1;
 		this.y = 20;
 		this.team = teamNumber;
 		teamNumber++;
 	} else {
-		if(teamNumber % 2 != 0){
-			this.team = 1;
-			this.x = Math.floor(Math.random() * 1180) + 2401;
-			this.y = 20;
-		} else {
-			this.team = 2;
-			this.x = Math.floor(Math.random() * 1180);
-			this.y = 20;
-		}
-		teamNumber ++;
+		this.team = team;
+		this.x = Math.floor(Math.random() * 1180) + 2401;
+		this.y = 20;
 	}
 	this.BASE = this.x - 590;
 	this.dir = "up";

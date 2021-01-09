@@ -12,7 +12,7 @@ var base = 0;
 var mapWidth = 3600;
 var team1Kills = 0;
 var team2Kills = 0;
-var teamMode = false;
+var teamMode = true;
 var team = 0;
 
 function setup(){
@@ -24,16 +24,18 @@ function setup(){
     socket.on('players', test);
     socket.on("dead", respawn);
 
+    socket.on("teamMode", displayTeamRadio);
+
     $(document).ready(function() {
         //username modal start     
         $('#myModal').appendTo('body').modal('show');
         $('#myModal').on('hidden.bs.modal',function(){
           if(!userNameSubmitted){
-            socket.emit('username',"");
+            socket.emit('username',["", $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
           }
         });
         $('#theButton').click(function() {
-          socket.emit('username',$('#userName').val());
+          socket.emit('username',[$('#userName').val(), $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
           userNameSubmitted = true;
         });
         //username modal end
@@ -48,7 +50,7 @@ function setup(){
           var keycode = (event.keyCode ? event.keyCode : event.which);
           if(keycode == '13'){
             if($('#myModal').is(':visible')){
-              socket.emit('username',$('#userName').val());
+              socket.emit('username',[$('#userName').val(), $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
               userNameSubmitted = true;
               $("#myModal").removeClass("in");
               $(".modal-backdrop").remove();
@@ -372,4 +374,10 @@ function update(returnList){
 function respawn(){
     console.log("This happened here.????")
     $('#myModal').appendTo('body').modal('show');
+}
+
+function displayTeamRadio(teamMode){
+    if (teamMode){
+        $("#team").html('<p>Choose a team:</p><input type="radio" id="teamA" name="team" value="teamA" checked><label for="teamA">TEAM A</label><br><input type="radio" id="teamB" name="team" value="teamB"><label for="teamB">TEAM B</label><br>')
+    }
 }
