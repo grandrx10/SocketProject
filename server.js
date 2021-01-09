@@ -305,6 +305,7 @@ function newConnection(socket) {
 		} else {
 			players[socket.id] = new Player(username, characterClass, team)
 		}
+		console.log(players[socket.id].team)
 		io.sockets.emit('players',players);
 		gameStart = true;
 		if (updateTimer == null){
@@ -684,9 +685,9 @@ function Player(username, chosenClass, team){
 		teamNumber++;
 	} else {
 		this.team = team;
-		if (this.team == 1){
+		if (this.team == "teamB"){
 			this.x = Math.floor(Math.random() * 1180) + 2401;
-		} else {
+		} else if (this.team == "teamA") {
 			this.x = Math.floor(Math.random() * 1180);
 		}
 		this.y = 20;
