@@ -150,7 +150,7 @@ function newConnection(socket) {
 			if (players[socket.id].class == "assassin" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				for (player in players){
 					// retry this please fix this later
-					if (players[player].x + 40>= players[socket.id].x && players[player].x - 20 <= players[socket.id].x + players[socket.id].width && players[player].y + 20 >= players[socket.id].y && players[player].y - 20 <=  players[socket.id].y + players[socket.id].height && player != socket.id){
+					if (players[player].x + 40>= players[socket.id].x && players[player].x - 20 <= players[socket.id].x + players[socket.id].width && players[player].y + 20 >= players[socket.id].y && players[player].y - 20 <=  players[socket.id].y + players[socket.id].height && player != socket.id && players[socket.id].team != players[player].team){
 						players[player].hp -= 30;
 					}
 				}
