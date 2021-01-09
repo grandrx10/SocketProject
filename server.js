@@ -684,7 +684,11 @@ function Player(username, chosenClass, team){
 		teamNumber++;
 	} else {
 		this.team = team;
-		this.x = Math.floor(Math.random() * 1180) + 2401;
+		if (this.team == 1){
+			this.x = Math.floor(Math.random() * 1180) + 2401;
+		} else {
+			this.x = Math.floor(Math.random() * 1180);
+		}
 		this.y = 20;
 	}
 	this.BASE = this.x - 590;
