@@ -124,7 +124,7 @@ function newConnection(socket) {
 					bullets.push(b);
 				}
 				players[socket.id].canShoot = false;
-				players[socket.id].shootTime = 20;
+				players[socket.id].shootTime = 12;
 				players[socket.id].canShootCooldown = gameTime;
 			} else if (players[socket.id].class == "huntsman" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
 				for (player in players){
@@ -137,38 +137,38 @@ function newConnection(socket) {
 					}
 				}
 				players[socket.id].canAbility1 = false;
-				players[socket.id].a1Time = 50;
+				players[socket.id].a1Time = 40;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			} else if (players[socket.id].class == "huntsman" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				// dash
 				if(players[socket.id].dir == "left"){
-					players[socket.id].x -= 180;
-					players[socket.id].BASE -= 180;
-					b = new Bullet(players[socket.id].x + 20, players[socket.id].y, 180, 40, players[socket.id].dir, socket.id, 0, "RED", "rush", players[socket.id].team);
+					players[socket.id].x -= 250;
+					players[socket.id].BASE -= 250;
+					b = new Bullet(players[socket.id].x + 20, players[socket.id].y, 250, 40, players[socket.id].dir, socket.id, 0, "RED", "rush", players[socket.id].team);
 					bullets.push(b);
 				} else if (players[socket.id].dir == "right"){
-					players[socket.id].x += 180;
-					players[socket.id].BASE += 180;
-					b = new Bullet(players[socket.id].x - 180, players[socket.id].y, 180, 40, players[socket.id].dir, socket.id, 0, "RED", "rush", players[socket.id].team);
+					players[socket.id].x += 250;
+					players[socket.id].BASE += 250;
+					b = new Bullet(players[socket.id].x - 250, players[socket.id].y, 250, 40, players[socket.id].dir, socket.id, 0, "RED", "rush", players[socket.id].team);
 					bullets.push(b);
 				} else if (players[socket.id].dir == "up"){
-					players[socket.id].y -= 180;
-					b = new Bullet(players[socket.id].x - 10, players[socket.id].y + 40, 180, 40, players[socket.id].dir, socket.id, 0, "RED", "rush", players[socket.id].team);
+					players[socket.id].y -= 250;
+					b = new Bullet(players[socket.id].x - 10, players[socket.id].y + 40, 250, 40, players[socket.id].dir, socket.id, 0, "RED", "rush", players[socket.id].team);
 					bullets.push(b);
 				} else if (players[socket.id].dir == "down"){
-					players[socket.id].y += 180;
-					b = new Bullet(players[socket.id].x - 10, players[socket.id].y - 180, 180, 40, players[socket.id].dir, socket.id, 0, "RED", "rush", players[socket.id].team);
+					players[socket.id].y += 250;
+					b = new Bullet(players[socket.id].x - 10, players[socket.id].y - 250, 250, 40, players[socket.id].dir, socket.id, 0, "RED", "rush", players[socket.id].team);
 					bullets.push(b);
 				}
 				players[socket.id].canAbility2 = false;
-				players[socket.id].a2Time = 70;
+				players[socket.id].a2Time = 60;
 				players[socket.id].canAbility2Cooldown = gameTime;
 				players[socket.id].stun = true;
 				players[socket.id].stunCooldown = gameTime;
 				players[socket.id].stunTime = 3;
 			} else if (players[socket.id].class == "huntsman" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				players[socket.id].canUltimate = false;
-				players[socket.id].ultTime = 200;
+				players[socket.id].ultTime = 150;
 				players[socket.id].canUltimateCooldown = gameTime;
 				players[socket.id].canShoot = true;
 				players[socket.id].canAbility1 = true;
