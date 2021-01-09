@@ -456,6 +456,9 @@ function newConnection(socket) {
 					else if (bullets[i].type == "trap" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
 					}
+					else if (bullets[i].type == "rush" && player == bullets[i].shooter){
+						bullets.splice(i, 1)
+					}
 				}
 				for (var i = 0; i < bullets.length; i++) {
 					if (bullets[i].type == "beam" && player == bullets[i].shooter){
