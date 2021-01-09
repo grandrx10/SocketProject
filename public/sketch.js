@@ -143,6 +143,15 @@ function draw() {
                 } else {
                     rect(players[player].x + 20 - base, players[player].y+10, 20, 12);
                 }
+            } else if (players[player].class == "huntsman" && (gameTime - players[player].canAbility1Cooldown) > 0 && (gameTime - players[player].canAbility1Cooldown) < 2) {
+                fill("yellow");
+                if (players[player].dir == "left"){
+                    rect(players[player].x - 20 - base, players[player].y+10, 20, 12);
+                } else if (players[player].dir == "right"){
+                    rect(players[player].x + 20 - base, players[player].y+10, 20, 12);
+                } else {
+                    rect(players[player].x + 20 - base, players[player].y+10, 20, 12);
+                }
             }
             if (players[player].invis == true){
                 if(socket.id == player){
