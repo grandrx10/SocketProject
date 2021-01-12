@@ -103,7 +103,7 @@ function draw() {
     if (bullets != []) {
         for (var i = 0; i < bullets.length; i++) {
             fill(bullets[i].colour)
-            if (bullets[i].type == "beam" || bullets[i].type == "trap"){
+            if (bullets[i].type == "beam" || bullets[i].type == "trap" || bullets[i].type == "ultrahealing"){
                 rect(bullets[i].x - base, bullets[i].y, bullets[i].width, bullets[i].height);
             } else{
                 if (bullets[i].dir == "up" || bullets[i].dir == "down"){
@@ -211,7 +211,35 @@ function draw() {
                         rect(players[player].x - 5- base, players[player].y - 30, (gameTime - players[player].stunCooldown2)/players[player].stunTime * 30, 5);
                     }
                 }
-                if(players[player].class == "assassin"){
+                if(players[player].class == "doc"){
+                    fill("white")
+                    rect(players[player].x - base, players[player].y , 20, 10)
+                    fill ("red")
+                    rect(players[player].x - base, players[player].y , 6, 10)
+                    rect(players[player].x - base + 14, players[player].y , 6, 10)
+                    if (players[player].dir == "left" || players[player].dir == "up"){
+                        rect(players[player].x - base - 5, players[player].y + 10, 25, 5)
+                    } else {
+                        rect(players[player].x - base, players[player].y + 10, 25, 5)
+                    }
+                }
+                else if(players[player].class == "huntsman"){
+                    fill("BROWN")
+                    rect(players[player].x - base - 8, players[player].y + 5, 36, 5)
+                    rect(players[player].x - base, players[player].y , 20, 5)
+                    if (players[player].dir == "left"){
+                        rect(players[player].x - base - 1, players[player].y + 15, 22, 15)
+                        rect(players[player].x - base + 21, players[player].y + 16, 10, 20)
+                    } else if (players[player].dir == "up"){
+                        rect(players[player].x - base - 1, players[player].y + 15, 22, 15)
+                        rect(players[player].x - base + 21, players[player].y + 16, 10, 20)
+                    } 
+                    else {
+                        rect(players[player].x - base - 1, players[player].y + 15, 22, 15)
+                        rect(players[player].x - base - 11, players[player].y + 16, 10, 20)
+                    }
+                }
+                else if(players[player].class == "assassin"){
                     fill("BLACK")
                     if (players[player].dir == "left"){
                         rect(players[player].x - base, players[player].y + 10, 14, 6)
