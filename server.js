@@ -685,7 +685,7 @@ function newConnection(socket) {
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team){
 					// doc detection
 					if (bullets[i].type == "lifesteal"){ 
-						players[player].hp -= 6;
+						players[player].hp -= 12;
 						if (players[bullets[i].shooter] != null){
 							players[bullets[i].shooter].hp += 6;
 						}
@@ -698,8 +698,9 @@ function newConnection(socket) {
 						players[player].hp += 15;
 						bulletsToRemove.push(i);
 					} else if (bullets[i].type == "ultrahealing"){ 
-						players[player].yAcceleration = players[player].yAcceleration/2;
-						players[player].xAcceleration = players[player].xAcceleration/2;
+						
+						players[player].yAcceleration = 63*players[player].yAcceleration/64;
+						players[player].xAcceleration = 63*players[player].xAcceleration/64;
 						players[player].slow = true;
 						players[player].slowTime = 20;
 						players[player].slowCooldown = gameTime;
