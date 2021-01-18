@@ -802,6 +802,7 @@ function newConnection(socket) {
 								}
 							}
 							if (players[bullets[i].shooter].team == "teamB"){
+								console.log(team1Kills);
 								team1Kills += 1;
 							} else if (players[bullets[i].shooter].team == "teamA"){
 								team2Kills += 1;
