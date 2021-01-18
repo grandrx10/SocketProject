@@ -12,7 +12,7 @@ var base = 0;
 var mapWidth = 3600;
 var team1Kills = 0;
 var team2Kills = 0;
-var teamMode = true;
+var teamMode = false;
 var team = 0;
 
 function setup(){
