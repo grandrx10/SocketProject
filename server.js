@@ -730,8 +730,8 @@ function newConnection(socket) {
 			}
 			if (bullets[i].type == "trap"){
 				bullets[i].y -= bullets[i].speed;
-				if (bullets[i].y > 592){
-					bullets[i].y = 592;
+				if (bullets[i].y > 1192){
+					bullets[i].y = 1192;
 				}
 				for (var j = 0; j < platforms.length; j++) {
 					if (bullets[i].x + 20 > platforms[j].x && bullets[i].x < platforms[j].x + platforms[j].width && bullets[i].y + bullets[i].height > platforms[j].y && bullets[i].y < platforms[j].y + platforms[j].height) {
