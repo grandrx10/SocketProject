@@ -288,7 +288,7 @@ function draw() {
                         rect(players[player].x - base, players[player].y-range, 20, 8)
                         rect(players[player].x - 6 - base, players[player].y -range+ 8, 26, 8)
                     } else if (players[player].dir == "up"){
-                        rect(players[player].x- base, players[player].y, 20, 8)
+                        rect(players[player].x- base, players[player].y-range, 20, 8)
                         rect(players[player].x - 6 - base, players[player].y-range + 8, 26, 8)
                     } else {
                         rect(players[player].x- base, players[player].y-range, 20, 8)

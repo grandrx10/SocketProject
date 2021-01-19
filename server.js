@@ -768,7 +768,7 @@ function newConnection(socket) {
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team){
 					//deadeye
 					if (bullets[i].type == "revolver"){ 
-						players[player].hp -= 30;
+						players[player].hp -= 23;
 						bulletsToRemove.push(i);
 					} else if (bullets[i].type == "deadshot"){ 
 						players[player].hp -= 100;
