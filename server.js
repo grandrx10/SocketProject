@@ -22,7 +22,8 @@ var healBoxes = [];
 var map = 2;
 var updateTimer = null;
 var gameTime = 0;
-var mapWidth = 3600
+var mapWidth = 6000;
+var mapHeight = 1200;
 var teamMode = true;
 var teamNumber = 0;
 var team1Kills = 0;
@@ -84,8 +85,44 @@ if (map == 1){
 	platforms.push(new Platform(3050, 200, 350, 20, 0));
 	platforms.push(new Platform(2400, 310, 100, 20, 0));
 	platforms.push(new Platform(3500, 310, 100, 20, 0));
-	var healLocationX = [1785, 900, 2700]
-	var healLocationY = [400, 100, 100]
+	// mirror
+	platforms.push(new Platform(3900, 500, 600, 20, 0));
+	platforms.push(new Platform(3800, 500, 100, 20, 2));
+	platforms.push(new Platform(4500, 500, 100, 20, -2));
+	platforms.push(new Platform(3900, 100, 200, 20, 0.5));
+	platforms.push(new Platform(4300, 300, 200, 20, -0.5));
+	platforms.push(new Platform(4600, 200, 200, 20, 0.5));
+	platforms.push(new Platform(3600, 350, 200, 20, -0.5));
+	platforms.push(new Platform(4100, 50, 200, 20, 0.2));
+	// third part
+	platforms.push(new Platform(4800, 500, 300, 20, 0));
+	platforms.push(new Platform(5700, 500, 300, 20, 0));
+	platforms.push(new Platform(5100, 370, 200, 20, 0));
+	platforms.push(new Platform(5350, 350, 100, 20, 3));
+	platforms.push(new Platform(5500, 370, 200, 20, 0));
+	platforms.push(new Platform(5000, 200, 350, 20, 0));
+	platforms.push(new Platform(5450, 200, 350, 20, 0));
+	platforms.push(new Platform(4800, 310, 100, 20, 0));
+	platforms.push(new Platform(5900, 310, 100, 20, 0));
+
+
+	platforms.push(new Platform(0, 800, 1000, 20, 0));
+	platforms.push(new Platform(mapWidth - 1000, 800, 1000, 20, 0));
+
+	platforms.push(new Platform(1500, 800, 800, 20, 0));
+	platforms.push(new Platform(mapWidth - 2300, 800, 800, 20, 0));
+
+	platforms.push(new Platform(2600, 800, 300, 20, 0));
+	platforms.push(new Platform(3100, 800, 300, 20, 0));
+
+	platforms.push(new Platform(1000, 900, 400, 20, 0.7));
+	platforms.push(new Platform(mapWidth - 1000, 900, 400, 20, 0.7));
+
+	platforms.push(new Platform(2400, 900, 500, 20, 0.3));
+	platforms.push(new Platform(mapWidth - 2900, 900, 500, 20, 0.3));
+
+	var healLocationX = [1785, 900, 2700, 4185, 3300,5100]
+	var healLocationY = [400, 100, 100, 400, 100, 100]
 }
 
 function newConnection(socket) {
@@ -111,6 +148,45 @@ function newConnection(socket) {
 
 	function bulletTravel(abilityKey){
 		if (Object.keys(players).indexOf(socket.id) != -1){
+			//deadeye Abilities
+			if (players[socket.id].class == "deadeye" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].ammo > 0){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 23, 14, players[socket.id].dir, socket.id, 24, "ORANGE", "revolver", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].ammo --;
+				players[socket.id].canShoot = false;
+				players[socket.id].shootTime = 1;
+				players[socket.id].canShootCooldown = gameTime;
+			} 
+			else if (players[socket.id].class == "deadeye" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
+				players[socket.id].xAcceleration = 10;
+				players[socket.id].speedTime = 15;
+				players[socket.id].speedCooldown = gameTime;
+				players[socket.id].ammo = 6;
+				players[socket.id].canAbility1 = false;
+				players[socket.id].a1Time = 40;
+				players[socket.id].canAbility1Cooldown = gameTime;
+			} else if (players[socket.id].class == "deadeye" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
+				b = new Bullet(players[socket.id].x, players[socket.id].y + 25, 15, 15, players[socket.id].dir, socket.id, 10, "BLUE", "teleport", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].canAbility2 = false;
+				players[socket.id].a2Time = 80;
+				players[socket.id].canAbility2Cooldown = gameTime;
+			} else if (players[socket.id].class == "deadeye" && players[socket.id].canAbility2 != true && abilityKey == 76 && players[socket.id].stun == false){
+				for (var i = 0; i < bullets.length; i++) {
+					if (bullets[i].shooter == socket.id && bullets[i].type == "teleport"){
+						players[socket.id].x = bullets[i].x
+						players[socket.id].BASE = bullets[i].x - 590
+						players[socket.id].y = bullets[i].y - 25
+						bullets.splice(i, 1);
+					}
+				}
+			}else if (players[socket.id].class == "deadeye" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
+				players[socket.id].canUltimate = false;
+				players[socket.id].ultTime = 180;
+				players[socket.id].ultDurTime = 20;
+				players[socket.id].canUltimateCooldown= gameTime;
+				players[socket.id].ultimateDuration = gameTime;
+			}
 			// Doc abilities
 			if (players[socket.id].class == "doc" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 30, 15, players[socket.id].dir, socket.id, 20, "RED", "lifesteal", players[socket.id].team);
@@ -122,7 +198,7 @@ function newConnection(socket) {
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 5, 10, 25, players[socket.id].dir, socket.id, 22, "YELLOW", "snipe", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].canAbility1 = false;
-				players[socket.id].a1Time = 30;
+				players[socket.id].a1Time = 40;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			} else if (players[socket.id].class == "doc" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x, players[socket.id].y - 30, 20, 20, players[socket.id].dir, socket.id, 0, "GREEN", "healing", players[socket.id].team);
@@ -413,7 +489,6 @@ function newConnection(socket) {
 		} else {
 			players[socket.id] = new Player(username, characterClass, team)
 		}
-		console.log(players[socket.id].team)
 		io.sockets.emit('players',players);
 		gameStart = true;
 		if (updateTimer == null){
@@ -427,6 +502,8 @@ function newConnection(socket) {
 		// Draw borders
 		// update player position
 		//console.log(deadPlayers);
+		// healing blocks
+		
 		if (gameTime % 150 == 0 && healGot == true){
 			for (var i = 0; i < healLocationX.length; i++){
 				b = new Bullet(healLocationX[i], healLocationY[i], 30, 30, "left", 0, 0, "green", "heal", -1)
@@ -445,6 +522,18 @@ function newConnection(socket) {
 				players[player].hp += 0.5
 			} else if (players[player].class == "tank" ) {
 				players[player].ultimateDuration = 0;
+			}
+
+			if (gameTime - players[player].ultimateDuration < players[player].ultDurTime && players[player].class == "deadeye" && players[player].ultimateDuration != 0){
+				players[player].xAcceleration = 3;
+				players[player].yAcceleration = 5;
+			}
+			else if (gameTime - players[player].ultimateDuration > players[player].ultDurTime && players[player].class == "deadeye" && players[player].ultimateDuration != 0){
+				players[player].xAcceleration = players[player].xOrigA;
+				players[player].yAcceleration = players[player].yOrigA;
+				players[player].ultimateDuration = 0;
+				b = new Bullet(players[player].x + 5, players[player].y + 15, 30, 20, players[player].dir, player, 40, "BLACK", "deadshot", players[player].team);
+				bullets.push(b);
 			}
 			//cooldowns for the mercenary
 			if (gameTime - players[player].canShootCooldown > players[player].shootTime){
@@ -482,7 +571,7 @@ function newConnection(socket) {
 				players[player].speedCooldown = 0;
 			}
 
-			if (players[player].y + 40>= 540 && map == 2){
+			if (players[player].y + 40>= 1000 && map == 2){
 				players[player].hp -= 5;
 			}
 			if (players[player].hp < 0){
@@ -491,7 +580,6 @@ function newConnection(socket) {
 				players[player].hp = 100;
 			}
 			if (players[player].hp == 0) {
-				console.log(bullets.length)
 				for (var i = 0; i < bullets.length; i++) {
 					if (bullets[i].type == "beam" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
@@ -512,7 +600,6 @@ function newConnection(socket) {
 				}
 				players[player].deadTime = gameTime;
 				deadPlayers.push(players[player]);
-				console.log("THIS happened.")
 				io.to(player).emit("dead", 1);
 				delete players[player];
 			}
@@ -539,10 +626,8 @@ function newConnection(socket) {
 				players[player].x = 0;
 				players[player].BASE = -590;
 			}
-			if (players[player].y < 0){
-				players[player].y = 0
-			} else if (players[player].y + players[player].height > 600){
-				players[player].y = 600 - players[player].height;
+			if (players[player].y + players[player].height > mapHeight){
+				players[player].y = mapHeight - players[player].height;
 				players[player].jump = true;
 				players[player].secondJump = true;
 			}
@@ -560,8 +645,8 @@ function newConnection(socket) {
 			}
 			if (deadPlayers[player].y < 0){
 				deadPlayers[player].y = 0
-			} else if (deadPlayers[player].y > 560){
-				deadPlayers[player].y = 580;
+			} else if (deadPlayers[player].y > 1180){
+				deadPlayers[player].y = 1180;
 				deadPlayers[player].jump = true;
 			}
 		}
@@ -569,7 +654,7 @@ function newConnection(socket) {
 		// platform collision and moving
 		for (var i = 0; i < platforms.length; i++) {
 			platforms[i].y += platforms[i].speed;
-			if (platforms[i].y > 600 - platforms[i].height || platforms[i].y < 40) {
+			if (platforms[i].y > mapHeight - platforms[i].height - 200 || platforms[i].y < 40) {
 				platforms[i].speed = -platforms[i].speed;
 			}
 			for (player in players){
@@ -673,26 +758,32 @@ function newConnection(socket) {
 				}
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && players[player].team == bullets[i].team){
 					if (bullets[i].type == "healing"){ 
-						console.log("Im alive bruh")
 						players[player].hp += 30;
 						bulletsToRemove.push(i);
 					} 
 					if (bullets[i].type == "ultrahealing"){ 
-						console.log("Im alive")
 						players[player].hp += 5;
 					}
 				}
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team){
+					//deadeye
+					if (bullets[i].type == "revolver"){ 
+						players[player].hp -= 30;
+						bulletsToRemove.push(i);
+					} else if (bullets[i].type == "deadshot"){ 
+						players[player].hp -= 100;
+						bulletsToRemove.push(i);
+					}
 					// doc detection
 					if (bullets[i].type == "lifesteal"){ 
-						players[player].hp -= 12;
+						players[player].hp -= 9;
 						if (players[bullets[i].shooter] != null){
 							players[bullets[i].shooter].hp += 6;
 						}
 					} else if (bullets[i].type == "snipe"){
 						players[player].hp -= 3;
 						players[player].stun = true;
-						players[player].stunTime = 12
+						players[player].stunTime = 8
 						players[player].stunCooldown = gameTime;
 					} else if (bullets[i].type == "healing"){ 
 						players[player].hp += 15;
@@ -781,11 +872,12 @@ function newConnection(socket) {
 					}
 					if (players[player].hp <= 0){
 						if (players[bullets[i].shooter] == undefined){
-							if (bullets[i].team == 1){
-								team1Kills += 1;
-							} else if (bullets[i].team == 2){
-								team2Kills += 1;
-							}
+							console.log("Null")
+							// if (bullets[i].team == "teamA"){
+							// 	team1Kills += 1;
+							// } else if (bullets[i].team == "teamB"){
+							// 	team2Kills += 1;
+							// }
 						} else{
 							players[bullets[i].shooter].kills += 1;
 							if (players[bullets[i].shooter].class == "huntsman"){
@@ -802,10 +894,11 @@ function newConnection(socket) {
 								}
 							}
 							if (players[bullets[i].shooter].team == "teamB"){
-								console.log(team1Kills);
 								team1Kills += 1;
+								console.log(team1Kills);
 							} else if (players[bullets[i].shooter].team == "teamA"){
 								team2Kills += 1;
+								console.log(team2Kills);
 							}
 						}
 					}
@@ -815,7 +908,9 @@ function newConnection(socket) {
 		for (var i = bulletsToRemove.length -1; i > 0; i--){
 			bullets.splice(bulletsToRemove[i], 1);
 		}
-
+		for (player in players){
+			players[player].RANGE = players[player].y - 280;
+		}
 		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills]);
 	}
 }
@@ -846,7 +941,7 @@ function Bullet(x, y, width, height, dir, shooter, speed, colour, type, team) {
 }
 
 function checkRemove(bullet){
-	if (bullet.x > mapWidth || bullet.x < 0 || bullet.y > 600 || bullet.y < 0){
+	if (bullet.x > mapWidth || bullet.x < 0 || bullet.y > mapHeight || bullet.y < -300){
 		return true;
 	} else{
 		return false;
@@ -855,20 +950,21 @@ function checkRemove(bullet){
 
 function Player(username, chosenClass, team){
 	if (teamMode == false){
-		this.x = Math.floor(Math.random() * 3580) + 1;
+		this.x = Math.floor(Math.random() * 5980) + 1;
 		this.y = 20;
 		this.team = teamNumber;
 		teamNumber++;
 	} else {
 		this.team = team;
 		if (this.team == "teamB"){
-			this.x = Math.floor(Math.random() * 1180) + 2401;
+			this.x = Math.floor(Math.random() * 1180) + 4801;
 		} else if (this.team == "teamA") {
 			this.x = Math.floor(Math.random() * 1180);
 		}
 		this.y = 20;
 	}
 	this.BASE = this.x - 590;
+	this.RANGE = this.y - 280;
 	this.dir = "up";
 	this.height = 40;
 	this.width = 20;
@@ -877,7 +973,11 @@ function Player(username, chosenClass, team){
 	if (chosenClass == "assassin"){
 		this.yOrigA = 10
 		this.xOrigA = 8
-	} else{
+	} else if(chosenClass == "deadeye"){
+		this.yOrigA = 10
+		this.xOrigA = 6
+		this.ammo = 6
+	} else {
 		this.yOrigA = 10
 		this.xOrigA = 6
 	}
