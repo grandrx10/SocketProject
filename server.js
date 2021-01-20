@@ -1008,7 +1008,6 @@ function newConnection(socket) {
 					}
 					if (players[player].hp <= 0){
 						if (players[bullets[i].shooter] == undefined){
-							console.log("Null")
 							// if (bullets[i].team == "teamA"){
 							// 	team1Kills += 1;
 							// } else if (bullets[i].team == "teamB"){
