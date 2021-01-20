@@ -13,8 +13,8 @@ var range = 0;
 var mapWidth = 6000;
 var team1Kills = 0;
 var team2Kills = 0;
-var teamMode = false;
 var team = 0;
+var teamMode = "";
 
 function setup(){
     createCanvas(1200,600);
@@ -193,15 +193,15 @@ function draw() {
                 if(socket.id == player){
                     team = players[socket.id].team
                     fill(87, 109, 255);
-                    rect(590, 280, 20, players[player].height);
+                    rect(600 - players[player].width/2, 300 - players[player].height/2, players[player].width, players[player].height);
                 } 
                 else if (players[player].team == team) {
                     fill("GREEN");
-                    rect(players[player].x - base, players[player].y-range, 20, players[player].height);
+                    rect(players[player].x - base, players[player].y-range, players[player].width, players[player].height);
                 } 
                 else{
                     fill("RED")
-                    rect(players[player].x - base, players[player].y-range, 20, players[player].height);
+                    rect(players[player].x - base, players[player].y-range, players[player].width, players[player].height);
                 }
                 if (players[player].stun == true){
                     fill("WHITE")
@@ -296,7 +296,7 @@ function draw() {
                     }
                 } else if (players[player].class == "spellslinger"){
                     fill(161, 94, 0)
-                    if (players[player].height == 25){
+                    if (players[player].height == players[player].origHeight/2 ){
                         rect(players[player].x - 1- base, players[player].y-range + 15, 22, 10);
                     } else {
                         rect(players[player].x - 1- base, players[player].y-range + 15, 22, 25);
@@ -308,17 +308,24 @@ function draw() {
                     fill(255, 178, 102)
                     rect(players[player].x - 5- base, players[player].y -range- 40, (gameTime - players[player].ultimateDuration)/players[player].ultDurTime * 30, 5);
                 }
-                if (players[player].xAcceleration > players[player].xOrigA){
+                if (players[player].xAcceleration > players[player].xOrigA && players[player].class != "juggernaut"){
                     fill("white")
                     rect(players[player].x - 5- base, players[player].y-range - 40, 30, 5);
                     fill(255, 178, 102)
                     rect(players[player].x - 5- base, players[player].y-range - 40, (gameTime - players[player].speedCooldown)/players[player].speedTime * 30, 5);
                 }
                 // healthbars
-                fill("white")
-                rect(players[player].x - 10- base, players[player].y-range - 10, 40, 5);
-                fill(44, 222, 0)
-                rect(players[player].x - 10- base, players[player].y -range- 10, 40 * players[player].hp/100, 5);
+                if (players[player].class != "juggernaut"){
+                    fill("white")
+                    rect(players[player].x - 10- base, players[player].y-range - 10, 40, 5);
+                    fill(44, 222, 0)
+                    rect(players[player].x - 10- base, players[player].y -range- 10, 40 * players[player].hp/100, 5);
+                } else{
+                    fill("white")
+                    rect(players[player].x - 14- base, players[player].y-range - 10, 60, 5);
+                    fill(44, 222, 0)
+                    rect(players[player].x - 14- base, players[player].y -range- 10, 60 * players[player].hp/200, 5);
+                }
                 // usernames
                 textAlign(CENTER);
                 fill("black");
@@ -387,7 +394,7 @@ function draw() {
                 textSize(20);
                 text("Kills: " + players[socket.id].kills, 1100, 20);
                 // Kills TEAMS
-                if (teamMode == true){
+                if (teamMode == "tdm"){
                     fill("RED")
                     textSize(20);
                     text("Team A Kills: " + team2Kills, 500, 20);
@@ -437,6 +444,7 @@ function update(returnList){
     walls = returnList[6];
     team1Kills = returnList[7];
     team2Kills = returnList[8];
+    teamMode = returnList[9];
 }
 
 function respawn(){
@@ -445,7 +453,7 @@ function respawn(){
 }
 
 function displayTeamRadio(teamMode){
-    if (teamMode){
+    if (teamMode == "tdm"){
         $("#team").html('<p>Choose a team:</p><input type="radio" id="teamA" name="team" value="teamA" checked><label for="teamA">TEAM A</label><br><input type="radio" id="teamB" name="team" value="teamB"><label for="teamB">TEAM B</label><br>')
     }
 }
