@@ -307,7 +307,7 @@ function newConnection(socket) {
 			} else if (players[socket.id].class == "huntsman" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
 				for (player in players){
 					// retry this please fix this later
-					if (players[player].x + 40>= players[socket.id].x && players[player].x - 20 <= players[socket.id].x + players[socket.id].width && players[player].y + 20 >= players[socket.id].y && players[player].y - 20 <=  players[socket.id].y + players[socket.id].height && player != socket.id && players[socket.id].team != players[player].team){
+					if (players[player].x + players[player].height>= players[socket.id].x && players[player].x - 20 <= players[socket.id].x + players[socket.id].width && players[player].y + 20 >= players[socket.id].y && players[player].y - 20 <=  players[socket.id].y + players[socket.id].height && player != socket.id && players[socket.id].team != players[player].team){
 						players[player].hp -= 20;
 						players[player].stun = true;
 						players[player].stunTime = 15;
@@ -400,7 +400,7 @@ function newConnection(socket) {
 			if (players[socket.id].class == "assassin" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				for (player in players){
 					// retry this please fix this later
-					if (players[player].x + 40>= players[socket.id].x && players[player].x - 20 <= players[socket.id].x + players[socket.id].width && players[player].y + 20 >= players[socket.id].y && players[player].y - 20 <=  players[socket.id].y + players[socket.id].height && player != socket.id && players[socket.id].team != players[player].team){
+					if (players[player].x + players[player].height>= players[socket.id].x && players[player].x - 20 <= players[socket.id].x + players[socket.id].width && players[player].y + 20 >= players[socket.id].y && players[player].y - 20 <=  players[socket.id].y + players[socket.id].height && player != socket.id && players[socket.id].team != players[player].team){
 						players[player].hp -= 30;
 						if (players[player].hp <= 0){
 							killer = socket.id;
@@ -874,7 +874,7 @@ function newConnection(socket) {
 						players[player].hp += 5;
 					}
 				}
-				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + 40 > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team){
+				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + players[player].height > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team){
 					//jugg bullets
 					if (bullets[i].type == "juggRound"){ 
 						players[player].hp -= 40;
