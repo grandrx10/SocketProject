@@ -811,17 +811,13 @@ function newConnection(socket) {
 
 		if (killer!= 0){
 			players[killer].kills += 1;
-			console.log("this stupid thing doesn't work")
 			if (players[killer].team == "teamB"){
 				team1Kills += 1;
-				console.log(team1Kills);
 			} else if (players[killer].team == "teamA"){
 				team2Kills += 1;
-				console.log(team2Kills);
 			}
 
 			if (teamMode == "jugg"){
-				console.log("RUNing")
 				players[killer].class = "juggernaut"
 				players[killer].width = 30;
 				players[killer].height = 60;
@@ -1053,10 +1049,8 @@ function newConnection(socket) {
 
 							if (players[bullets[i].shooter].team == "teamB"){
 								team1Kills += 1;
-								console.log(team1Kills);
 							} else if (players[bullets[i].shooter].team == "teamA"){
 								team2Kills += 1;
-								console.log(team2Kills);
 							}
 						}
 					}
