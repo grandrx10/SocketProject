@@ -129,9 +129,7 @@ if (map == 1){
 }
 
 function newConnection(socket) {
-	console.log('new connection: ' + socket.id);
 	socket.on('disconnect', () => {	
-		console.log('lost connection: ' + socket.id);
 		delete(players[socket.id]);
   	});
 	
