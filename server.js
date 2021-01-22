@@ -207,7 +207,7 @@ function newConnection(socket) {
 				players[socket.id].ultimateDuration = gameTime;
 			}
 			//jugg Abilities
-			else if (players[socket.id].class == "juggernaut" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
+			if (players[socket.id].class == "juggernaut" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 30, 15, players[socket.id].dir, socket.id, 20, "RED", "juggRound", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].canShoot = false;
@@ -272,7 +272,7 @@ function newConnection(socket) {
 				players[socket.id].canUltimateCooldown = gameTime;
 			}
 			//deadeye Abilities
-			else if (players[socket.id].class == "deadeye" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].ammo > 0){
+			if (players[socket.id].class == "deadeye" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].ammo > 0){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 23, 14, players[socket.id].dir, socket.id, 24, "ORANGE", "revolver", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].ammo --;
@@ -311,7 +311,7 @@ function newConnection(socket) {
 				players[socket.id].ultimateDuration = gameTime;
 			}
 			// Doc abilities
-			else if (players[socket.id].class == "doc" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
+			if (players[socket.id].class == "doc" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 30, 15, players[socket.id].dir, socket.id, 20, "RED", "lifesteal", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].canShoot = false;
@@ -342,7 +342,7 @@ function newConnection(socket) {
 				players[socket.id].ultimateDuration = gameTime;
 			}
 			// huntsman Abilities
-			else if (players[socket.id].class == "huntsman" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
+			if (players[socket.id].class == "huntsman" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				if(players[socket.id].dir == "left" || players[socket.id].dir == "right"){
 					b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 10, 10, players[socket.id].dir, socket.id, 8, "BLUE", "pulse", players[socket.id].team);
 					bullets.push(b);
@@ -414,7 +414,7 @@ function newConnection(socket) {
 			}
 
 			// Tank Abilities
-			else if (players[socket.id].class == "tank" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
+			if (players[socket.id].class == "tank" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				if(players[socket.id].dir == "left" || players[socket.id].dir == "right"){
 					b = new Bullet(players[socket.id].x + 5, players[socket.id].y, 10, 10, players[socket.id].dir, socket.id, 7, "PEACH", "scatter", players[socket.id].team);
 					bullets.push(b);
@@ -454,7 +454,7 @@ function newConnection(socket) {
 				players[socket.id].ultimateDuration = gameTime;
 			}
 			//Assassin abilities
-			else if (players[socket.id].class == "assassin" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
+			if (players[socket.id].class == "assassin" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				for (player in players){
 					// retry this please fix this later
 					if (players[player].x + players[player].height>= players[socket.id].x && players[player].x - 20 <= players[socket.id].x + players[socket.id].width && players[player].y + 20 >= players[socket.id].y && players[player].y - 20 <=  players[socket.id].y + players[socket.id].height && player != socket.id && players[socket.id].team != players[player].team){
@@ -489,7 +489,7 @@ function newConnection(socket) {
 				players[socket.id].canUltimateCooldown = gameTime;
 			} 
 			//Mercenary Abilities
-			else if (players[socket.id].class == "mercenary" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
+			if (players[socket.id].class == "mercenary" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 20, 5, players[socket.id].dir, socket.id, 25, (112,128,144), "bullet", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].canShoot = false;
@@ -541,7 +541,7 @@ function newConnection(socket) {
 				players[socket.id].canUltimateCooldown = gameTime;
 			}
 			// Spellslinger ABILITIES
-			else if (players[socket.id].class == "spellslinger" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
+			if (players[socket.id].class == "spellslinger" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 18, 12, players[socket.id].dir, socket.id, 18, "BLUE", "blast", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].canShoot = false;
@@ -637,22 +637,21 @@ function newConnection(socket) {
 			}
 			healGot = false;
 		}
-		if (teamMode == "jugg"){
-			for (player in players){
-				//check for jug
-				if (teamMode == "jugg"){
-					if (players[player].class == "juggernaut"){
-						currentJugg = true;
-					}
+
+		for (player in players){
+			//check for jug
+			if (teamMode == "jugg"){
+				if (players[player].class == "juggernaut"){
+					currentJugg = true;
 				}
 			}
+		}
 
-			if (teamMode == "jugg" && currentJugg == false){
-				b = new Bullet( 2975, 100, 50, 50, "left", 0, 0, "WHITE", "becomeJugg", -1)
-				bullets.push(b);
-			} else {
-				currentJugg = false;
-			}
+		if (teamMode == "jugg" && currentJugg == false){
+			b = new Bullet( 2975, 100, 50, 50, "left", 0, 0, "WHITE", "becomeJugg", -1)
+			bullets.push(b);
+		} else {
+			currentJugg = false;
 		}
 
 		for (player in players){
