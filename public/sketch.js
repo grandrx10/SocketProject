@@ -21,6 +21,12 @@ function setup(){
     background(51);
     frameRate(60);
 
+    // song.volume(0.2);
+    // song.loop();
+    var song = createAudio("Assets/SongForGame.mp3");
+    song.volume(0.2);
+    song.loop();
+
     socket = io();
     socket.on('players', test);
     socket.on("dead", respawn);
@@ -66,6 +72,7 @@ function setup(){
 function draw() {
     textSize(12)
     background(220);
+    
     for (player in players){
         if (player == socket.id){
             base = players[socket.id].BASE;
@@ -75,6 +82,12 @@ function draw() {
             fill(220,20,60)
             rect(0, 1000 - range, mapWidth, 600)
         }
+        // fix next time... :( massive rip
+        // if (players[socket.id].loadedSong == false){
+        //     var song = createAudio("Assets/SongForGame.mp3");
+        //     song.volume(0.2);
+        //     song.loop();
+        // }
     }
     if (gameStart){
         socket.on('returnUpdate', update);
@@ -213,7 +226,43 @@ function draw() {
                         rect(players[player].x - 5- base, players[player].y - 30-range, (gameTime - players[player].stunCooldown2)/players[player].stunTime * 30, 5);
                     }
                 }
-                if (players[player].class == "deadeye"){
+                if (players[player].marked == true){
+                    fill("WHITE")
+                    rect(players[player].x - 5- base, players[player].y - 35-range, 30, 5);
+                    fill("CYAN")
+                    if ((gameTime - players[player].markTimer) < players[player].markDuration){
+                        rect(players[player].x - 5- base, players[player].y - 35-range, (gameTime - players[player].markTimer)/players[player].markDuration * 30, 5);
+                    }
+                }
+                if (players[player].class == "necro"){
+                    if (players[player].dir == "down"){
+                        fill("purple")
+                        rect(players[player].x - base, players[player].y - range + 15, 20, 5)
+                        rect(players[player].x - base + 20, players[player].y - range + 15, 5, 5)
+                        fill("black")
+                        rect(players[player].x - base + 25, players[player].y - range + 10, 5, 5)
+                        fill(252, 50, 77)
+                        rect(players[player].x - base + 25, players[player].y - range + 15, 5, 5)
+                    } else if (players[player].dir == "left"|| players[player].dir == "up"){
+                        fill("purple")
+                        rect(players[player].x - base, players[player].y - range + 15, 20, 25)
+                        rect(players[player].x - base -5, players[player].y - range + 15, 5, 8)
+                        fill("black")
+                        rect(players[player].x - base - 10, players[player].y - range + 10, 5, 5)
+                        fill(252, 50, 77)
+                        rect(players[player].x - base - 10, players[player].y - range + 15, 5, 25)
+                    } else {
+                        fill("purple")
+                        rect(players[player].x - base, players[player].y - range + 15, 20, 25)
+                        rect(players[player].x - base + 20, players[player].y - range + 15, 5, 8)
+                        fill("black")
+                        rect(players[player].x - base + 25, players[player].y - range + 10, 5, 5)
+                        fill(252, 50, 77)
+                        rect(players[player].x - base + 25, players[player].y - range + 15, 5, 25)
+                    }
+
+                }
+                else if (players[player].class == "deadeye"){
                     fill("BROWN")
                     rect(players[player].x - base - 8, players[player].y + 5-range, 36, 5)
                     rect(players[player].x - base, players[player].y -range , 20, 5)
