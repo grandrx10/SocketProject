@@ -180,6 +180,7 @@ function newConnection(socket) {
 				players[minionCount].team = players[socket.id].team
 				players[minionCount].x = players[socket.id].x
 				players[minionCount].y = players[socket.id].y
+				players[minionCount].hp = 50
 				players[minionCount].owner = socket.id;
 				if (players[socket.id].dir == "left" || players[socket.id].dir == "up"){
 					players[minionCount].xSpeed = 5
@@ -993,7 +994,7 @@ function newConnection(socket) {
 					}
 					//deadeye
 					if (bullets[i].type == "revolver"){ 
-						players[player].hp -= 23;
+						players[player].hp -= 30;
 						bulletsToRemove.push(i);
 					} else if (bullets[i].type == "deadshot"){ 
 						players[player].hp -= 100;
@@ -1103,12 +1104,11 @@ function newConnection(socket) {
 							// 	team2Kills += 1;
 							// }
 						} 
-						else if (players[player].class == "none"){
-							
+						else if (players[player].class == "none" || players[player].username == "Minion"){
+							//do nothing
 						} 
 						else{	
 							players[bullets[i].shooter].kills += 1;
-
 
 							if (players[bullets[i].shooter].class == "huntsman"){
 								players[bullets[i].shooter].canShoot = true;
@@ -1129,6 +1129,7 @@ function newConnection(socket) {
 								players[minionCount].team = players[bullets[i].shooter].team
 								players[minionCount].x = players[player].x
 								players[minionCount].y = players[player].y
+								players[minionCount].hp = 50
 								players[minionCount].owner = bullets[i].shooter;
 								if (players[player].dir == "left" || players[player].dir == "up"){
 									players[minionCount].xSpeed = 5
