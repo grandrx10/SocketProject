@@ -644,16 +644,16 @@ function newConnection(socket) {
 		// update player position
 		//console.log(deadPlayers);
 		// healing blocks
-		if (gameTime > 5000){
-			gameTime = 0;
-			bullets = [];
-			team1Kills = 0;
-			team2Kills = 0;
-			for (player in players){
-				io.to(player).emit("dead", 1);
-				delete players[player];
-			}
-		}
+		// if (gameTime > 5000){
+		// 	gameTime = 0;
+		// 	bullets = [];
+		// 	team1Kills = 0;
+		// 	team2Kills = 0;
+		// 	for (player in players){
+		// 		io.to(player).emit("dead", 1);
+		// 		delete players[player];
+		// 	}
+		// }
 		
 		if (gameTime % 250 == 0 && healGot == true){
 			for (var i = 0; i < healLocationX.length; i++){
@@ -670,7 +670,7 @@ function newConnection(socket) {
 					currentJugg = true;
 				}
 			}
-			if (players[player].class == "tt" && gameTime % 30 == 0){
+			if (players[player].class == "tt" && gameTime % 50 == 0){
 				players[player].pastX = players[player].x;
 				players[player].pastY = players[player].y;
 				players[player].pastHP = players[player].hp;
@@ -996,13 +996,13 @@ function newConnection(socket) {
 						bulletsToRemove.push(i);
 					} 
 					else if (bullets[i].type == "timeMark"){
-						players[player].hp -= 10;
+						players[player].hp -= 20;
 						players[player].marked = true;
 						players[player].markTimer = gameTime;
 						players[player].markDuration = 50;
 						bulletsToRemove.push(i);
 					} else if (bullets[i].type == "timeShift"){
-						players[player].hp -= 20;
+						players[player].hp -= 10;
 						players[player].marked = true;
 						players[player].markTimer = gameTime;
 						players[player].markDuration = 50;
