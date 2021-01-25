@@ -167,9 +167,9 @@ function newConnection(socket) {
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 5, 15, 30, players[socket.id].dir, socket.id, 25, "CYAN", "timeShift", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].canAbility2 = false;
-				players[socket.id].a2Time = 50;
+				players[socket.id].a2Time = 40;
 				players[socket.id].canAbility2Cooldown = gameTime;
-			} else if (players[socket.id].class == "tt" && players[socket.id].canUltimate && abilityKey == 72){
+			} else if (players[socket.id].class == "tt" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].hp > 0){
 				players[socket.id].x = players[socket.id].pastX
 				players[socket.id].y = players[socket.id].pastY
 				players[socket.id].hp = players[socket.id].pastHP
