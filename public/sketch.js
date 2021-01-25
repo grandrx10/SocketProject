@@ -234,6 +234,10 @@ function draw() {
                         rect(players[player].x - 5- base, players[player].y - 35-range, (gameTime - players[player].markTimer)/players[player].markDuration * 30, 5);
                     }
                 }
+                if (players[player].class == "tt" && socket.id == player && players[player].canUltimateCooldown == 0){
+                    fill(0, 0 , 0, 50)
+                    rect(players[player].pastX- base, players[player].pastY - range, 20, 40, 0.1)
+                }
                 if (players[player].class == "necro"){
                     if (players[player].dir == "down"){
                         fill("purple")

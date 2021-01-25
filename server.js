@@ -670,7 +670,7 @@ function newConnection(socket) {
 					currentJugg = true;
 				}
 			}
-			if (players[player].class == "tt" && gameTime % 50 == 0){
+			if (players[player].class == "tt" && gameTime % 70 == 0){
 				players[player].pastX = players[player].x;
 				players[player].pastY = players[player].y;
 				players[player].pastHP = players[player].hp;
@@ -720,6 +720,7 @@ function newConnection(socket) {
 			}
 			if (gameTime - players[player].canUltimateCooldown > players[player].ultTime){
 				players[player].canUltimate = true;
+				players[player].canUltimateCooldown = 0;
 			}
 			if (gameTime - players[player].stunCooldown > players[player].stunTime && players[player].stunCooldown != 0){
 				players[player].stun = false;
