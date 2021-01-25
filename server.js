@@ -169,7 +169,7 @@ function newConnection(socket) {
 				players[socket.id].canAbility2 = false;
 				players[socket.id].a2Time = 40;
 				players[socket.id].canAbility2Cooldown = gameTime;
-			} else if (players[socket.id].class == "tt" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].hp > 10){
+			} else if (players[socket.id].class == "tt" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].hp > 0){
 				players[socket.id].x = players[socket.id].pastX
 				players[socket.id].y = players[socket.id].pastY
 				players[socket.id].hp = players[socket.id].pastHP
@@ -1234,6 +1234,9 @@ function newConnection(socket) {
 		for (player in players){
 			players[player].RANGE = players[player].y - 300 + players[player].height/2;
 			players[player].BASE = players[player].x - 600 + players[player].width/2;
+			if (players[player].hp < 0){
+				players[player].hp = 0;
+			}
 		}
 		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode]);
 		for (player in players){
