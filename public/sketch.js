@@ -15,6 +15,7 @@ var team1Kills = 0;
 var team2Kills = 0;
 var team = 0;
 var teamMode = "";
+var playSong = true;
 
 function setup(){
     createCanvas(1200,600);
@@ -23,9 +24,6 @@ function setup(){
 
     // song.volume(0.2);
     // song.loop();
-    var song = createAudio("Assets/SongForGame.mp3");
-    song.volume(0.2);
-    song.loop();
 
     socket = io();
     socket.on('players', test);
@@ -72,7 +70,12 @@ function setup(){
 function draw() {
     textSize(12)
     background(220);
-    
+    if (playSong){
+        var song = createAudio("Assets/SongForGame.mp3");
+        song.volume(0.2);
+        song.loop();
+        playSong = false
+    }
     for (player in players){
         if (player == socket.id){
             base = players[socket.id].BASE;

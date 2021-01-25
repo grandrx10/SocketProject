@@ -169,7 +169,7 @@ function newConnection(socket) {
 				players[socket.id].canAbility2 = false;
 				players[socket.id].a2Time = 40;
 				players[socket.id].canAbility2Cooldown = gameTime;
-			} else if (players[socket.id].class == "tt" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].hp > 0){
+			} else if (players[socket.id].class == "tt" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].hp > 6){
 				players[socket.id].x = players[socket.id].pastX
 				players[socket.id].y = players[socket.id].pastY
 				players[socket.id].hp = players[socket.id].pastHP
