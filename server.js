@@ -172,7 +172,7 @@ function newConnection(socket) {
 			} else if (players[socket.id].class == "tt" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].hp > 0){
 				players[socket.id].x = players[socket.id].pastX
 				players[socket.id].y = players[socket.id].pastY
-				players[socket.id].hp = players[socket.id].pastHP
+				players[socket.id].hp = 100
 				players[socket.id].canUltimate = false;
 				players[socket.id].ultTime = 100;
 				players[socket.id].canUltimateCooldown= gameTime;
