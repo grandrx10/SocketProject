@@ -33,6 +33,8 @@ var healGot = true;
 var n = 0;
 var killer =0;
 var minionCount = 0;
+var killing = ["none", "none", "none"];
+var killed = ["none", "none", "none"];
 
 
 setInterval(function(){
@@ -304,10 +306,10 @@ function newConnection(socket) {
 				players[socket.id].a1Time = 40;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			} else if (players[socket.id].class == "deadeye" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
-				b = new Bullet(players[socket.id].x, players[socket.id].y + 25, 15, 15, players[socket.id].dir, socket.id, 10, "BLUE", "teleport", players[socket.id].team);
+				b = new Bullet(players[socket.id].x, players[socket.id].y + 25, 15, 15, players[socket.id].dir, socket.id, 8, "BLUE", "teleport", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].canAbility2 = false;
-				players[socket.id].a2Time = 80;
+				players[socket.id].a2Time = 90;
 				players[socket.id].canAbility2Cooldown = gameTime;
 			} else if (players[socket.id].class == "deadeye" && players[socket.id].canAbility2 != true && abilityKey == 76 && players[socket.id].stun == false){
 				for (var i = 0; i < bullets.length; i++) {
@@ -626,7 +628,7 @@ function newConnection(socket) {
 		var characterClass = usernameList[1];
 		var team = usernameList[2];
 		if (username == ""){
-			players[socket.id] = new Player(socket.id, characterClass, team)
+			players[socket.id] = new Player("Unnamed", characterClass, team)
 		} else {
 			players[socket.id] = new Player(username, characterClass, team)
 		}
@@ -989,10 +991,10 @@ function newConnection(socket) {
 					if (bullets[i].type == "timeShot" && players[player].marked == true){
 						marked = false;
 						players[player].markTimer = 0;
-						players[player].hp -= 40;
-						players[player].stun = true;
-						players[player].stunTime = 4;
-						players[player].stunCooldown = gameTime;
+						players[player].hp -= 50;
+						// players[player].stun = true;
+						// players[player].stunTime = 4;
+						// players[player].stunCooldown = gameTime;
 						players[player].marked = false;
 						players[player].markTimer = 0;
 						bulletsToRemove.push(i);
@@ -1002,14 +1004,37 @@ function newConnection(socket) {
 						players[player].markTimer = gameTime;
 						players[player].markDuration = 50;
 						bulletsToRemove.push(i);
-					} 
+					} else if (bullets[i].type == "timeMark" && players[player].marked == true){
+						players[player].hp -= 20;
+						players[player].stun = true;
+						players[player].stunTime = 12;
+						players[player].stunCooldown = gameTime;
+						players[player].marked = false;
+						players[player].markTimer = 0;
+						bulletsToRemove.push(i);
+					}
 					else if (bullets[i].type == "timeMark"){
-						players[player].hp -= 30;
+						players[player].hp -= 10;
+						players[player].stun = true;
+						players[player].stunTime = 4;
+						players[player].stunCooldown = gameTime;
 						players[player].marked = true;
 						players[player].markTimer = gameTime;
 						players[player].markDuration = 50;
 						bulletsToRemove.push(i);
-					} else if (bullets[i].type == "timeShift"){
+					} else if (bullets[i].type == "timeShift" && players[player].marked == true){
+						players[player].hp -= 10;
+						players[player].marked = false;
+						players[player].markTimer = 0;
+						players[player].markDuration = 50;
+						if (players[bullets[i].shooter] != null){
+							players[bullets[i].shooter].hp += 30;
+							players[bullets[i].shooter].x = players[player].x;
+							players[bullets[i].shooter].y = players[player].y;
+						}
+						bulletsToRemove.push(i);
+					}
+					else if (bullets[i].type == "timeShift"){
 						players[player].hp -= 10;
 						players[player].marked = true;
 						players[player].markTimer = gameTime;
@@ -1182,7 +1207,13 @@ function newConnection(socket) {
 						} 
 						else{	
 							players[bullets[i].shooter].kills += 1;
-
+							killing[2] = killing[1]
+							killed[2] = killed[1]
+							killing[1] = killing[0]
+							killed[1] = killed[0]
+							killing[0] = players[bullets[i].shooter].username;
+							killed[0] = players[player].username;
+							
 							if (players[bullets[i].shooter].class == "huntsman"){
 								players[bullets[i].shooter].canShoot = true;
 								players[bullets[i].shooter].canAbility1 = true;
@@ -1242,7 +1273,7 @@ function newConnection(socket) {
 			players[player].RANGE = players[player].y - 300 + players[player].height/2;
 			players[player].BASE = players[player].x - 600 + players[player].width/2;
 		}
-		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode]);
+		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode, killing, killed]);
 		for (player in players){
 			players[player].loadedSong = true;
 		}

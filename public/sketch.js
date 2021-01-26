@@ -16,6 +16,8 @@ var team2Kills = 0;
 var team = 0;
 var teamMode = "";
 var playSong = true;
+var killed = ["none", "none", "none"]
+var killing = ["none", "none", "none"]
 
 function setup(){
     createCanvas(1200,600);
@@ -445,11 +447,7 @@ function draw() {
                     fill("YELLOW");
                     rect(30, 70, (gameTime - players[player].canUltimateCooldown)/players[player].ultTime * 100, 10);
                 }
-                // Kills
-                fill("BLACK")
                 textSize(20);
-                text("Kills: " + players[socket.id].kills, 1100, 20);
-                // Kills TEAMS
                 if (teamMode == "tdm"){
                     fill("RED")
                     textSize(20);
@@ -457,9 +455,25 @@ function draw() {
                     fill("BLUE")
                     text("Team B Kills: " + team1Kills, 700, 20);
                 }
-                textSize(20);
                 fill("black")
                 text(Math.round(gameTime/10), 600, 20)
+                // Kills
+                textAlign(RIGHT)
+                fill("BLACK")
+                textSize(20);
+                text("Kills: " + players[socket.id].kills, 1180, 20);
+                // Kills TEAMS
+                textSize(18);
+                if (killing[0] != "none"){
+                    text(killing[0] + " has killed " + killed[0], 1180, 60)
+                }
+                if (killing[1] != "none"){
+                    text(killing[1] + " has killed " + killed[1], 1180, 80)
+                }
+                if (killing[2] != "none"){
+                    text(killing[2] + " has killed " + killed[2], 1180, 100)
+                }
+                textAlign(CENTER)
                 textSize(12);
             }
         }
@@ -501,6 +515,8 @@ function update(returnList){
     team1Kills = returnList[7];
     team2Kills = returnList[8];
     teamMode = returnList[9];
+    killing = returnList[10];
+    killed = returnList[11];
 }
 
 function respawn(){
