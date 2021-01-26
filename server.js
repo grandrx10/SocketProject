@@ -752,7 +752,10 @@ function newConnection(socket) {
 			if (players[player].y + 40>= 1000 && map == 2){
 				players[player].hp -= 5;
 			}
+
 			if (players[player].hp < 0){
+				players[player].canUltimate = false;
+				players[player].canUltimateCooldown = gameTime;
 				players[player].hp = 0;
 			} else if (players[player].hp > 100 && players[player].class != "juggernaut"){
 				players[player].hp = 100;
@@ -761,6 +764,7 @@ function newConnection(socket) {
 			}
 			// remove after death
 			if (players[player].hp == 0) {
+				players[player].canUltimate = false;
 				for (var i = 0; i < bullets.length; i++) {
 					if (bullets[i].type == "beam" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
@@ -1234,9 +1238,6 @@ function newConnection(socket) {
 		for (player in players){
 			players[player].RANGE = players[player].y - 300 + players[player].height/2;
 			players[player].BASE = players[player].x - 600 + players[player].width/2;
-			if (players[player].hp < 0){
-				players[player].hp = 0;
-			}
 		}
 		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode]);
 		for (player in players){
