@@ -750,7 +750,7 @@ function newConnection(socket) {
 			}
 
 			if (players[player].y + 40>= 1000 && map == 2){
-				players[player].hp -= 5;
+				players[player].hp -= 100;
 			}
 
 			if (players[player].hp < 0){
