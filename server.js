@@ -998,10 +998,13 @@ function newConnection(socket) {
 						bulletsToRemove.push(i);
 					} else if (bullets[i].type == "timeShot"){ 
 						players[player].hp -= 20;
+						players[player].marked = true;
+						players[player].markTimer = gameTime;
+						players[player].markDuration = 50;
 						bulletsToRemove.push(i);
 					} 
 					else if (bullets[i].type == "timeMark"){
-						players[player].hp -= 20;
+						players[player].hp -= 30;
 						players[player].marked = true;
 						players[player].markTimer = gameTime;
 						players[player].markDuration = 50;
