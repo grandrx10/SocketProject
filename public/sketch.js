@@ -277,6 +277,18 @@ function draw() {
                         rect(players[player].x - base + 3, players[player].y -range + 2, 5, 5)
                         rect(players[player].x - base + 14, players[player].y -range + 2, 5, 5)
                     }
+                }else if (players[player].class == "watcherClone"){
+                    fill("green")
+                    rect(players[player].x - base - 1, players[player].y -range- 2, 22, 12)
+                    if (players[player].dir == "left" || players[player].dir == "down"){
+                        fill("BLUE")
+                        rect(players[player].x - base + 1, players[player].y -range + 2, 5, 5)
+                        rect(players[player].x - base + 12, players[player].y -range + 2, 5, 5)
+                    } else{
+                        fill("BLUE")
+                        rect(players[player].x - base + 3, players[player].y -range + 2, 5, 5)
+                        rect(players[player].x - base + 14, players[player].y -range + 2, 5, 5)
+                    }
                 }
                 if (players[player].class == "tt"){
                     if(players[player].height != 20){

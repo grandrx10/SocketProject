@@ -164,7 +164,7 @@ function newConnection(socket) {
 				players[socket.id].shootTime = 4;
 				players[socket.id].canShootCooldown = gameTime;
 			}else if (players[socket.id].class == "watcher" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
-				players[minionCount] = new Player(players[socket.id].username, "watcher", players[socket.id].team)
+				players[minionCount] = new Player(players[socket.id].username, "watcherClone", players[socket.id].team)
 				players[minionCount].team = players[socket.id].team
 				players[minionCount].x = players[socket.id].x
 				players[minionCount].y = players[socket.id].y
@@ -177,6 +177,7 @@ function newConnection(socket) {
 					players[minionCount].xSpeed = -6
 					minionCount ++;
 				}
+				players[socket.id].canAbility1 = false
 				players[socket.id].a1Time = 60;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			} else if (players[socket.id].class == "watcher" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
@@ -813,7 +814,7 @@ function newConnection(socket) {
 				markTimer = 0;
 				players[player].marked = false;
 			}
-			if (players[player].xSpeed != 0 || players[player].ySpeed != 0){
+			if (players[player].xSpeed != 0 && players[player].class == "watcher"){
 				players[player].invis = false;
 			}
 			if (gameTime - players[player].invisCooldown > players[player].invisTime && players[player].invisCooldown != 0){
@@ -897,7 +898,14 @@ function newConnection(socket) {
 			else if (players[player].x < 0 && players[player].class == "none"){
 				players[player].hp -= 100;
 				players[player].BASE = -590;
+			} else if (players[player].x < 0 && players[player].class == "watcherClone"){
+				players[player].hp -= 100;
+				players[player].BASE = -590;
+			} else if (players[player].x > mapWidth - players[player].width && players[player].class == "watcherClone"){
+				players[player].x = mapWidth - players[player].width;
+				players[player].BASE = mapWidth - players[player].width - 590;
 			}
+
 			else if (players[player].x < 0){
 				players[player].x = 0;
 				players[player].BASE = -590;
