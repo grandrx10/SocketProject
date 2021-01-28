@@ -902,8 +902,8 @@ function newConnection(socket) {
 				players[player].hp -= 100;
 				players[player].BASE = -590;
 			} else if (players[player].x > mapWidth - players[player].width && players[player].class == "watcherClone"){
-				players[player].x = mapWidth - players[player].width;
-				players[player].BASE = mapWidth - players[player].width - 590;
+				players[player].hp -= 100;
+				players[player].BASE = -590;
 			}
 
 			else if (players[player].x < 0){
@@ -1087,7 +1087,7 @@ function newConnection(socket) {
 						players[player].hp -= 20;
 						bulletsToRemove.push(i);
 						players[player].stun = true;
-						players[player].stunTime = 25;
+						players[player].stunTime = 18;
 						players[player].stunCooldown = gameTime;
 					}
 					else if (bullets[i].type == "boomerang" && players[bullets[i].shooter] != null){ 
