@@ -161,10 +161,10 @@ function newConnection(socket) {
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 28, 15, players[socket.id].dir, socket.id, 18, "#fae", "boomerang", players[socket.id].team);
 				bullets.push(b);
 				players[socket.id].canShoot = false;
-				players[socket.id].shootTime = 4;
+				players[socket.id].shootTime = 6;
 				players[socket.id].canShootCooldown = gameTime;
 			} else if (players[socket.id].class == "ae" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
-				players[socket.id].evil += 1;
+				players[socket.id].evil += 3;
 				players[socket.id].canAbility1 = false;
 				players[socket.id].a1Time = 70;
 				players[socket.id].canAbility1Cooldown = gameTime;
@@ -1029,11 +1029,14 @@ function newConnection(socket) {
 				}
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + players[player].height > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team  && players[player].invinc != true){
 					if (bullets[i].type == "boomerang" && players[bullets[i].shooter] != null){ 
-						players[player].hp -= 10 + players[bullets[i].shooter].evil*3;
-						bullets[i].speed = - bullets[i].speed
+						players[player].hp -= 10 + players[bullets[i].shooter].evil;
+						players[bullets[i].shooter].evil += 1;
+						players[bullets[i].shooter].canShoot = true;
+						players[bullets[i].shooter].canShootCooldown = 0;
+						bulletsToRemove.push(i);
 					}
 					// time traveller bullets
-					if (bullets[i].type == "timeShot" && players[player].marked == true){
+					else if (bullets[i].type == "timeShot" && players[player].marked == true){
 						marked = false;
 						players[player].markTimer = 0;
 						players[player].hp -= 50;
@@ -1288,7 +1291,7 @@ function newConnection(socket) {
 									minionCount ++;
 								}
 							} else if (players[bullets[i].shooter].class == "ae"){
-								players[bullets[i].shooter].evil += 1;
+								players[bullets[i].shooter].evil += 3;
 							}
 
 							if (players[bullets[i].shooter].class != null && players[player].class == "juggernaut"){
