@@ -901,7 +901,7 @@ function newConnection(socket) {
 			} else if (players[player].x < 0 && players[player].class == "watcherClone"){
 				players[player].hp -= 100;
 				players[player].BASE = -590;
-			} else if (players[player].x > mapWidth - players[player].width && players[player].class == "watcherClone"){
+			} else if (players[player].x > mapWidth - 30 && players[player].class == "watcherClone"){
 				players[player].hp -= 100;
 				players[player].BASE = -590;
 			}
