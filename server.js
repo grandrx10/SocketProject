@@ -156,6 +156,41 @@ function newConnection(socket) {
 
 	function bulletTravel(abilityKey){
 		if (Object.keys(players).indexOf(socket.id) != -1){
+			// watcher
+			if (players[socket.id].class == "watcher" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].invinc != true){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 20, 30, 10, players[socket.id].dir, socket.id, 30, "green", "slowDart", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].canShoot = false;
+				players[socket.id].shootTime = 4;
+				players[socket.id].canShootCooldown = gameTime;
+			}else if (players[socket.id].class == "watcher" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
+				players[minionCount] = new Player(players[socket.id].username, "watcher", players[socket.id].team)
+				players[minionCount].team = players[socket.id].team
+				players[minionCount].x = players[socket.id].x
+				players[minionCount].y = players[socket.id].y
+				players[minionCount].hp = players[socket.id].hp
+				players[minionCount].owner = socket.id;
+				if (players[socket.id].dir == "left" || players[socket.id].dir == "up"){
+					players[minionCount].xSpeed = 6
+					minionCount ++;
+				} else {
+					players[minionCount].xSpeed = -6
+					minionCount ++;
+				}
+				players[socket.id].a1Time = 60;
+				players[socket.id].canAbility1Cooldown = gameTime;
+			} else if (players[socket.id].class == "watcher" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
+				players[socket.id].invis = true;
+				players[socket.id].canAbility2 = false;
+				players[socket.id].a2Time = 10;
+				players[socket.id].canAbility2Cooldown = gameTime;
+			} else if (players[socket.id].class == "watcher" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 10, 40, 20, players[socket.id].dir, socket.id, 40, "yellow", "megaStun", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].canUltimate = false;
+				players[socket.id].ultTime = 150;
+				players[socket.id].canUltimateCooldown = gameTime;
+			} 
 			// ancient evil
 			if (players[socket.id].class == "ae" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].invinc != true){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 28, 15, players[socket.id].dir, socket.id, 18, "#fae", "boomerang", players[socket.id].team);
@@ -778,6 +813,9 @@ function newConnection(socket) {
 				markTimer = 0;
 				players[player].marked = false;
 			}
+			if (players[player].xSpeed != 0 || players[player].ySpeed != 0){
+				players[player].invis = false;
+			}
 			if (gameTime - players[player].invisCooldown > players[player].invisTime && players[player].invisCooldown != 0){
 				players[player].invis = false;
 				players[player].invisCooldown = 0;
@@ -1028,7 +1066,23 @@ function newConnection(socket) {
 					}
 				}
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + players[player].height > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team  && players[player].invinc != true){
-					if (bullets[i].type == "boomerang" && players[bullets[i].shooter] != null){ 
+					// watcher
+					if(bullets[i].type == "slowDart"){
+						players[player].hp -= 24;
+						players[player].yAcceleration = 4*players[player].yAcceleration/5;
+						players[player].xAcceleration = 4*players[player].xAcceleration/5;
+						bulletsToRemove.push(i);
+						players[player].slow = true;
+						players[player].slowTime = 10;
+						players[player].slowCooldown = gameTime;
+					} else if(bullets[i].type == "megaStun"){
+						players[player].hp -= 20;
+						bulletsToRemove.push(i);
+						players[player].stun = true;
+						players[player].stunTime = 25;
+						players[player].stunCooldown = gameTime;
+					}
+					else if (bullets[i].type == "boomerang" && players[bullets[i].shooter] != null){ 
 						players[player].hp -= 10 + players[bullets[i].shooter].evil;
 						players[bullets[i].shooter].evil += 1;
 						players[bullets[i].shooter].canShoot = true;

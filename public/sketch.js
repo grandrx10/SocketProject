@@ -176,13 +176,33 @@ function draw() {
                 if(socket.id == player){
                     fill(204, 255, 255);
                     rect(players[player].x - base, players[player].y-range, 20, players[player].height);
-                    fill("BLACK")
-                    if (players[player].dir == "left"){
-                        rect(players[player].x - base, players[player].y + 10-range, 14, 6)
-                    } else if (players[player].dir == "up"){
-                        rect(players[player].x - base, players[player].y + 10-range, 14, 6)
-                    } else {
-                        rect(players[player].x + 6 - base, players[player].y + 10-range, 14, 6)
+                    if(players[player].class == "assassin"){
+                        fill("BLACK")
+                        if (players[player].dir == "left"){
+                            rect(players[player].x - base, players[player].y + 10-range, 14, 6)
+                        } else if (players[player].dir == "up"){
+                            rect(players[player].x - base, players[player].y + 10-range, 14, 6)
+                        } else {
+                            rect(players[player].x + 6 - base, players[player].y + 10-range, 14, 6)
+                        }
+                        fill("white")
+                        rect(players[player].x - 5 - base, players[player].y - 35-range, 30, 5);
+                        fill("black")
+                        if ((gameTime - players[player].invisCooldown) < players[player].invisTime && players[player].invisTime != 0){
+                            rect(players[player].x - 5 - base, players[player].y - 35-range, (gameTime - players[player].invisCooldown)/players[player].invisTime * 30, 5);
+                        }
+                    } else if (players[player].class == "watcher"){
+                        fill("green")
+                        rect(players[player].x - base - 1, players[player].y -range- 2, 22, 12)
+                        if (players[player].dir == "left" || players[player].dir == "down"){
+                            fill("BLUE")
+                            rect(players[player].x - base + 1, players[player].y -range + 2, 5, 5)
+                            rect(players[player].x - base + 12, players[player].y -range + 2, 5, 5)
+                        } else{
+                            fill("BLUE")
+                            rect(players[player].x - base + 3, players[player].y -range + 2, 5, 5)
+                            rect(players[player].x - base + 14, players[player].y -range + 2, 5, 5)
+                        }
                     }
                     // healthbars
                     fill("white")
@@ -193,12 +213,6 @@ function draw() {
                     textAlign(CENTER);
                     fill("black");
                     text(players[player].username, players[player].x + 10 - base, players[player].y - 15-range);
-                    fill("white")
-                    rect(players[player].x - 5 - base, players[player].y - 35-range, 30, 5);
-                    fill("black")
-                    if ((gameTime - players[player].invisCooldown) < players[player].invisTime){
-                        rect(players[player].x - 5 - base, players[player].y - 35-range, (gameTime - players[player].invisCooldown)/players[player].invisTime * 30, 5);
-                    }
                     if (players[player].xAcceleration != players[player].xOrigA){
                         fill("white")
                         rect(players[player].x - 5 - base, players[player].y - 40-range, 30, 5);
@@ -248,6 +262,21 @@ function draw() {
                 if (players[player].class == "ae"){
                     fill("Black")
                     text(players[player].evil, players[player].x + 10 - base, players[player].y - 30- range)
+                    fill("RED")
+                    rect(players[player].x -base, players[player].y -range + 6, 20, 4)
+                    rect(players[player].x -base + 6, players[player].y -range + 4, 8, 8)
+                } else if (players[player].class == "watcher"){
+                    fill("green")
+                    rect(players[player].x - base - 1, players[player].y -range- 2, 22, 12)
+                    if (players[player].dir == "left" || players[player].dir == "down"){
+                        fill("BLUE")
+                        rect(players[player].x - base + 1, players[player].y -range + 2, 5, 5)
+                        rect(players[player].x - base + 12, players[player].y -range + 2, 5, 5)
+                    } else{
+                        fill("BLUE")
+                        rect(players[player].x - base + 3, players[player].y -range + 2, 5, 5)
+                        rect(players[player].x - base + 14, players[player].y -range + 2, 5, 5)
+                    }
                 }
                 if (players[player].class == "tt"){
                     if(players[player].height != 20){
