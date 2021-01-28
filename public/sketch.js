@@ -97,11 +97,10 @@ function draw() {
     if (gameStart){
         socket.on('returnUpdate', update);
     }
-    
+    fill("BLACK")
+    rect(-20 - base, 0, 20, 600)
+    rect(mapWidth - base, 0, 20, 600)
     for (var i = 0; i < platforms.length; i++) {
-        fill("BLACK")
-        rect(-20 - base, 0, 20, 600)
-        rect(mapWidth - base, 0, 20, 600)
         if (platforms[i].speed === 0) {
             fill(4, 207, 95);
         } else {
@@ -123,7 +122,7 @@ function draw() {
     if (bullets != []) {
         for (var i = 0; i < bullets.length; i++) {
             fill(bullets[i].colour)
-            if (bullets[i].type == "beam" || bullets[i].type == "trap" || bullets[i].type == "ultrahealing"){
+            if (bullets[i].type == "beam" || bullets[i].type == "trap" || bullets[i].type == "ultrahealing" || bullets[i].type == "rush"){
                 rect(bullets[i].x - base, bullets[i].y - range, bullets[i].width, bullets[i].height);
             } else{
                 if (bullets[i].dir == "up" || bullets[i].dir == "down"){
@@ -242,8 +241,31 @@ function draw() {
                 if (players[player].class == "tt" && socket.id == player && players[player].canUltimateCooldown == 0){
                     fill(0, 0 , 0, 50)
                     rect(players[player].pastX- base, players[player].pastY - range, 20, 40, 0.1)
+                } else if (players[player].class == "ae" && players[player].invinc == true){
+                    fill(0, 0 , 0, 50)
+                    rect(players[player].pastX- base, players[player].pastY - range, 20, 40, 0.1)
                 }
-                if (players[player].class == "necro"){
+                if (players[player].class == "ae"){
+                    fill("Black")
+                    text(players[player].evil, players[player].x + 10 - base, players[player].y - 30- range)
+                }
+                if (players[player].class == "tt"){
+                    if(players[player].height != 20){
+                        fill("PURPLE")
+                        rect(players[player].x - base, players[player].y - range + 18, 20, 22)
+                        fill("CYAN")
+                        rect(players[player].x - base, players[player].y - range + 15, 8, 25)
+                        rect(players[player].x - base + 12, players[player].y - range + 15, 8, 25)
+                    } else{
+                        fill("PURPLE")
+                        rect(players[player].x - base, players[player].y - range + 18, 20, 2)
+                        fill("CYAN")
+                        rect(players[player].x - base, players[player].y - range + 15, 8, 5)
+                        rect(players[player].x - base + 12, players[player].y - range + 15, 8, 5)
+                        
+                    }
+                }
+                else if (players[player].class == "necro"){
                     if (players[player].dir == "down"){
                         fill("purple")
                         rect(players[player].x - base, players[player].y - range + 15, 20, 5)
