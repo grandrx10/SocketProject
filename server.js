@@ -202,23 +202,23 @@ function newConnection(socket) {
 			} else if (players[socket.id].class == "ae" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
 				players[socket.id].evil += 3;
 				players[socket.id].canAbility1 = false;
-				players[socket.id].a1Time = 70 - players[socket.id].evil * 0.4;
+				players[socket.id].a1Time = 70 - players[socket.id].evil * 0.3;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			} else if (players[socket.id].class == "ae" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				players[socket.id].jump = true;
 				players[socket.id].secondJump = true;
 				players[socket.id].canAbility2 = false;
-				players[socket.id].a2Time = 50 - players[socket.id].evil * 0.5;
+				players[socket.id].a2Time = 50 - players[socket.id].evil * 0.2;
 				players[socket.id].canAbility2Cooldown = gameTime;
 			} else if (players[socket.id].class == "ae" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				players[socket.id].xAcceleration = 10;
-				players[socket.id].invincTime = 30 + players[socket.id].evil * 0.5;
+				players[socket.id].invincTime = 30 + players[socket.id].evil * 0.3;
 				players[socket.id].invinc = true;
 				players[socket.id].invincCooldown = gameTime;
-				players[socket.id].speedTime = 30 + players[socket.id].evil * 0.5;
+				players[socket.id].speedTime = 30 + players[socket.id].evil * 0.3;
 				players[socket.id].speedCooldown = gameTime;
 				players[socket.id].canUltimate = false;
-				players[socket.id].ultTime = 150 - players[socket.id].evil * 0.5;
+				players[socket.id].ultTime = 150 - players[socket.id].evil * 0.3;
 				players[socket.id].canUltimateCooldown = gameTime;
 			} 
 			//time traveller
