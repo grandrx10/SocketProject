@@ -780,14 +780,13 @@ function newConnection(socket) {
 			survivalCount = 0;
 		}
 
-		if (winnerDecided != 0 && gameTime - winnerDecided > 30){
+		if (winnerDecided != 0 && gameTime - winnerDecided > 30 ){
 			gameTime = 0;
 			bullets = [];
 			team1Kills = 0;
 			team2Kills = 0;
 			mapDeathWall = 0;
 			winner = "none";
-			healGot = true;
 			winnerDecided = 0;
 			for (player in players){
 				io.to(player).emit("dead", 1);
