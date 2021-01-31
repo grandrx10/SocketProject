@@ -793,9 +793,7 @@ function newConnection(socket) {
 				io.to(player).emit("dead", 1);
 				delete players[player];
 			}
-			for (player in deadPlayers){
-				delete deadPlayers[player];
-			}
+			deadPlayers = []
 		}
 
 		if (teamMode == "jugg" && currentJugg == false){
