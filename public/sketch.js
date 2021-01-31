@@ -19,9 +19,10 @@ var team = 0;
 var teamMode = "";
 var killed = ["none", "none", "none"]
 var killing = ["none", "none", "none"]
+var song;
 
 function preload(){
-    var song = createAudio("Assets/SongForGame.mp3");
+    song = createAudio("Assets/SongForGame.mp3");
 }
 
 
