@@ -783,6 +783,7 @@ function newConnection(socket) {
 		if (winnerDecided != 0 && gameTime - winnerDecided > 30 ){
 			gameTime = 0;
 			bullets = [];
+			bullets.push(new Bullet(2 + 5, 600 + 15, 18, 12, "left", 12, 15, "BLUE", "blast", 0))
 			team1Kills = 0;
 			team2Kills = 0;
 			mapDeathWall = 0;
@@ -791,6 +792,9 @@ function newConnection(socket) {
 			for (player in players){
 				io.to(player).emit("dead", 1);
 				delete players[player];
+			}
+			for (player in deadPlayers){
+				delete deadPlayers[player];
 			}
 		}
 
@@ -1480,7 +1484,7 @@ function checkRemove(bullet){
 }
 
 function Player(username, chosenClass, team){
-	if (teamMode == "ffa" || teamMode == "survival"){
+	if (teamMode == "ffa"){
 		this.x = Math.floor(Math.random() * 5980) + 1;
 		this.y = 20;
 		this.team = teamNumber;
@@ -1497,6 +1501,11 @@ function Player(username, chosenClass, team){
 		this.team = 1;
 		this.x = Math.floor(Math.random() * 5980) + 1;
 		this.y = 20;
+	} else if (teamMode == "survival"){
+		this.x = Math.floor(Math.random() * (mapWidth - mapDeathWall)) + mapDeathWall;
+		this.y = 20;
+		this.team = teamNumber;
+		teamNumber++;
 	}
 	this.height = 40;
 	this.width = 20;
