@@ -17,17 +17,21 @@ var team1Kills = 0;
 var team2Kills = 0;
 var team = 0;
 var teamMode = "";
-var playSong = true;
 var killed = ["none", "none", "none"]
 var killing = ["none", "none", "none"]
+
+function preload(){
+    var song = createAudio("Assets/SongForGame.mp3");
+}
+
 
 function setup(){
     createCanvas(1200,600);
     background(51);
     frameRate(60);
 
-    // song.volume(0.2);
-    // song.loop();
+    song.volume(0.2);
+    song.loop();
 
     socket = io();
     socket.on('players', test);
@@ -74,12 +78,6 @@ function setup(){
 function draw() {
     textSize(12)
     background(220);
-    if (playSong){
-        var song = createAudio("Assets/SongForGame.mp3");
-        song.volume(0.2);
-        song.loop();
-        playSong = false
-    }
     for (player in players){
         if (player == socket.id){
             base = players[socket.id].BASE;
