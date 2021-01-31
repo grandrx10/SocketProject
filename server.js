@@ -768,7 +768,7 @@ function newConnection(socket) {
 				survivalCount += 1;
 			}
 		}
-
+		
 		if (survivalCount <= 1 && gameTime > 100 && winner == "none" && teamMode == "survival"){
 			winnerDecided = gameTime;
 			for (player in players){
