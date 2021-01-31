@@ -1502,7 +1502,11 @@ function Player(username, chosenClass, team){
 		this.x = Math.floor(Math.random() * 5980) + 1;
 		this.y = 20;
 	} else if (teamMode == "survival"){
-		this.x = Math.floor(Math.random() * (mapWidth - mapDeathWall)) + mapDeathWall;
+		if (mapDeathWall != 0){
+			this.x = Math.floor(Math.random() * (mapWidth - mapDeathWall)) + mapDeathWall;
+		} else {
+			this.x = Math.floor(Math.random() * 5980) + 1;
+		}
 		this.y = 20;
 		this.team = teamNumber;
 		teamNumber++;
