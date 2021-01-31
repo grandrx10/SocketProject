@@ -699,7 +699,7 @@ function newConnection(socket) {
 		// 	players[socket.id] = new Player(username, "spellslinger");
 		// }
 		var username = usernameList[0];
-		if (gameTime > 100 && teamMode == "survival"){
+		if (gameTime > 120 && teamMode == "survival"){
 			var characterClass = "spec";
 		} else {
 			var characterClass = usernameList[1];
@@ -736,7 +736,11 @@ function newConnection(socket) {
 		// }
 		
 		//survival game
-		if (gameTime > 100 && teamMode == "survival"){
+		if (gameTime == 120 && teamMode == "survival"){
+			for (player in players){
+				players[player].invinc = false;
+			}
+		} else if (gameTime > 120 && teamMode == "survival"){
 			mapDeathWall += 0.5;
 		}
 
@@ -769,7 +773,11 @@ function newConnection(socket) {
 			}
 		}
 		
-		if (survivalCount <= 1 && gameTime > 100 && winner == "none" && teamMode == "survival"){
+		if (Object.keys(players).length == 0){
+			gameTime = 0;
+		}
+		
+		if (survivalCount <= 1 && gameTime > 120 && winner == "none" && teamMode == "survival"){
 			winnerDecided = gameTime;
 			for (player in players){
 				if (players[player].class != "spec"){
@@ -1567,6 +1575,8 @@ function Player(username, chosenClass, team){
 	if (chosenClass == "spec"){
 		this.invinc = true;
 		this.invis = true;
+	} else if (teamMode == "survival") {
+		this.invinc = true;
 	} else {
 		this.invinc = false;
 	}
