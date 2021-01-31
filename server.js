@@ -741,7 +741,7 @@ function newConnection(socket) {
 				players[player].invinc = false;
 			}
 		} else if (gameTime > 120 && teamMode == "survival"){
-			mapDeathWall += 0.5;
+			mapDeathWall += 2;
 		}
 
 		if (gameTime % 250 == 0 && healGot == true){
