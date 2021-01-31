@@ -204,25 +204,26 @@ function newConnection(socket) {
 				players[socket.id].shootTime = 6;
 				players[socket.id].canShootCooldown = gameTime;
 			} else if (players[socket.id].class == "ae" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
-				players[socket.id].evil += 3;
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 30, 10, players[socket.id].dir, socket.id, 24, "rgb(225, 54, 255)", "evilFarm", players[socket.id].team);
+				bullets.push(b);
 				players[socket.id].canAbility1 = false;
-				players[socket.id].a1Time = 70 - players[socket.id].evil * 0.3;
+				players[socket.id].a1Time = 30;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			} else if (players[socket.id].class == "ae" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				players[socket.id].jump = true;
 				players[socket.id].secondJump = true;
 				players[socket.id].canAbility2 = false;
-				players[socket.id].a2Time = 50 - players[socket.id].evil * 0.2;
+				players[socket.id].a2Time = 70 - players[socket.id].evil * 0.2;
 				players[socket.id].canAbility2Cooldown = gameTime;
 			} else if (players[socket.id].class == "ae" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				players[socket.id].xAcceleration = 10;
-				players[socket.id].invincTime = 30 + players[socket.id].evil * 0.3;
+				players[socket.id].invincTime = 30 + players[socket.id].evil * 0.2;
 				players[socket.id].invinc = true;
 				players[socket.id].invincCooldown = gameTime;
-				players[socket.id].speedTime = 30 + players[socket.id].evil * 0.3;
+				players[socket.id].speedTime = 30 + players[socket.id].evil * 0.2;
 				players[socket.id].speedCooldown = gameTime;
 				players[socket.id].canUltimate = false;
-				players[socket.id].ultTime = 150 - players[socket.id].evil * 0.3;
+				players[socket.id].ultTime = 200 - players[socket.id].evil * 0.2;
 				players[socket.id].canUltimateCooldown = gameTime;
 			} 
 			//time traveller
@@ -768,7 +769,7 @@ function newConnection(socket) {
 			}
 		}
 
-		if (survivalCount <= 1 && gameTime > 100 && winner == "none"){
+		if (survivalCount <= 1 && gameTime > 100 && winner == "none" && teamMode == "survival"){
 			winnerDecided = gameTime;
 			for (player in players){
 				if (players[player].class != "spec"){
@@ -1137,15 +1138,19 @@ function newConnection(socket) {
 						players[player].hp -= 20;
 						bulletsToRemove.push(i);
 						players[player].stun = true;
-						players[player].stunTime = 18;
+						players[player].stunTime = 15;
 						players[player].stunCooldown = gameTime;
 					}
+					// ae
 					else if (bullets[i].type == "boomerang" && players[bullets[i].shooter] != null){ 
 						players[player].hp -= 10 + players[bullets[i].shooter].evil;
-						players[bullets[i].shooter].evil += 1;
+						players[bullets[i].shooter].evil += 3;
 						players[bullets[i].shooter].canShoot = true;
 						players[bullets[i].shooter].canShootCooldown = 0;
 						bulletsToRemove.push(i);
+					} else if (bullets[i].type == "evilFarm" && players[bullets[i].shooter] != null){ 
+						players[player].hp -= 3 +  0.2*players[bullets[i].shooter].evil;
+						players[bullets[i].shooter].evil += 1;
 					}
 					// time traveller bullets
 					else if (bullets[i].type == "timeShot" && players[player].marked == true){
