@@ -45,10 +45,12 @@ function setup(){
         $('#myModal').appendTo('body').modal('show');
         $('#myModal').on('hidden.bs.modal',function(){
           if(!userNameSubmitted){
+            song.loop();
             socket.emit('username',["", $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
           }
         });
         $('#theButton').click(function() {
+          song.loop()
           socket.emit('username',[$('#userName').val(), $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
           userNameSubmitted = true;
         });
@@ -64,6 +66,7 @@ function setup(){
           var keycode = (event.keyCode ? event.keyCode : event.which);
           if(keycode == '13'){
             if($('#myModal').is(':visible')){
+              song.loop()
               socket.emit('username',[$('#userName').val(), $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
               userNameSubmitted = true;
               $("#myModal").removeClass("in");
@@ -599,6 +602,7 @@ function update(returnList){
 }
 
 function respawn(){
+    song.stop();
     $('#myModal').appendTo('body').modal('show');
 }
 
