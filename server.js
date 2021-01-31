@@ -24,7 +24,11 @@ var updateTimer = null;
 var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
-var teamMode = "ffa";
+var mapDeathWall = 0;
+var teamMode = "survival";
+var survivalCount = 0;
+var winnerDecided = 0;
+var winner = "none"
 var currentJugg = false;
 var teamNumber = 0;
 var team1Kills = 0;
@@ -183,7 +187,7 @@ function newConnection(socket) {
 			} else if (players[socket.id].class == "watcher" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
 				players[socket.id].invis = true;
 				players[socket.id].canAbility2 = false;
-				players[socket.id].a2Time = 10;
+				players[socket.id].a2Time = 100;
 				players[socket.id].canAbility2Cooldown = gameTime;
 			} else if (players[socket.id].class == "watcher" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 10, 40, 20, players[socket.id].dir, socket.id, 40, "yellow", "megaStun", players[socket.id].team);
@@ -694,7 +698,11 @@ function newConnection(socket) {
 		// 	players[socket.id] = new Player(username, "spellslinger");
 		// }
 		var username = usernameList[0];
-		var characterClass = usernameList[1];
+		if (gameTime > 100 && teamMode == "survival"){
+			var characterClass = "spec";
+		} else {
+			var characterClass = usernameList[1];
+		}
 		var team = usernameList[2];
 		if (username == ""){
 			players[socket.id] = new Player("Unnamed", characterClass, team)
@@ -726,6 +734,11 @@ function newConnection(socket) {
 		// 	}
 		// }
 		
+		//survival game
+		if (gameTime > 100 && teamMode == "survival"){
+			mapDeathWall += 0.5;
+		}
+
 		if (gameTime % 250 == 0 && healGot == true){
 			for (var i = 0; i < healLocationX.length; i++){
 				b = new Bullet(healLocationX[i], healLocationY[i], 30, 30, "left", 0, 0, "green", "heal", -1)
@@ -748,6 +761,36 @@ function newConnection(socket) {
 			} else if (players[player].class == "ae" && gameTime % 2 == 0){
 				players[player].pastX = players[player].x;
 				players[player].pastY = players[player].y;
+			}
+
+			if (teamMode == "survival" && players[player].class != "spec"){
+				survivalCount += 1;
+			}
+		}
+
+		if (survivalCount <= 1 && gameTime > 100 && winner == "none"){
+			winnerDecided = gameTime;
+			for (player in players){
+				if (players[player].class != "spec"){
+					winner = players[player].username;
+				}
+			}
+		} else {
+			survivalCount = 0;
+		}
+
+		if (winnerDecided != 0 && gameTime - winnerDecided > 30){
+			gameTime = 0;
+			bullets = [];
+			team1Kills = 0;
+			team2Kills = 0;
+			mapDeathWall = 0;
+			winner = "none";
+			healGot = true;
+			winnerDecided = 0;
+			for (player in players){
+				io.to(player).emit("dead", 1);
+				delete players[player];
 			}
 		}
 
@@ -832,6 +875,13 @@ function newConnection(socket) {
 			}
 
 			if (players[player].y + 40>= 1000 && map == 2){
+				players[player].hp -= 100;
+			}
+
+			if (players[player].x < mapDeathWall && mapDeathWall != 0){
+				players[player].hp -= 100;
+			}
+			if (players[player].x > mapWidth - mapDeathWall && mapDeathWall != 0){
 				players[player].hp -= 100;
 			}
 
@@ -1385,7 +1435,7 @@ function newConnection(socket) {
 			players[player].RANGE = players[player].y - 300 + players[player].height/2;
 			players[player].BASE = players[player].x - 600 + players[player].width/2;
 		}
-		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode, killing, killed]);
+		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode, killing, killed, mapDeathWall, winner]);
 		for (player in players){
 			players[player].loadedSong = true;
 		}
@@ -1426,7 +1476,7 @@ function checkRemove(bullet){
 }
 
 function Player(username, chosenClass, team){
-	if (teamMode == "ffa"){
+	if (teamMode == "ffa" || teamMode == "survival"){
 		this.x = Math.floor(Math.random() * 5980) + 1;
 		this.y = 20;
 		this.team = teamNumber;
@@ -1459,6 +1509,12 @@ function Player(username, chosenClass, team){
 		this.yOrigA = 10
 		this.xOrigA = 6
 		this.ammo = 6
+	} else if(chosenClass == "huntsman"){
+		this.yOrigA = 10
+		this.xOrigA = 7
+	} else if(chosenClass == "spec"){
+		this.yOrigA = 12
+		this.xOrigA = 10
 	} else {
 		this.yOrigA = 10
 		this.xOrigA = 6
@@ -1492,7 +1548,12 @@ function Player(username, chosenClass, team){
 	this.slowTime = 0;
 	this.speedTime = 0;
 	this.invincTime = 0;
-	this.invinc = false;
+	if (chosenClass == "spec"){
+		this.invinc = true;
+		this.invis = true;
+	} else {
+		this.invinc = false;
+	}
 	this.invincCooldown = 0;
 	this.wallTime = 0;
 	this.canAbility1 = true;

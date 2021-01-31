@@ -11,6 +11,8 @@ var walls = [];
 var base = 0;
 var range = 0;
 var mapWidth = 6000;
+var mapDeathWall;
+var winner;
 var team1Kills = 0;
 var team2Kills = 0;
 var team = 0;
@@ -100,6 +102,19 @@ function draw() {
     fill("BLACK")
     rect(-20 - base, 0, 20, 600)
     rect(mapWidth - base, 0, 20, 600)
+    fill("RED")
+    if (mapDeathWall != 0){
+        rect(mapDeathWall - base, 0, 30, 600)
+        rect(mapWidth - mapDeathWall - base, 0, 30, 600)
+    }
+
+    if (winner != "none"){
+        textSize(20)
+        textAlign(CENTER)
+        text("WINNER: " + winner, 600, 100)
+        textSize(12)
+    }
+
     for (var i = 0; i < platforms.length; i++) {
         if (platforms[i].speed === 0) {
             fill(4, 207, 95);
@@ -580,6 +595,8 @@ function update(returnList){
     teamMode = returnList[9];
     killing = returnList[10];
     killed = returnList[11];
+    mapDeathWall = returnList[12];
+    winner = returnList[13];
 }
 
 function respawn(){
