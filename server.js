@@ -25,7 +25,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "survival";
+var teamMode = "ffa";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none"
@@ -250,7 +250,7 @@ function newConnection(socket) {
 				players[socket.id].y = players[socket.id].pastY
 				players[socket.id].hp = 100
 				players[socket.id].canUltimate = false;
-				players[socket.id].ultTime = 100;
+				players[socket.id].ultTime = 150;
 				players[socket.id].canUltimateCooldown= gameTime;
 			}
 			//necro abilities
@@ -368,7 +368,7 @@ function newConnection(socket) {
 				bullets.push(b);
 				players[socket.id].ammo --;
 				players[socket.id].canShoot = false;
-				players[socket.id].shootTime = 2;
+				players[socket.id].shootTime = 1.5;
 				players[socket.id].canShootCooldown = gameTime;
 			} 
 			else if (players[socket.id].class == "deadeye" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
@@ -1166,7 +1166,7 @@ function newConnection(socket) {
 					else if (bullets[i].type == "timeShot" && players[player].marked == true){
 						marked = false;
 						players[player].markTimer = 0;
-						players[player].hp -= 50;
+						players[player].hp -= 40;
 						// players[player].stun = true;
 						// players[player].stunTime = 4;
 						// players[player].stunCooldown = gameTime;
@@ -1174,7 +1174,7 @@ function newConnection(socket) {
 						players[player].markTimer = 0;
 						bulletsToRemove.push(i);
 					} else if (bullets[i].type == "timeShot"){ 
-						players[player].hp -= 20;
+						players[player].hp -= 15;
 						players[player].marked = true;
 						players[player].markTimer = gameTime;
 						players[player].markDuration = 50;
@@ -1182,7 +1182,7 @@ function newConnection(socket) {
 					} else if (bullets[i].type == "timeMark" && players[player].marked == true){
 						players[player].hp -= 20;
 						players[player].stun = true;
-						players[player].stunTime = 12;
+						players[player].stunTime = 10;
 						players[player].stunCooldown = gameTime;
 						players[player].marked = false;
 						players[player].markTimer = 0;

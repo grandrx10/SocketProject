@@ -19,10 +19,20 @@ var team = 0;
 var teamMode = "";
 var killed = ["none", "none", "none"]
 var killing = ["none", "none", "none"]
-var song;
+var deadeyeSong;
+var huntsmanSong;
+var spellslingerSong
+var aeSong
+var assassinSong
+var necromancerSong
 
 function preload(){
-    song = createAudio("Assets/SongForGame.mp3");
+    deadeyeSong = createAudio("Assets/Epithet.mp3");
+    huntsmanSong = createAudio("Assets/hellsing.mp3");
+    spellslingerSong = createAudio("Assets/valedictory.mp3");
+    aeSong = createAudio("Assets/eow.mp3");
+    assassinSong = createAudio("Assets/psychoKiller.mp3");
+    necromancerSong = createAudio("Assets/necromancer.mp3");
 }
 
 
@@ -30,9 +40,6 @@ function setup(){
     createCanvas(1200,600);
     background(51);
     frameRate(60);
-
-    song.volume(0.2);
-    song.loop();
 
     socket = io();
     socket.on('players', test);
@@ -45,12 +52,12 @@ function setup(){
         $('#myModal').appendTo('body').modal('show');
         $('#myModal').on('hidden.bs.modal',function(){
           if(!userNameSubmitted){
-            song.loop();
+            loopSong($("input[type='radio'][name='class']:checked").val())
             socket.emit('username',["", $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
           }
         });
         $('#theButton').click(function() {
-          song.loop()
+          loopSong($("input[type='radio'][name='class']:checked").val())
           socket.emit('username',[$('#userName').val(), $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
           userNameSubmitted = true;
         });
@@ -66,7 +73,7 @@ function setup(){
           var keycode = (event.keyCode ? event.keyCode : event.which);
           if(keycode == '13'){
             if($('#myModal').is(':visible')){
-              song.loop()
+              loopSong($("input[type='radio'][name='class']:checked").val())
               socket.emit('username',[$('#userName').val(), $("input[type='radio'][name='class']:checked").val(), $("input[type='radio'][name='team']:checked").val()]);
               userNameSubmitted = true;
               $("#myModal").removeClass("in");
@@ -77,6 +84,28 @@ function setup(){
         });
     });
     
+}
+
+function loopSong(charClass){
+    if (charClass == "huntsman"){
+        huntsmanSong.volume(1.0);
+        huntsmanSong.loop();
+    } else if (charClass == "deadeye"){
+        deadeyeSong.volume(0.2);
+        deadeyeSong.loop();
+    } else if (charClass == "spellslinger"){
+        spellslingerSong.volume(0.05);
+        spellslingerSong.loop();
+    } else if (charClass == "ae"){
+        aeSong.volume(0.05);
+        aeSong.loop();
+    } else if (charClass == "assassin"){
+        assassinSong.volume(0.1);
+        assassinSong.loop();
+    } else if (charClass == "necro"){
+        necromancerSong.volume(0.1);
+        necromancerSong.loop();
+    }
 }
 
 function draw() {
