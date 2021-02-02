@@ -1153,13 +1153,13 @@ function newConnection(socket) {
 					}
 					// ae
 					else if (bullets[i].type == "boomerang" && players[bullets[i].shooter] != null){ 
-						players[player].hp -= 10 + players[bullets[i].shooter].evil;
+						players[player].hp -= 15 + players[bullets[i].shooter].evil;
 						players[bullets[i].shooter].evil += 3;
 						players[bullets[i].shooter].canShoot = true;
 						players[bullets[i].shooter].canShootCooldown = 0;
 						bulletsToRemove.push(i);
 					} else if (bullets[i].type == "evilFarm" && players[bullets[i].shooter] != null){ 
-						players[player].hp -= 3 +  0.2*players[bullets[i].shooter].evil;
+						players[player].hp -= 5 +  0.5*players[bullets[i].shooter].evil;
 						players[bullets[i].shooter].evil += 1;
 					}
 					// time traveller bullets
@@ -1310,7 +1310,7 @@ function newConnection(socket) {
 					}
 					// Tank detection
 					if (bullets[i].type == "scatter"){ 
-						players[player].hp -= 14;
+						players[player].hp -= 17;
 						bulletsToRemove.push(i);
 					}
 					// assassin detection
@@ -1418,7 +1418,7 @@ function newConnection(socket) {
 									minionCount ++;
 								}
 							} else if (players[bullets[i].shooter].class == "ae"){
-								players[bullets[i].shooter].evil += 3;
+								players[bullets[i].shooter].evil += 6;
 							}
 
 							if (players[bullets[i].shooter].class != null && players[player].class == "juggernaut"){
@@ -1517,6 +1517,10 @@ function Player(username, chosenClass, team){
 		this.y = 20;
 		this.team = teamNumber;
 		teamNumber++;
+	} else if (teamMode == "coop"){
+		this.team = 1;
+		this.x = Math.floor(Math.random() * 5980) + 1;
+		this.y = 20;
 	}
 	this.height = 40;
 	this.width = 20;

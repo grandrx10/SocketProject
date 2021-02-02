@@ -25,14 +25,23 @@ var spellslingerSong
 var aeSong
 var assassinSong
 var necromancerSong
+var ttSong
+var tankSong
+var mercSong
+var watcherSong
+var docSong
 
 function preload(){
-    deadeyeSong = createAudio("Assets/Epithet.mp3");
+    deadeyeSong = createAudio("Assets/sixShooter.mp3");
     huntsmanSong = createAudio("Assets/hellsing.mp3");
     spellslingerSong = createAudio("Assets/valedictory.mp3");
-    aeSong = createAudio("Assets/eow.mp3");
+    aeSong = createAudio("Assets/untold.mp3");
     assassinSong = createAudio("Assets/psychoKiller.mp3");
     necromancerSong = createAudio("Assets/necromancer.mp3");
+    ttSong = createAudio("Assets/dmc.mp3");
+    mercSong = createAudio("Assets/themeHellsing.mp3");
+    tankSong = createAudio("Assets/doom.mp3");
+    docSong = createAudio("Assets/civilWar.mp3")
 }
 
 
@@ -91,7 +100,7 @@ function loopSong(charClass){
         huntsmanSong.volume(1.0);
         huntsmanSong.loop();
     } else if (charClass == "deadeye"){
-        deadeyeSong.volume(0.2);
+        deadeyeSong.volume(0.1);
         deadeyeSong.loop();
     } else if (charClass == "spellslinger"){
         spellslingerSong.volume(0.05);
@@ -105,6 +114,18 @@ function loopSong(charClass){
     } else if (charClass == "necro"){
         necromancerSong.volume(0.1);
         necromancerSong.loop();
+    } else if (charClass == "tt"){
+        ttSong.volume(0.1);
+        ttSong.loop();
+    } else if (charClass == "merc"){
+        mercSong.volume(0.1);
+        mercSong.loop();
+    } else if (charClass == "tank"){
+        tankSong.volume(0.05);
+        tankSong.loop();
+    } else if (charClass == "doc"){
+        docSong.volume(0.1);
+        docSong.loop();
     }
 }
 
