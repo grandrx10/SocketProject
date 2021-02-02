@@ -758,7 +758,14 @@ function newConnection(socket) {
 			players[botCount].team = 2
 			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
 			players[botCount].y = 20;
-			players[botCount].hp = 50;
+			players[botCount].hp = 100;
+			players[botCount].bot = true;
+			botCount ++;
+			players[botCount] = new Player("Enemy", "ai", 2)
+			players[botCount].team = 2
+			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
+			players[botCount].y = 20;
+			players[botCount].hp = 100;
 			players[botCount].bot = true;
 			botCount ++;
 		} else if (gameTime % 81 == 0 && teamMode == "coop"){
