@@ -752,16 +752,16 @@ function newConnection(socket) {
 		}
 
 		// coop
-		if (gameTime % 30 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70){
+		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70){
 			aiSpawn = false;
-			players[botCount] = new Player("Enemy", "ai", 2)
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
 			players[botCount].team = 2
 			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
 			players[botCount].y = 20;
 			players[botCount].hp = 100;
 			players[botCount].bot = true;
 			botCount ++;
-			players[botCount] = new Player("Enemy", "ai", 2)
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
 			players[botCount].team = 2
 			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
 			players[botCount].y = 20;
@@ -821,8 +821,14 @@ function newConnection(socket) {
 					players[player].xSpeed = 5
 					players[player].dir = "left"
 				}
-				if (players[player].canShoot == true){
+				if (players[player].canShoot == true && players[player].stun == false && players[player].class == "ai"){
 					b = new Bullet(players[player].x + 5, players[player].y + 15, 18, 12, players[player].dir, player, 23, "BLUE", "blast", players[player].team);
+					bullets.push(b);
+					players[player].canShoot = false;
+					players[player].shootTime = 5;
+					players[player].canShootCooldown = gameTime;
+				} else if (players[player].canShoot == true && players[player].stun == false && players[player].class == "aiStunner"){
+					b = new Bullet(players[player].x + 5, players[player].y + 15, 28, 10, players[player].dir, player, 30, "YELLOW", "stun", players[player].team);
 					bullets.push(b);
 					players[player].canShoot = false;
 					players[player].shootTime = 5;
@@ -875,6 +881,7 @@ function newConnection(socket) {
 			team1Kills = 0;
 			team2Kills = 0;
 			mapDeathWall = 0;
+			healGot = true;
 			winner = "none";
 			winnerDecided = 0;
 			for (player in players){
