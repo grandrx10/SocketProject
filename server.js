@@ -25,7 +25,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "coop";
+var teamMode = "ffa";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none"
@@ -38,7 +38,7 @@ var n = 0;
 var killer =0;
 var minionCount = 0;
 var aiSpawn = true;
-var botCount = 0;
+var botCount = 1000;
 var playerX = []
 var killing = ["none", "none", "none"];
 var killed = ["none", "none", "none"];
@@ -755,6 +755,16 @@ function newConnection(socket) {
 		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70){
 			aiSpawn = false;
 			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			//teams are autoset in the game. Idk why I made it like this.
+			players[botCount].team = 2
+			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
+			players[botCount].y = 20;
+			players[botCount].hp = 100;
+			players[botCount].bot = true;
+			botCount ++;
+		}
+		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 200){
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
 			players[botCount].team = 2
 			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
 			players[botCount].y = 20;
@@ -768,9 +778,28 @@ function newConnection(socket) {
 			players[botCount].hp = 100;
 			players[botCount].bot = true;
 			botCount ++;
-		} else if (gameTime % 81 == 0 && teamMode == "coop"){
+		}
+		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 600){
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			players[botCount].team = 2
+			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
+			players[botCount].y = 20;
+			players[botCount].hp = 100;
+			players[botCount].bot = true;
+			botCount ++;
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			players[botCount].team = 2
+			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
+			players[botCount].y = 20;
+			players[botCount].hp = 100;
+			players[botCount].bot = true;
+			botCount ++;
+		}
+		if (gameTime % 51 == 0 && teamMode == "coop"){
 			aiSpawn = true;
 		}
+
+
 
 		if (gameTime % 250 == 0 && healGot == true){
 			for (var i = 0; i < healLocationX.length; i++){
