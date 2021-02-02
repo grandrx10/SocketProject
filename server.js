@@ -25,7 +25,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "survival";
+var teamMode = "coop";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none"
@@ -37,6 +37,9 @@ var healGot = true;
 var n = 0;
 var killer =0;
 var minionCount = 0;
+var aiSpawn = true;
+var botCount = 0;
+var playerX = []
 var killing = ["none", "none", "none"];
 var killed = ["none", "none", "none"];
 
@@ -701,9 +704,13 @@ function newConnection(socket) {
 		var username = usernameList[0];
 		if (gameTime > 120 && teamMode == "survival"){
 			var characterClass = "spec";
-		} else {
+		} else if (gameTime > 120 && teamMode == "coop"){
+			var characterClass = "spec";
+		}
+		else {
 			var characterClass = usernameList[1];
 		}
+
 		var team = usernameList[2];
 		if (username == ""){
 			players[socket.id] = new Player("Unnamed", characterClass, team)
@@ -744,6 +751,20 @@ function newConnection(socket) {
 			mapDeathWall += 2;
 		}
 
+		// coop
+		if (gameTime % 80 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70){
+			aiSpawn = false;
+			players[botCount] = new Player("Enemy", "ai", 2)
+			players[botCount].team = 2
+			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
+			players[botCount].y = 20;
+			players[botCount].hp = 50;
+			players[botCount].bot = true;
+			botCount ++;
+		} else if (gameTime % 81 == 0 && teamMode == "coop"){
+			aiSpawn = true;
+		}
+
 		if (gameTime % 250 == 0 && healGot == true){
 			for (var i = 0; i < healLocationX.length; i++){
 				b = new Bullet(healLocationX[i], healLocationY[i], 30, 30, "left", 0, 0, "green", "heal", -1)
@@ -771,7 +792,51 @@ function newConnection(socket) {
 			if (teamMode == "survival" && players[player].class != "spec"){
 				survivalCount += 1;
 			}
+
+			if (teamMode == "coop" && players[player].team != 2 && players[player].class != "spec"){
+				playerX.push(players[player].x)
+				survivalCount += 1;
+			}
 		}
+		for (player in players){
+			if (playerX.length == 0){
+				// nothing
+			}
+			else if (players[player].team == 2){
+				goal = players[player].x
+				var closest = playerX.reduce(function(prev, curr) {
+					return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
+				});
+				if (players[player].x < closest){
+					players[player].xSpeed = -5
+					players[player].dir = "right"
+				} else if (players[player].x > closest){
+					players[player].xSpeed = 5
+					players[player].dir = "left"
+				}
+				if (players[player].canShoot == true){
+					b = new Bullet(players[player].x + 5, players[player].y + 15, 18, 12, players[player].dir, player, 23, "BLUE", "blast", players[player].team);
+					bullets.push(b);
+					players[player].canShoot = false;
+					players[player].shootTime = 5;
+					players[player].canShootCooldown = gameTime;
+				}
+
+				var bot = player
+				for (player in players){
+					if (players[player].x == closest){
+						if (players[bot].y > players[player].y && players[bot].jump == true){
+							players[bot].ySpeed = 10;
+							players[bot].jump = false;
+						} else if (players[bot].y > players[player].y && players[bot].secondJump == true){
+							players[bot].ySpeed = 10;
+							players[bot].secondJump = false;
+						}
+					}
+				}
+			}
+		}
+		playerX = []
 		
 		if (Object.keys(players).length == 0){
 			gameTime = 0;
@@ -785,7 +850,14 @@ function newConnection(socket) {
 				}
 			}
 			mapDeathWall = 0;
-		} else {
+		} else if (teamMode == "survival") {
+			survivalCount = 0;
+		}
+		
+		if (survivalCount <= 0 && gameTime > 80 && winner == "none" && teamMode == "coop"){
+			winnerDecided = gameTime;
+			winner = "GAME OVER"
+		} else if (teamMode == "coop") {
 			survivalCount = 0;
 		}
 
@@ -1451,9 +1523,6 @@ function newConnection(socket) {
 			players[player].BASE = players[player].x - 600 + players[player].width/2;
 		}
 		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode, killing, killed, mapDeathWall, winner]);
-		for (player in players){
-			players[player].loadedSong = true;
-		}
 	}
 }
 function Bullet(x, y, width, height, dir, shooter, speed, colour, type, team) {
@@ -1605,8 +1674,7 @@ function Player(username, chosenClass, team){
 	this.ultimateDuration = 0;
 	this.deadTime = 0;
 	this.owner = 0;
-	this.loadedSong = false;
-
+	this.bot = false;
 	this.move = function(dir){
 		if(dir == "up" && this.jump == true && this.stun == false){
 			this.jump = false;

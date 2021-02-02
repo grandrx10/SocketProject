@@ -39,7 +39,7 @@ function preload(){
     assassinSong = createAudio("Assets/psychoKiller.mp3");
     necromancerSong = createAudio("Assets/necromancer.mp3");
     ttSong = createAudio("Assets/dmc.mp3");
-    mercSong = createAudio("Assets/themeHellsing.mp3");
+    mercSong = createAudio("Assets/themeHell.mp3");
     tankSong = createAudio("Assets/doom.mp3");
     docSong = createAudio("Assets/civilWar.mp3")
 }
@@ -117,7 +117,7 @@ function loopSong(charClass){
     } else if (charClass == "tt"){
         ttSong.volume(0.1);
         ttSong.loop();
-    } else if (charClass == "merc"){
+    } else if (charClass == "mercenary"){
         mercSong.volume(0.1);
         mercSong.loop();
     } else if (charClass == "tank"){
@@ -160,10 +160,17 @@ function draw() {
         rect(mapWidth - mapDeathWall - base, 0, 30, 600)
     }
 
-    if (winner != "none"){
+    if (winner != "none" && teamMode == "survival"){
         textSize(20)
         textAlign(CENTER)
         text("WINNER: " + winner, 600, 100)
+        textSize(12)
+    }
+
+    if (winner != "none" && teamMode == "coop"){
+        textSize(20)
+        textAlign(CENTER)
+        text("GAME OVER", 600, 100)
         textSize(12)
     }
 
