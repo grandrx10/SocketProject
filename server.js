@@ -752,7 +752,7 @@ function newConnection(socket) {
 		}
 
 		// coop
-		if (gameTime % 80 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70){
+		if (gameTime % 30 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70){
 			aiSpawn = false;
 			players[botCount] = new Player("Enemy", "ai", 2)
 			players[botCount].team = 2
