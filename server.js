@@ -25,7 +25,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "survival";
+var teamMode = "coop";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none"
@@ -39,6 +39,9 @@ var killer =0;
 var minionCount = 0;
 var aiSpawn = true;
 var botCount = 1000;
+var botLeft = 0;
+var wave = 1;
+var increaseWave = true;
 var playerX = []
 var killing = ["none", "none", "none"];
 var killed = ["none", "none", "none"];
@@ -752,20 +755,20 @@ function newConnection(socket) {
 		}
 
 		// coop
-		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70 && gameTime < 200){
+		if (teamMode == "coop" && aiSpawn == true && wave == 1 && gameTime > 90){
 			aiSpawn = false;
 			players[botCount] = new Player("Enemy Mage", "ai", 2)
 			//teams are autoset in the game. Idk why I made it like this.
 			botCorrection()
 		}
-		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 200 && gameTime < 500){
+		else if (teamMode == "coop" && aiSpawn == true && wave == 2){
 			players[botCount] = new Player("Enemy Mage", "ai", 2)
 			botCorrection();
 			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
 			botCorrection();
 			aiSpawn = false;
 		}
-		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 500){
+		else if (teamMode == "coop" && aiSpawn == true && wave == 3){
 			players[botCount] = new Player("Enemy Mage", "ai", 2)
 			botCorrection();
 			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
@@ -775,12 +778,96 @@ function newConnection(socket) {
 			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
 			botCorrection();
 			aiSpawn = false;
+		} else if (teamMode == "coop" && aiSpawn == true && wave == 4){
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			aiSpawn = false;
+		} else if (teamMode == "coop" && aiSpawn == true && wave == 5){
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			aiSpawn = false;
+		} else if (teamMode == "coop" && aiSpawn == true && wave == 6){
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			aiSpawn = false;
+		} else if (teamMode == "coop" && aiSpawn == true && wave == 7){
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			aiSpawn = false;
 		}
-		if (gameTime % 51 == 0 && teamMode == "coop"){
-			aiSpawn = true;
+		else if (teamMode == "coop" && aiSpawn == true && wave == 8){
+			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			aiSpawn = false;
+		} else if (teamMode == "coop" && aiSpawn == true && wave == 9){
+			aiSpawn = false;
 		}
-
-
 
 		if (gameTime % 250 == 0 && healGot == true){
 			for (var i = 0; i < healLocationX.length; i++){
@@ -814,6 +901,9 @@ function newConnection(socket) {
 				playerX.push(players[player].x)
 				survivalCount += 1;
 			}
+			if (teamMode == "coop" && players[player].team == 2){
+				botLeft += 1;
+			}
 		}
 		for (player in players){
 			if (playerX.length == 0){
@@ -824,12 +914,23 @@ function newConnection(socket) {
 				var closest = playerX.reduce(function(prev, curr) {
 					return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
 				});
-				if (players[player].x < closest){
-					players[player].xSpeed = -5
-					players[player].dir = "right"
-				} else if (players[player].x > closest){
-					players[player].xSpeed = 5
-					players[player].dir = "left"
+
+				if (players[player].class != "aiA"){
+					if (players[player].x < closest){
+						players[player].xSpeed = -3
+						players[player].dir = "right"
+					} else if (players[player].x > closest){
+						players[player].xSpeed = 3
+						players[player].dir = "left"
+					}
+				} else {
+					if (players[player].x < closest){
+						players[player].xSpeed = -5
+						players[player].dir = "right"
+					} else if (players[player].x > closest){
+						players[player].xSpeed = 5
+						players[player].dir = "left"
+					}
 				}
 				if (players[player].canShoot == true && players[player].stun == false && players[player].class == "ai"){
 					b = new Bullet(players[player].x + 5, players[player].y + 15, 18, 12, players[player].dir, player, 17, "BLUE", "blast", players[player].team);
@@ -843,16 +944,53 @@ function newConnection(socket) {
 					players[player].canShoot = false;
 					players[player].shootTime = 18;
 					players[player].canShootCooldown = gameTime;
+				} else if (players[player].canShoot == true && players[player].stun == false && players[player].class == "aiA"){
+					var bot = player;
+					for (player in players){
+						// retry this please fix this later
+						if (players[player].x + players[player].height>= players[bot].x && players[player].x - 20 <= players[bot].x + players[bot].width && players[player].y + 20 >= players[bot].y && players[player].y - 20 <=  players[bot].y + players[bot].height && player != bot && players[bot].team != players[player].team && players[player].invinc != true){
+							players[player].hp -= 30;
+							if (players[player].hp <= 0){
+								killer = bot;
+							}
+						}
+					}
+					players[bot].canShoot = false;
+					players[bot].shootTime = 5;
+					players[bot].canShootCooldown = gameTime;
+				} else if (players[player].canShoot == true && players[player].stun == false && players[player].class == "aiTank"){
+					b = new Bullet(players[player].x + 5, players[player].y, 10, 10, players[player].dir, player, 7, "PEACH", "scatter", players[player].team);
+                    bullets.push(b);
+                    b = new Bullet(players[player].x + 5, players[player].y + 15, 10, 10, players[player].dir, player, 9, "PEACH", "scatter", players[player].team);
+                    bullets.push(b);
+                    b = new Bullet(players[player].x + 5, players[player].y + 30, 10, 10, players[player].dir, player, 7, "PEACH", "scatter", players[player].team);
+					bullets.push(b);
+					players[player].hp += 10
+					players[player].canShoot = false;
+					players[player].shootTime = 15;
+					players[player].canShootCooldown = gameTime;
+				} else if (players[player].canShoot == true && players[player].stun == false && players[player].class == "aiMerc"){
+					b = new Bullet(players[player].x + 5, players[player].y + 15, 20, 5, players[player].dir, player, 25, (112,128,144), "bullet", players[player].team);
+					bullets.push(b);
+					players[player].canShoot = false;
+					players[player].shootTime = 4;
+					players[player].canShootCooldown = gameTime;
+				} else if (players[player].canAbility1 == true && players[player].stun == false && players[player].class == "aiMerc"){
+					b = new Bullet(players[player].x + 5, players[player].y + 32, 35, 8, players[player].dir, player, -10, "PURPLE", "trap", players[player].team);					bullets.push(b);
+					bullets.push(b);
+					players[player].canAbility1 = false;
+					players[player].a1Time = 60;
+					players[player].canAbility1Cooldown = gameTime;
 				}
 
 				var bot = player
 				for (player in players){
 					if (players[player].x == closest){
 						if (players[bot].y > players[player].y && players[bot].jump == true){
-							players[bot].ySpeed = 10;
+							players[bot].ySpeed = 12;
 							players[bot].jump = false;
 						} else if (players[bot].y > players[player].y && players[bot].secondJump == true){
-							players[bot].ySpeed = 10;
+							players[bot].ySpeed = 12;
 							players[bot].secondJump = false;
 						}
 					}
@@ -884,6 +1022,15 @@ function newConnection(socket) {
 			survivalCount = 0;
 		}
 
+		var enemiesLeft = botLeft;
+
+		if (botLeft == 0 && gameTime > 100){
+			wave += 1
+			aiSpawn = true;
+		} else {
+			botLeft = 0;
+		}
+
 		if (winnerDecided != 0 && gameTime - winnerDecided > 30 ){
 			gameTime = 0;
 			bullets = [];
@@ -892,6 +1039,7 @@ function newConnection(socket) {
 			team2Kills = 0;
 			mapDeathWall = 0;
 			healGot = true;
+			wave = 0
 			winner = "none";
 			winnerDecided = 0;
 			for (player in players){
@@ -1546,7 +1694,7 @@ function newConnection(socket) {
 			players[player].RANGE = players[player].y - 300 + players[player].height/2;
 			players[player].BASE = players[player].x - 600 + players[player].width/2;
 		}
-		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode, killing, killed, mapDeathWall, winner]);
+		io.sockets.emit('returnUpdate', [bullets, players, platforms, deadPlayers, map, gameTime, walls, team1Kills, team2Kills, teamMode, killing, killed, mapDeathWall, winner, wave, enemiesLeft]);
 	}
 }
 function Bullet(x, y, width, height, dir, shooter, speed, colour, type, team) {
@@ -1750,7 +1898,17 @@ function botCorrection() {
 	players[botCount].team = 2
 	players[botCount].x = Math.floor(Math.random() * 5980) + 1;
 	players[botCount].y = 20;
-	players[botCount].hp = 50;
+	if (players[botCount].class == "aiStunner"){
+		players[botCount].hp = 20;
+	} else if (players[botCount].class == "ai"){
+		players[botCount].hp = 30;
+	} else if (players[botCount].class == "aiA"){
+		players[botCount].hp = 30;
+	} else if (players[botCount].class == "aiTank"){
+		players[botCount].hp = 100;
+	} else if (players[botCount].class == "aiMerc"){
+		players[botCount].hp = 20;
+	}
 	players[botCount].bot = true;
 	botCount ++;
 }

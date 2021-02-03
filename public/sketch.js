@@ -30,6 +30,7 @@ var tankSong
 var mercSong
 var watcherSong
 var docSong
+var wave
 
 function preload(){
     deadeyeSong = createAudio("Assets/sixShooter.mp3");
@@ -166,14 +167,6 @@ function draw() {
         text("WINNER: " + winner, 600, 100)
         textSize(12)
     }
-
-    if (winner != "none" && teamMode == "coop"){
-        textSize(20)
-        textAlign(CENTER)
-        text("GAME OVER", 600, 100)
-        textSize(12)
-    }
-
     for (var i = 0; i < platforms.length; i++) {
         if (platforms[i].speed === 0) {
             fill(4, 207, 95);
@@ -474,10 +467,24 @@ function draw() {
                     } else {
                         rect(players[player].x + 6 - base, players[player].y -range+ 10, 14, 6)
                     }
-                } else if (players[player].class == "tank"){
+                } else if(players[player].class == "aiA"){
+                    fill("BLACK")
+                    if (players[player].dir == "left"){
+                        rect(players[player].x - base, players[player].y + 10-range, 14, 6)
+                    } else if (players[player].dir == "up"){
+                        rect(players[player].x - base, players[player].y + 10-range, 14, 6)
+                    } else {
+                        rect(players[player].x + 6 - base, players[player].y -range+ 10, 14, 6)
+                    }
+                } 
+                else if (players[player].class == "tank"){
                     fill(66, 245, 239)
                     rect(players[player].x - 2 - base, players[player].y -range+ 5, 24, 10)
-                } else if (players[player].class == "mercenary"){
+                } else if (players[player].class == "aiTank"){
+                    fill(66, 245, 239)
+                    rect(players[player].x - 2 - base, players[player].y -range+ 5, 24, 10)
+                }
+                else if (players[player].class == "mercenary"){
                     fill(66, 47, 79)
                     if (players[player].dir == "left"){
                         rect(players[player].x - base, players[player].y-range, 20, 8)
@@ -489,7 +496,20 @@ function draw() {
                         rect(players[player].x- base, players[player].y-range, 20, 8)
                         rect(players[player].x- base, players[player].y -range+ 8, 26, 8)
                     }
-                } else if (players[player].class == "spellslinger"){
+                } else if (players[player].class == "aiMerc"){
+                    fill(66, 47, 79)
+                    if (players[player].dir == "left"){
+                        rect(players[player].x - base, players[player].y-range, 20, 8)
+                        rect(players[player].x - 6 - base, players[player].y -range+ 8, 26, 8)
+                    } else if (players[player].dir == "up"){
+                        rect(players[player].x- base, players[player].y-range, 20, 8)
+                        rect(players[player].x - 6 - base, players[player].y-range + 8, 26, 8)
+                    } else {
+                        rect(players[player].x- base, players[player].y-range, 20, 8)
+                        rect(players[player].x- base, players[player].y -range+ 8, 26, 8)
+                    }
+                }
+                else if (players[player].class == "spellslinger"){
                     fill(161, 94, 0)
                     if (players[player].height == players[player].origHeight/2 ){
                         rect(players[player].x - 1- base, players[player].y-range + 15, 22, 10);
@@ -615,6 +635,25 @@ function draw() {
             }
         }
     }
+    fill("RED")
+    if (winner != "none" && teamMode == "coop"){
+        textSize(20)
+        textAlign(CENTER)
+        text("GAME OVER", 600, 100)
+        text("Waves Survived: " + wave, 600, 150)
+        textSize(12)
+    }
+
+    if (teamMode == "coop"){
+        textSize(20)
+        fill("BLACK")
+        textAlign(CENTER)
+        text("Wave: " + wave, 600, 40);
+        textAlign(RIGHT)
+        text("Enemies: " + enemiesLeft, 1180, 40);
+        textSize(12)
+        textAlign(CENTER)
+    }
 }
 
 function keyPressed(){
@@ -656,6 +695,8 @@ function update(returnList){
     killed = returnList[11];
     mapDeathWall = returnList[12];
     winner = returnList[13];
+    wave = returnList[14];
+    enemiesLeft = returnList[15];
 }
 
 function respawn(){
