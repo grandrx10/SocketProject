@@ -25,7 +25,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "ffa";
+var teamMode = "coop";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none"
@@ -752,48 +752,29 @@ function newConnection(socket) {
 		}
 
 		// coop
-		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70){
+		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 70 && gameTime < 200){
 			aiSpawn = false;
 			players[botCount] = new Player("Enemy Mage", "ai", 2)
 			//teams are autoset in the game. Idk why I made it like this.
-			players[botCount].team = 2
-			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
-			players[botCount].y = 20;
-			players[botCount].hp = 100;
-			players[botCount].bot = true;
-			botCount ++;
+			botCorrection()
 		}
-		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 200){
+		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 200 && gameTime < 500){
 			players[botCount] = new Player("Enemy Mage", "ai", 2)
-			players[botCount].team = 2
-			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
-			players[botCount].y = 20;
-			players[botCount].hp = 100;
-			players[botCount].bot = true;
-			botCount ++;
+			botCorrection();
 			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
-			players[botCount].team = 2
-			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
-			players[botCount].y = 20;
-			players[botCount].hp = 100;
-			players[botCount].bot = true;
-			botCount ++;
+			botCorrection();
+			aiSpawn = false;
 		}
-		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 600){
+		if (gameTime % 50 == 0 && teamMode == "coop" && aiSpawn == true && gameTime > 500){
 			players[botCount] = new Player("Enemy Mage", "ai", 2)
-			players[botCount].team = 2
-			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
-			players[botCount].y = 20;
-			players[botCount].hp = 100;
-			players[botCount].bot = true;
-			botCount ++;
+			botCorrection();
 			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
-			players[botCount].team = 2
-			players[botCount].x = Math.floor(Math.random() * 5980) + 1;
-			players[botCount].y = 20;
-			players[botCount].hp = 100;
-			players[botCount].bot = true;
-			botCount ++;
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			aiSpawn = false;
 		}
 		if (gameTime % 51 == 0 && teamMode == "coop"){
 			aiSpawn = true;
@@ -1763,4 +1744,13 @@ function Wall(x, y, width, height, user, dir){
 	this.dir = dir;
 	this.width = width;
 	this.height = height;
+}
+
+function botCorrection() {
+	players[botCount].team = 2
+	players[botCount].x = Math.floor(Math.random() * 5980) + 1;
+	players[botCount].y = 20;
+	players[botCount].hp = 100;
+	players[botCount].bot = true;
+	botCount ++;
 }
