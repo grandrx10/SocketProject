@@ -787,8 +787,6 @@ function newConnection(socket) {
 			botCorrection();
 			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
 			botCorrection();
-			players[botCount] = new Player("Enemy Mage", "ai", 2)
-			botCorrection();
 			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
 			botCorrection();
 			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
@@ -800,8 +798,6 @@ function newConnection(socket) {
 			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
 			botCorrection();
 			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
-			botCorrection();
-			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
 			botCorrection();
 			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
 			botCorrection();
@@ -837,8 +833,6 @@ function newConnection(socket) {
 			botCorrection();
 			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
 			botCorrection();
-			players[botCount] = new Player("Enemy Mage", "ai", 2)
-			botCorrection();
 			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
 			botCorrection();
 			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
@@ -866,6 +860,43 @@ function newConnection(socket) {
 			botCorrection();
 			aiSpawn = false;
 		} else if (teamMode == "coop" && aiSpawn == true && wave == 9){
+			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Tank", "aiTank", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Stunner", "aiStunner", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mage", "ai", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			aiSpawn = false;
+		} else if (teamMode == "coop" && aiSpawn == true && wave == 10){
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Assassin", "aiA", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			players[botCount] = new Player("Enemy Mercenary", "aiMerc", 2)
+			botCorrection();
+			aiSpawn = false;
+		}
+		else if (teamMode == "coop" && aiSpawn == true && wave == 9){
 			aiSpawn = false;
 		}
 
