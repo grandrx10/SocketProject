@@ -835,13 +835,13 @@ function newConnection(socket) {
 					b = new Bullet(players[player].x + 5, players[player].y + 15, 18, 12, players[player].dir, player, 17, "BLUE", "blast", players[player].team);
 					bullets.push(b);
 					players[player].canShoot = false;
-					players[player].shootTime = 7;
+					players[player].shootTime = 10;
 					players[player].canShootCooldown = gameTime;
 				} else if (players[player].canShoot == true && players[player].stun == false && players[player].class == "aiStunner"){
 					b = new Bullet(players[player].x + 5, players[player].y + 15, 28, 10, players[player].dir, player, 12, "YELLOW", "stun", players[player].team);
 					bullets.push(b);
 					players[player].canShoot = false;
-					players[player].shootTime = 12;
+					players[player].shootTime = 18;
 					players[player].canShootCooldown = gameTime;
 				}
 
