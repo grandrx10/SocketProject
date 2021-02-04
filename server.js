@@ -25,7 +25,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "coop";
+var teamMode = "ffa";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none"
@@ -166,6 +166,60 @@ function newConnection(socket) {
 
 	function bulletTravel(abilityKey){
 		if (Object.keys(players).indexOf(socket.id) != -1){
+			// captain
+			if (players[socket.id].class == "captain" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].ammo > 0){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 12, 18, 14, players[socket.id].dir, socket.id, 20, "rgb(102, 153, 153)", "gunL", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].ammo --;
+				players[socket.id].canShoot = false;
+				players[socket.id].shootTime = 1000;
+				players[socket.id].canShootCooldown = gameTime;
+				players[socket.id].canAbility1 = true;
+				players[socket.id].canAbility1Cooldown = 0;
+			} else if (players[socket.id].class == "captain" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false && players[socket.id].ammo > 0){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 16, 18, 14, players[socket.id].dir, socket.id, 20, "rgb(204, 102, 153)", "gunR", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].ammo --;
+				players[socket.id].canAbility1 = false
+				players[socket.id].a1Time = 1000;
+				players[socket.id].canAbility1Cooldown = gameTime;
+				players[socket.id].canShoot = true;
+				players[socket.id].shootTime = 0;
+			} else if (players[socket.id].class == "captain" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false){
+				// dash
+				if(players[socket.id].dir == "left"){
+					players[socket.id].x -= 250;
+					players[socket.id].BASE -= 250;
+					b = new Bullet(players[socket.id].x + 20, players[socket.id].y, 250, 40, players[socket.id].dir, socket.id, 0, "YELLOW", "rushStun", players[socket.id].team);
+					bullets.push(b);
+				} else if (players[socket.id].dir == "right"){
+					players[socket.id].x += 250;
+					players[socket.id].BASE += 250;
+					b = new Bullet(players[socket.id].x - 250, players[socket.id].y, 250, 40, players[socket.id].dir, socket.id, 0, "YELLOW", "rushStun", players[socket.id].team);
+					bullets.push(b);
+				} else if (players[socket.id].dir == "up"){
+					players[socket.id].y -= 250;
+					b = new Bullet(players[socket.id].x - 10, players[socket.id].y + 40, 40, 250, players[socket.id].dir, socket.id, 0, "YELLOW", "rushStun", players[socket.id].team);
+					bullets.push(b);
+				} else if (players[socket.id].dir == "down"){
+					players[socket.id].y += 250;
+					b = new Bullet(players[socket.id].x - 10, players[socket.id].y - 250, 40, 250, players[socket.id].dir, socket.id, 0, "YELLOW", "rushStun", players[socket.id].team);
+					bullets.push(b);
+				}
+				players[socket.id].canAbility2 = false;
+				players[socket.id].a2Time = 80;
+				players[socket.id].ammo = 20;
+				players[socket.id].canAbility2Cooldown = gameTime;
+				players[socket.id].stun = true;
+				players[socket.id].stunCooldown = gameTime;
+				players[socket.id].stunTime = 2;
+			} else if (players[socket.id].class == "captain" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
+				players[socket.id].canUltimate = false;
+				players[socket.id].ultTime = 150;
+				players[socket.id].ultDurTime = 20;
+				players[socket.id].canUltimateCooldown= gameTime;
+				players[socket.id].ultimateDuration = gameTime;
+			}
 			// watcher
 			if (players[socket.id].class == "watcher" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].invinc != true){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 20, 30, 10, players[socket.id].dir, socket.id, 30, "green", "slowDart", players[socket.id].team);
@@ -1098,6 +1152,11 @@ function newConnection(socket) {
 				players[player].hp += 1.5
 			} else if (players[player].class == "tank" ) {
 				players[player].ultimateDuration = 0;
+			} 
+			if (gameTime - players[player].ultimateDuration < players[player].ultDurTime && players[player].class == "captain" && players[player].ultimateDuration != 0){
+				players[player].ammo = 20
+			} else if (players[player].class == "captain" ) {
+				players[player].ultimateDuration = 0;
 			}
 
 			if (gameTime - players[player].ultimateDuration < players[player].ultDurTime && players[player].class == "deadeye" && players[player].ultimateDuration != 0){
@@ -1192,7 +1251,10 @@ function newConnection(socket) {
 					}
 					else if (bullets[i].type == "rush" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
-					} else if (bullets[i].type == "ultrahealing" && player == bullets[i].shooter){
+					}else if (bullets[i].type == "rushStun" && player == bullets[i].shooter){
+						bullets.splice(i, 1)
+					}
+					else if (bullets[i].type == "ultrahealing" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
 					} else if (bullets[i].type == "pool" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
@@ -1400,6 +1462,9 @@ function newConnection(socket) {
 				if (gameTime - players[player].canAbility2Cooldown > 2 && bullets[i].type == "rush" && gameTime - players[player].canAbility2Cooldown < 10 && player == bullets[i].shooter){
 					bulletsToRemove.push(i);
 				}
+				if (gameTime - players[player].canAbility2Cooldown > 2 && bullets[i].type == "rushStun" && gameTime - players[player].canAbility2Cooldown < 10 && player == bullets[i].shooter){
+					bulletsToRemove.push(i);
+				}
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + players[player].height > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && players[player].team == bullets[i].team){
 					if (bullets[i].type == "healing"){ 
 						players[player].hp += 30;
@@ -1410,8 +1475,29 @@ function newConnection(socket) {
 					}
 				}
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + players[player].height > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team  && players[player].invinc != true){
+					// Captain
+					if(bullets[i].type == "gunL"){
+						players[player].hp -= 10;
+						if (players[bullets[i].shooter] != null){
+							players[bullets[i].shooter].hp += 3;
+						}
+						bulletsToRemove.push(i);
+					} else if(bullets[i].type == "gunR"){
+						players[player].hp -= 7;
+						players[player].yAcceleration = 4*players[player].yAcceleration/5;
+						players[player].xAcceleration = 4*players[player].xAcceleration/5;
+						bulletsToRemove.push(i);
+						players[player].slow = true;
+						players[player].slowTime = 10;
+						players[player].slowCooldown = gameTime;
+					} else if(bullets[i].type == "rushStun"){
+						players[player].hp -= 3;
+						players[player].stun = true;
+						players[player].stunTime = 6;
+						players[player].stunCooldown2 = gameTime;
+					}
 					// watcher
-					if(bullets[i].type == "slowDart"){
+					else if(bullets[i].type == "slowDart"){
 						players[player].hp -= 24;
 						players[player].yAcceleration = 4*players[player].yAcceleration/5;
 						players[player].xAcceleration = 4*players[player].xAcceleration/5;
@@ -1663,8 +1749,14 @@ function newConnection(socket) {
 							killed[1] = killed[0]
 							killing[0] = players[bullets[i].shooter].username;
 							killed[0] = players[player].username;
-							
-							if (players[bullets[i].shooter].class == "huntsman"){
+							if (players[bullets[i].shooter].class == "captain"){
+								players[bullets[i].shooter].canAbility2 = true;
+								players[bullets[i].shooter].canAbility2Cooldown = 0
+								if (bullets[i].type == "rushStun"){
+									bulletsToRemove.push(i);
+								}
+							}
+							else if (players[bullets[i].shooter].class == "huntsman"){
 								players[bullets[i].shooter].canShoot = true;
 								players[bullets[i].shooter].canAbility1 = true;
 								players[bullets[i].shooter].canAbility2 = true;
@@ -1809,7 +1901,12 @@ function Player(username, chosenClass, team){
 		this.yOrigA = 10
 		this.xOrigA = 6
 		this.ammo = 6
-	} else if(chosenClass == "huntsman"){
+	} else if(chosenClass == "captain"){
+		this.yOrigA = 10
+		this.xOrigA = 6
+		this.ammo = 20
+	}
+	else if(chosenClass == "huntsman"){
 		this.yOrigA = 10
 		this.xOrigA = 7
 	} else if(chosenClass == "spec"){

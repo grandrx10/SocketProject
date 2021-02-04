@@ -31,6 +31,7 @@ var mercSong
 var watcherSong
 var docSong
 var wave
+var captainSong
 
 function preload(){
     deadeyeSong = createAudio("Assets/sixShooter.mp3");
@@ -43,6 +44,7 @@ function preload(){
     mercSong = createAudio("Assets/themeHell.mp3");
     tankSong = createAudio("Assets/doom.mp3");
     docSong = createAudio("Assets/civilWar.mp3")
+    captainSong = createAudio("Assets/stillFeel.mp3")
 }
 
 
@@ -127,6 +129,9 @@ function loopSong(charClass){
     } else if (charClass == "doc"){
         docSong.volume(0.1);
         docSong.loop();
+    } else if (charClass == "captain"){
+        captainSong.volume(0.05);
+        captainSong.loop();
     }
 }
 
@@ -189,7 +194,7 @@ function draw() {
     if (bullets != []) {
         for (var i = 0; i < bullets.length; i++) {
             fill(bullets[i].colour)
-            if (bullets[i].type == "beam" || bullets[i].type == "trap" || bullets[i].type == "ultrahealing" || bullets[i].type == "rush"){
+            if (bullets[i].type == "beam" || bullets[i].type == "trap" || bullets[i].type == "ultrahealing" || bullets[i].type == "rush" || bullets[i].type == "rushStun"){
                 rect(bullets[i].x - base, bullets[i].y - range, bullets[i].width, bullets[i].height);
             } else{
                 if (bullets[i].dir == "up" || bullets[i].dir == "down"){
@@ -319,6 +324,7 @@ function draw() {
                         rect(players[player].x - 5- base, players[player].y - 35-range, (gameTime - players[player].markTimer)/players[player].markDuration * 30, 5);
                     }
                 }
+                
                 if (players[player].class == "tt" && socket.id == player && players[player].canUltimateCooldown == 0){
                     fill(0, 0 , 0, 50)
                     rect(players[player].pastX- base, players[player].pastY - range, 20, 40, 0.1)
@@ -399,7 +405,34 @@ function draw() {
                         fill(252, 50, 77)
                         rect(players[player].x - base + 25, players[player].y - range + 15, 5, 25)
                     }
-
+                }
+                else if (players[player].class == "captain"){
+                    if (gameTime - players[player].ultimateDuration < players[player].ultDurTime && players[player].ultimateDuration != 0){
+                        fill("WHITE")
+                        rect(players[player].x - 5- base, players[player].y - 35-range, 30, 5);
+                        fill("GREY")
+                        rect(players[player].x - 5 - base, players[player].y - 35 - range, (gameTime - players[player].ultimateDuration)/players[player].ultDurTime*30, 5)
+                    }
+                    fill("BROWN")
+                    rect(players[player].x - base - 8, players[player].y + 5-range, 36, 5)
+                    rect(players[player].x - base, players[player].y -range , 20, 5)
+                    fill("WHITE")
+                    rect(players[player].x - base - 10, players[player].y - range - 5, 40, 3)
+                    fill(102, 153, 153)
+                    if (players[player].dir == "right"){
+                        rect(players[player].x - base, players[player].y + 20 - range, 8, 3)
+                        rect(players[player].x - base, players[player].y + 20 - range, 3, 5)
+                        rect(players[player].x - base + 20, players[player].y + 24 - range, 8, 3)
+                        rect(players[player].x - base + 20, players[player].y + 24 - range, 3, 5)
+                    } else if (players[player].dir == "left" || players[player].dir == "up"){
+                        rect(players[player].x - base - 8, players[player].y + 24 - range, 8, 3)
+                        rect(players[player].x - base - 3, players[player].y + 24 - range, 3, 5)
+                        rect(players[player].x - base + 12, players[player].y + 20 - range, 8, 3)
+                        rect(players[player].x - base + 17, players[player].y + 20 - range, 3, 5)
+                    }
+                    for (var i = 0; i < players[player].ammo; i++){
+                        rect(players[player].x - base - 8 + (i - 1)*2, players[player].y - range - 5, 2, 3)
+                    }
                 }
                 else if (players[player].class == "deadeye"){
                     fill("BROWN")
@@ -555,7 +588,7 @@ function draw() {
                 text("J", 15, 20);
                 fill("WHITE")
                 rect(30, 10, 100, 10);
-                if (gameTime - players[player].canShootCooldown > players[player].shootTime){
+                if (gameTime - players[player].canShootCooldown > players[player].shootTime || players[player].canShoot == true){
                     fill("GREEN")
                     rect(30, 10, 100, 10);
                 } else{
@@ -569,7 +602,7 @@ function draw() {
                 text("K", 15, 40);
                 fill("WHITE")
                 rect(30, 30, 100, 10);
-                if (gameTime - players[player].canAbility1Cooldown > players[player].a1Time){
+                if (gameTime - players[player].canAbility1Cooldown > players[player].a1Time || players[player].canAbility1 == true){
                     fill("GREEN")
                     rect(30, 30, 100, 10);
                 } else{
