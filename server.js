@@ -207,7 +207,7 @@ function newConnection(socket) {
 					bullets.push(b);
 				}
 				players[socket.id].canAbility2 = false;
-				players[socket.id].a2Time = 80;
+				players[socket.id].a2Time = 100;
 				players[socket.id].ammo = 20;
 				players[socket.id].canAbility2Cooldown = gameTime;
 				players[socket.id].stun = true;
@@ -215,7 +215,7 @@ function newConnection(socket) {
 				players[socket.id].stunTime = 2;
 			} else if (players[socket.id].class == "captain" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				players[socket.id].canUltimate = false;
-				players[socket.id].ultTime = 150;
+				players[socket.id].ultTime = 200;
 				players[socket.id].ultDurTime = 20;
 				players[socket.id].canUltimateCooldown= gameTime;
 				players[socket.id].ultimateDuration = gameTime;
@@ -1477,15 +1477,15 @@ function newConnection(socket) {
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + players[player].height > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team  && players[player].invinc != true){
 					// Captain
 					if(bullets[i].type == "gunL"){
-						players[player].hp -= 10;
+						players[player].hp -= 7;
 						if (players[bullets[i].shooter] != null){
 							players[bullets[i].shooter].hp += 3;
 						}
 						bulletsToRemove.push(i);
 					} else if(bullets[i].type == "gunR"){
-						players[player].hp -= 7;
-						players[player].yAcceleration = 4*players[player].yAcceleration/5;
-						players[player].xAcceleration = 4*players[player].xAcceleration/5;
+						players[player].hp -= 5;
+						players[player].yAcceleration = 99*players[player].yAcceleration/100;
+						players[player].xAcceleration = 99*players[player].xAcceleration/100;
 						bulletsToRemove.push(i);
 						players[player].slow = true;
 						players[player].slowTime = 10;
