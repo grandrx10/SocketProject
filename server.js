@@ -1930,15 +1930,15 @@ function botCorrection() {
 	players[botCount].x = Math.floor(Math.random() * 5980) + 1;
 	players[botCount].y = 20;
 	if (players[botCount].class == "aiStunner"){
-		players[botCount].hp = 20;
+		players[botCount].hp = 40;
 	} else if (players[botCount].class == "ai"){
-		players[botCount].hp = 30;
+		players[botCount].hp = 50;
 	} else if (players[botCount].class == "aiA"){
-		players[botCount].hp = 30;
+		players[botCount].hp = 50;
 	} else if (players[botCount].class == "aiTank"){
 		players[botCount].hp = 100;
 	} else if (players[botCount].class == "aiMerc"){
-		players[botCount].hp = 20;
+		players[botCount].hp = 40;
 	}
 	players[botCount].bot = true;
 	botCount ++;
