@@ -146,6 +146,8 @@ function draw() {
         if (map == 2){
             fill(220,20,60)
             rect(0, 1000 - range, mapWidth, 600)
+            fill(102, 153, 153)
+            rect(0, -600 - range, mapWidth, -600)
         }
         // fix next time... :( massive rip
         // if (players[socket.id].loadedSong == false){
@@ -206,18 +208,18 @@ function draw() {
         }
     }
 
-    if (keyIsDown(83)){
+    if (keyIsDown(83) && players[socket.id].reversed == false){
         key = "down";
         socket.emit('key',key);
+    } else if (keyIsDown(87) && players[socket.id].reversed == true){
+        key = "up";
+        socket.emit('key',key);
     } 
-    if (keyIsDown(65)){
+    else if (keyIsDown(65)){
         key = "left";
         socket.emit('key',key);
     } else if (keyIsDown(68)){
         key = "right";
-        socket.emit('key',key);
-    } else if (keyIsDown(83)){
-        key = "down";
         socket.emit('key',key);
     } else {
         key = "none";
@@ -322,6 +324,14 @@ function draw() {
                     fill("CYAN")
                     if ((gameTime - players[player].markTimer) < players[player].markDuration){
                         rect(players[player].x - 5- base, players[player].y - 35-range, (gameTime - players[player].markTimer)/players[player].markDuration * 30, 5);
+                    }
+                }
+                if (players[player].reversed == true && players[player].reversedTime != 0){
+                    fill("WHITE")
+                    rect(players[player].x - 5- base, players[player].y - 35-range, 30, 5);
+                    fill(51, 102, 153)
+                    if ((gameTime - players[player].reversedTime) < players[player].reversedDuration){
+                        rect(players[player].x - 5- base, players[player].y - 35-range, (gameTime - players[player].reversedTime)/players[player].reversedDuration * 30, 5);
                     }
                 }
                 
@@ -433,6 +443,11 @@ function draw() {
                     for (var i = 0; i < players[player].ammo; i++){
                         rect(players[player].x - base - 8 + (i - 1)*2, players[player].y - range - 5, 2, 3)
                     }
+                }else if (players[player].class == "rever"){
+                    fill("WHITE")
+                    rect(players[player].x - base - 10, players[player].y - range - 5, 40, 3)
+                    fill ("cyan")
+                    rect(players[player].x - base - 10, players[player].y - range - 5, players[player].charge/100 *40, 3)
                 }
                 else if (players[player].class == "deadeye"){
                     fill("BROWN")
@@ -701,8 +716,12 @@ function keyPressed(){
     if (keyCode == 72) {
         socket.emit('shoot', 72);
     }
-    if (keyIsDown(87)){
+    if (keyIsDown(87) && players[socket.id].reversed == false){
         key = "up";
+        socket.emit('key',key);
+    }
+    if (keyIsDown(83)&& players[socket.id].reversed == true){
+        key = "down";
         socket.emit('key',key);
     }
 }

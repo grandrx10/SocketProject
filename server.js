@@ -166,6 +166,33 @@ function newConnection(socket) {
 
 	function bulletTravel(abilityKey){
 		if (Object.keys(players).indexOf(socket.id) != -1){
+			// reverdant
+			if (players[socket.id].class == "rever" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].invinc != true){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 20, 24, 15, players[socket.id].dir, socket.id, 23, "rgb(51, 204, 204)", "basic", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].canShoot = false;
+				players[socket.id].shootTime = 4;
+				players[socket.id].canShootCooldown = gameTime;
+			} else if (players[socket.id].class == "rever" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 30, 12, players[socket.id].dir, socket.id, 30, "YELLOW", "gravityStun", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].canAbility1 = false;
+				players[socket.id].a1Time = 12;
+				players[socket.id].canAbility1Cooldown = gameTime;
+			}
+			else if (players[socket.id].class == "rever" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false && players[socket.id].reversed == false && players[socket.id].charge > 0){
+				players[socket.id].reversed = true;
+			} else if (players[socket.id].class == "rever" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false && players[socket.id].reversed == true){
+				players[socket.id].reversed = false;
+			} else if (players[socket.id].class == "rever" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
+				// not work
+				b = new Bullet(players[socket.id].x - 150, players[socket.id].y - 150, 300, 300, players[socket.id].dir, socket.id, 0, "rgba(51, 102, 153, 0.2)", "freeze", players[socket.id].team);
+				bullets.push(b);
+				players[socket.id].canUltimate = false;
+				players[socket.id].ultTime = 150;
+				players[socket.id].canUltimateCooldown= gameTime;
+				players[socket.id].ultimateDuration = gameTime;
+			}
 			// captain
 			if (players[socket.id].class == "captain" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].ammo > 0){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 12, 18, 14, players[socket.id].dir, socket.id, 20, "rgb(102, 153, 153)", "gunL", players[socket.id].team);
@@ -1191,6 +1218,23 @@ function newConnection(socket) {
 				players[player].stun = false;
 				players[player].stunCooldown2 = 0
 			}
+			if (players[player].class == "rever"){
+				players[player].charge += 0.5;
+			}
+			if (players[player].y < -600){
+				players[player].hp -= 100;
+			}
+
+			if (players[player].reversed == true && players[player].class == "rever"){
+				players[player].charge -= 1;
+			}
+			if (players[player].charge < 0 && players[player].class == "rever"){
+				players[player].reversed = false;
+				players[player].charge =0 ;
+			}
+			if (players[player].charge > 100 && players[player].class == "rever"){
+				players[player].charge = 100;
+			}
 
 			if (gameTime - players[player].slowCooldown > players[player].slowTime && players[player].slowCooldown != 0){
 				players[player].slow = false;
@@ -1201,6 +1245,10 @@ function newConnection(socket) {
 			if (gameTime - players[player].markTimer > players[player].markDuration && players[player].markTimer != 0){
 				markTimer = 0;
 				players[player].marked = false;
+			}
+			if (gameTime - players[player].reversedTime > players[player].reversedDuration && players[player].reversedTime != 0){
+				reversedTime = 0;
+				players[player].reversed = false;
 			}
 			if (players[player].xSpeed != 0 && players[player].class == "watcher"){
 				players[player].invis = false;
@@ -1256,7 +1304,9 @@ function newConnection(socket) {
 					}
 					else if (bullets[i].type == "ultrahealing" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
-					} else if (bullets[i].type == "pool" && player == bullets[i].shooter){
+					} else if (bullets[i].type == "freeze" && player == bullets[i].shooter){
+						bullets.splice(i, 1)
+					}else if (bullets[i].type == "pool" && player == bullets[i].shooter){
 						bullets.splice(i, 1)
 					}
 				}
@@ -1280,8 +1330,14 @@ function newConnection(socket) {
 
 		// works now
 		for (player in players){
-			players[player].ySpeed -= 0.5;
-			players[player].y -= players[player].ySpeed;
+			//gravity
+			if (players[player].reversed == false){
+				players[player].ySpeed -= 0.5;
+				players[player].y -= players[player].ySpeed;
+			} else if (players[player].reversed == true){
+				players[player].ySpeed += 0.5;
+				players[player].y -= players[player].ySpeed;
+			}
 			if (players[player].stun == false){
 				players[player].BASE -= players[player].xSpeed;
 				players[player].x -= players[player].xSpeed;
@@ -1325,12 +1381,6 @@ function newConnection(socket) {
 			} else if (deadPlayers[player].x < 0){
 				deadPlayers[player].x = 0;
 			}
-			if (deadPlayers[player].y < 0){
-				deadPlayers[player].y = 0
-			} else if (deadPlayers[player].y > 1180){
-				deadPlayers[player].y = 1180;
-				deadPlayers[player].jump = true;
-			}
 		}
 
 		// platform collision and moving
@@ -1340,7 +1390,13 @@ function newConnection(socket) {
 				platforms[i].speed = -platforms[i].speed;
 			}
 			for (player in players){
-				if (players[player].x + 20 > platforms[i].x && players[player].x < platforms[i].x + platforms[i].width && players[player].y + players[player].height > platforms[i].y && players[player].y < platforms[i].y + platforms[i].height) {
+				if (players[player].x + 20 > platforms[i].x && players[player].x < platforms[i].x + platforms[i].width && players[player].y + players[player].height > platforms[i].y && players[player].y < platforms[i].y + platforms[i].height && players[player].reversed == true){
+					players[player].y = platforms[i].y + platforms[i].height;
+					players[player].ySpeed = 0;
+					players[player].jump = true;
+					players[player].secondJump = true;
+				}
+				else if (players[player].x + 20 > platforms[i].x && players[player].x < platforms[i].x + platforms[i].width && players[player].y + players[player].height > platforms[i].y && players[player].y < platforms[i].y + platforms[i].height) {
 					players[player].y = platforms[i].y - players[player].height;
 					players[player].ySpeed = 0;
 					players[player].jump = true;
@@ -1456,6 +1512,9 @@ function newConnection(socket) {
 				if (gameTime - players[player].ultimateDuration > 15 && bullets[i].type == "ultrahealing" && gameTime - players[player].ultimateDuration < 17 && player == bullets[i].shooter && players[player].ultimateDuration != 0){
 					bulletsToRemove.push(i);
 				}
+				if (gameTime - players[player].ultimateDuration > 25 && bullets[i].type == "freeze" && gameTime - players[player].ultimateDuration < 27 && player == bullets[i].shooter && players[player].ultimateDuration != 0){
+					bulletsToRemove.push(i);
+				}
 				if (gameTime - players[player].ultimateDuration > 15 && bullets[i].type == "pool" && gameTime - players[player].ultimateDuration < 17 && player == bullets[i].shooter && players[player].ultimateDuration != 0){
 					bulletsToRemove.push(i);
 				}
@@ -1475,6 +1534,23 @@ function newConnection(socket) {
 					}
 				}
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + players[player].height > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team  && players[player].invinc != true){
+					// reverdant
+					if(bullets[i].type == "basic"){
+						players[player].hp -= 20;
+						bulletsToRemove.push(i);
+						players[player].reversed = true;
+						players[player].reversedTime = gameTime;
+						players[player].reversedDuration = 20;
+					} else if(bullets[i].type == "gravityStun"){
+						players[player].hp -= 10;
+						bulletsToRemove.push(i);
+						players[player].stun = true;
+						players[player].stunTime = 8;
+						players[player].stunCooldown = gameTime;
+						players[player].reversed = true;
+						players[player].reversedTime = gameTime;
+						players[player].reversedDuration = 30;
+					} 
 					// Captain
 					if(bullets[i].type == "gunL"){
 						players[player].hp -= 7;
@@ -1649,12 +1725,22 @@ function newConnection(socket) {
 						players[player].hp += 15;
 						bulletsToRemove.push(i);
 					} else if (bullets[i].type == "ultrahealing"){ 
-						
 						players[player].yAcceleration = 63*players[player].yAcceleration/64;
 						players[player].xAcceleration = 63*players[player].xAcceleration/64;
 						players[player].slow = true;
 						players[player].slowTime = 20;
 						players[player].slowCooldown = gameTime;
+					} else if (bullets[i].type == "freeze"){ 
+						players[player].yAcceleration = 0
+						players[player].ySpeed = 0.5
+						players[player].xSpeed = 0
+						players[player].xAcceleration = 0
+						players[player].slow = true;
+						players[player].slowTime = 5;
+						players[player].slowCooldown = gameTime;
+						players[player].stun = true;
+						players[player].stunTime = 5
+						players[player].stunCooldown2 = gameTime;
 					}
 					// heal detection
 					if (bullets[i].type == "heal"){ 
@@ -1894,6 +1980,7 @@ function Player(username, chosenClass, team){
 	this.dir = "up";
 	this.ySpeed = 0;
 	this.xSpeed = 0;
+	this.reversed = false;
 	if (chosenClass == "assassin"){
 		this.yOrigA = 10
 		this.xOrigA = 8
@@ -1905,6 +1992,10 @@ function Player(username, chosenClass, team){
 		this.yOrigA = 10
 		this.xOrigA = 6
 		this.ammo = 20
+	} else if(chosenClass == "rever"){
+		this.yOrigA = 10
+		this.xOrigA = 6
+		this.charge = 100
 	}
 	else if(chosenClass == "huntsman"){
 		this.yOrigA = 10
@@ -1943,6 +2034,8 @@ function Player(username, chosenClass, team){
 	this.ultDurTime = 0;
 	this.stunTime = 0;
 	this.slowTime = 0;
+	this.reversedTime = 0;
+	this.reversedDuration =0;
 	this.speedTime = 0;
 	this.invincTime = 0;
 	if (chosenClass == "spec"){
@@ -1976,7 +2069,21 @@ function Player(username, chosenClass, team){
 	this.owner = 0;
 	this.bot = false;
 	this.move = function(dir){
-		if(dir == "up" && this.jump == true && this.stun == false){
+		if (dir == "up" && this.reversed == true){
+			this.dir = "up";
+			this.height = this.origHeight/2;
+		} else if (dir == "down" && this.jump == true && this.stun == false && this.reversed == true){
+			this.jump = false;
+			this.ySpeed = - this.yAcceleration;
+			this.dir = "down";
+			this.height = this.origHeight;
+		} else if (dir == "down" && this.secondJump == true && this.stun == false && this.reversed == true){
+			this.secondJump = false;
+			this.ySpeed = - this.yAcceleration;
+			this.dir = "down";
+			this.height = this.origHeight;
+		}
+		else if(dir == "up" && this.jump == true && this.stun == false){
 			this.jump = false;
 			this.ySpeed = this.yAcceleration;
 			this.dir = "up";
@@ -1987,7 +2094,7 @@ function Player(username, chosenClass, team){
 			this.dir = "up";
 			this.height = this.origHeight;
 		}
-		if (dir == "left") {
+		else if (dir == "left") {
 			this.xSpeed = this.xAcceleration;
 			this.dir = "left";
 			this.height = this.origHeight;
@@ -1995,7 +2102,7 @@ function Player(username, chosenClass, team){
 			this.xSpeed = -this.xAcceleration;
 			this.dir = "right";
 			this.height = this.origHeight;
-		} else if (dir == "down") {
+		} else if (dir == "down" && this.reversed == false) {
 			this.dir = "down";
 			this.height = this.origHeight/2;
 		} else {
