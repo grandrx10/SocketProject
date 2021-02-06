@@ -170,19 +170,23 @@ function newConnection(socket) {
 			if (players[socket.id].class == "rever" && players[socket.id].canShoot && abilityKey == 74 && players[socket.id].stun == false && players[socket.id].invinc != true){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 20, 24, 15, players[socket.id].dir, socket.id, 23, "rgb(51, 204, 204)", "basic", players[socket.id].team);
 				bullets.push(b);
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 20, 24, 15, players[socket.id].dir, socket.id, 18, "rgb(51, 204, 204)", "basic", players[socket.id].team);
+				bullets.push(b);
 				players[socket.id].canShoot = false;
 				players[socket.id].shootTime = 4;
 				players[socket.id].canShootCooldown = gameTime;
 			} else if (players[socket.id].class == "rever" && players[socket.id].canAbility1 && abilityKey == 75 && players[socket.id].stun == false){
 				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 30, 12, players[socket.id].dir, socket.id, 30, "YELLOW", "gravityStun", players[socket.id].team);
 				bullets.push(b);
+				b = new Bullet(players[socket.id].x + 5, players[socket.id].y + 15, 30, 12, players[socket.id].dir, socket.id, -30, "YELLOW", "gravityStun", players[socket.id].team);
+				bullets.push(b);
 				players[socket.id].canAbility1 = false;
 				players[socket.id].a1Time = 12;
 				players[socket.id].canAbility1Cooldown = gameTime;
 			}
-			else if (players[socket.id].class == "rever" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false && players[socket.id].reversed == false && players[socket.id].charge > 0){
+			else if (players[socket.id].class == "rever" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].reversed == false && players[socket.id].charge > 0){
 				players[socket.id].reversed = true;
-			} else if (players[socket.id].class == "rever" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].stun == false && players[socket.id].reversed == true){
+			} else if (players[socket.id].class == "rever" && players[socket.id].canAbility2 && abilityKey == 76 && players[socket.id].reversed == true){
 				players[socket.id].reversed = false;
 			} else if (players[socket.id].class == "rever" && players[socket.id].canUltimate && abilityKey == 72 && players[socket.id].stun == false){
 				// not work
@@ -1247,7 +1251,7 @@ function newConnection(socket) {
 				players[player].marked = false;
 			}
 			if (gameTime - players[player].reversedTime > players[player].reversedDuration && players[player].reversedTime != 0){
-				reversedTime = 0;
+				players[player].reversedTime = 0;
 				players[player].reversed = false;
 			}
 			if (players[player].xSpeed != 0 && players[player].class == "watcher"){
@@ -1512,7 +1516,7 @@ function newConnection(socket) {
 				if (gameTime - players[player].ultimateDuration > 15 && bullets[i].type == "ultrahealing" && gameTime - players[player].ultimateDuration < 17 && player == bullets[i].shooter && players[player].ultimateDuration != 0){
 					bulletsToRemove.push(i);
 				}
-				if (gameTime - players[player].ultimateDuration > 25 && bullets[i].type == "freeze" && gameTime - players[player].ultimateDuration < 27 && player == bullets[i].shooter && players[player].ultimateDuration != 0){
+				if (gameTime - players[player].ultimateDuration > 18 && bullets[i].type == "freeze" && gameTime - players[player].ultimateDuration < 20 && player == bullets[i].shooter && players[player].ultimateDuration != 0){
 					bulletsToRemove.push(i);
 				}
 				if (gameTime - players[player].ultimateDuration > 15 && bullets[i].type == "pool" && gameTime - players[player].ultimateDuration < 17 && player == bullets[i].shooter && players[player].ultimateDuration != 0){
@@ -1536,20 +1540,20 @@ function newConnection(socket) {
 				if (players[player].x + players[player].width > bullets[i].x && players[player].x < bullets[i].x + bullets[i].width && players[player].y + players[player].height > bullets[i].y && players[player].y <  bullets[i].y + bullets[i].height && player != bullets[i].shooter && players[player].team != bullets[i].team  && players[player].invinc != true){
 					// reverdant
 					if(bullets[i].type == "basic"){
-						players[player].hp -= 20;
+						players[player].hp -= 18;
 						bulletsToRemove.push(i);
 						players[player].reversed = true;
 						players[player].reversedTime = gameTime;
-						players[player].reversedDuration = 20;
+						players[player].reversedDuration = 5;
 					} else if(bullets[i].type == "gravityStun"){
-						players[player].hp -= 10;
+						players[player].hp -= 8;
 						bulletsToRemove.push(i);
 						players[player].stun = true;
 						players[player].stunTime = 8;
 						players[player].stunCooldown = gameTime;
 						players[player].reversed = true;
 						players[player].reversedTime = gameTime;
-						players[player].reversedDuration = 30;
+						players[player].reversedDuration = 8;
 					} 
 					// Captain
 					if(bullets[i].type == "gunL"){

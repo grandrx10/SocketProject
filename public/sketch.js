@@ -207,23 +207,27 @@ function draw() {
             }   
         }
     }
-
-    if (keyIsDown(83) && players[socket.id].reversed == false){
-        key = "down";
-        socket.emit('key',key);
-    } else if (keyIsDown(87) && players[socket.id].reversed == true){
-        key = "up";
-        socket.emit('key',key);
-    } 
-    else if (keyIsDown(65)){
-        key = "left";
-        socket.emit('key',key);
-    } else if (keyIsDown(68)){
-        key = "right";
-        socket.emit('key',key);
-    } else {
-        key = "none";
-        socket.emit('key',key);
+    if (gameStart){
+        if (players[socket.id] != null){
+            if (keyIsDown(83) && players[socket.id].reversed == false){
+                console.log("trigger")
+                key = "down";
+                socket.emit('key',key);
+            } else if (keyIsDown(87) && players[socket.id].reversed == true){
+                key = "up";
+                socket.emit('key',key);
+            } 
+            else if (keyIsDown(65)){
+                key = "left";
+                socket.emit('key',key);
+            } else if (keyIsDown(68)){
+                key = "right";
+                socket.emit('key',key);
+            } else {
+                key = "none";
+                socket.emit('key',key);
+            }
+        }
     }
     if(gameStart){
         for(player in players) {
@@ -716,13 +720,15 @@ function keyPressed(){
     if (keyCode == 72) {
         socket.emit('shoot', 72);
     }
-    if (keyIsDown(87) && players[socket.id].reversed == false){
-        key = "up";
-        socket.emit('key',key);
-    }
-    if (keyIsDown(83)&& players[socket.id].reversed == true){
-        key = "down";
-        socket.emit('key',key);
+    if (players[socket.id] != null){
+        if (keyIsDown(87) && players[socket.id].reversed == false){
+            key = "up";
+            socket.emit('key',key);
+        }
+        if (keyIsDown(83)&& players[socket.id].reversed == true){
+            key = "down";
+            socket.emit('key',key);
+        }
     }
 }
 
