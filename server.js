@@ -1557,15 +1557,15 @@ function newConnection(socket) {
 					} 
 					// Captain
 					if(bullets[i].type == "gunL"){
-						players[player].hp -= 7;
+						players[player].hp -= 9;
 						if (players[bullets[i].shooter] != null){
 							players[bullets[i].shooter].hp += 3;
 						}
 						bulletsToRemove.push(i);
 					} else if(bullets[i].type == "gunR"){
-						players[player].hp -= 5;
-						players[player].yAcceleration = 99*players[player].yAcceleration/100;
-						players[player].xAcceleration = 99*players[player].xAcceleration/100;
+						players[player].hp -= 7;
+						players[player].yAcceleration = 90*players[player].yAcceleration/100;
+						players[player].xAcceleration = 90*players[player].xAcceleration/100;
 						bulletsToRemove.push(i);
 						players[player].slow = true;
 						players[player].slowTime = 10;
