@@ -25,7 +25,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "ffa";
+var teamMode = "coop";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none"
@@ -238,7 +238,7 @@ function newConnection(socket) {
 					bullets.push(b);
 				}
 				players[socket.id].canAbility2 = false;
-				players[socket.id].a2Time = 100;
+				players[socket.id].a2Time = 30;
 				players[socket.id].ammo = 20;
 				players[socket.id].canAbility2Cooldown = gameTime;
 				players[socket.id].stun = true;
@@ -1039,7 +1039,7 @@ function newConnection(socket) {
 						players[player].xSpeed = 3
 						players[player].dir = "left"
 					}
-				} else {
+				} else if (players[player].class == "aiA") {
 					if (players[player].x < closest){
 						players[player].xSpeed = -5
 						players[player].dir = "right"
@@ -1571,7 +1571,7 @@ function newConnection(socket) {
 						players[player].slowTime = 10;
 						players[player].slowCooldown = gameTime;
 					} else if(bullets[i].type == "rushStun"){
-						players[player].hp -= 3;
+						players[player].hp -= 1;
 						players[player].stun = true;
 						players[player].stunTime = 6;
 						players[player].stunCooldown2 = gameTime;
