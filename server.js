@@ -1645,7 +1645,7 @@ function newConnection(socket) {
         abilityKey == 72 &&
         players[socket.id].stun == false
       ) {
-        players[socket.id].xAcceleration = 12;
+        players[socket.id].xAcceleration = 15;
         players[socket.id].speedTime = 50;
         players[socket.id].speedCooldown = gameTime;
         players[socket.id].canUltimate = false;
@@ -3551,28 +3551,28 @@ function Player(username, chosenClass, team) {
   this.reversed = false;
   if (chosenClass == "assassin") {
     this.yOrigA = 10;
-    this.xOrigA = 8;
+    this.xOrigA = 12;
   } else if (chosenClass == "deadeye") {
     this.yOrigA = 10;
-    this.xOrigA = 6;
+    this.xOrigA = 8;
     this.ammo = 6;
   } else if (chosenClass == "captain") {
     this.yOrigA = 10;
-    this.xOrigA = 6;
+    this.xOrigA = 8;
     this.ammo = 20;
   } else if (chosenClass == "rever") {
     this.yOrigA = 10;
-    this.xOrigA = 6;
+    this.xOrigA = 8;
     this.charge = 100;
   } else if (chosenClass == "huntsman") {
     this.yOrigA = 10;
-    this.xOrigA = 7;
+    this.xOrigA = 10;
   } else if (chosenClass == "spec") {
     this.yOrigA = 12;
     this.xOrigA = 10;
   } else {
     this.yOrigA = 10;
-    this.xOrigA = 6;
+    this.xOrigA = 8;
   }
   if (chosenClass == "tt") {
     this.pastX = this.x;
