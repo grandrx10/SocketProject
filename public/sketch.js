@@ -59,10 +59,6 @@ function setup(){
 
     socket.on("teamMode", displayTeamRadio);
 
-    if (gameStart){
-        socket.on('returnUpdate', update);
-    }
-
     $(document).ready(function() {
         //username modal start     
         $('#myModal').appendTo('body').modal('show');
@@ -142,6 +138,11 @@ function loopSong(charClass){
 function draw() {
     textSize(12)
     background(220);
+
+    if (gameStart){
+        socket.on('returnUpdate', update);
+    }
+
     for (player in players){
         if (player == socket.id){
             base = players[socket.id].BASE;
