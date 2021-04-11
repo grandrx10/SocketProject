@@ -59,6 +59,10 @@ function setup(){
 
     socket.on("teamMode", displayTeamRadio);
 
+    if (gameStart){
+        socket.on('returnUpdate', update);
+    }
+
     $(document).ready(function() {
         //username modal start     
         $('#myModal').appendTo('body').modal('show');
@@ -156,9 +160,7 @@ function draw() {
         //     song.loop();
         // }
     }
-    if (gameStart){
-        socket.on('returnUpdate', update);
-    }
+
     fill("BLACK")
     rect(-20 - base, 0, 20, 600)
     rect(mapWidth - base, 0, 20, 600)
