@@ -1960,17 +1960,6 @@ function newConnection(socket) {
   }
 
   function processUsername(usernameList) {
-    // if(username == "") {
-    // 	players[socket.id] = new Player(socket.id, "spellslinger");
-    // } else if (username == "Merc") {
-    // 	players[socket.id] = new Player(username, "mercenary");
-    // } else if (username == "Assassin") {
-    // 	players[socket.id] = new Player(username, "assassin");
-    // } else if (username == "Tank") {
-    // 	players[socket.id] = new Player(username, "tank");
-    // } else {
-    // 	players[socket.id] = new Player(username, "spellslinger");
-    // }
     var username = usernameList[0];
     if (gameTime > 120 && teamMode == "survival") {
       var characterClass = "spec";
@@ -3060,11 +3049,11 @@ function newConnection(socket) {
             players[player].hp -= 8;
             bulletsToRemove.push(i);
             players[player].stun = true;
-            players[player].stunTime = 8;
+            players[player].stunTime = 3;
             players[player].stunCooldown = gameTime;
             players[player].reversed = true;
             players[player].reversedTime = gameTime;
-            players[player].reversedDuration = 8;
+            players[player].reversedDuration = 3;
           }
           // Captain
           if (bullets[i].type == "gunL") {
