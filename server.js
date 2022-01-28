@@ -1585,12 +1585,12 @@ function newConnection(socket) {
         for (player in players) {
           // retry this please fix this later
           if (
-            players[player].x + players[player].height >=
+            players[player].x + players[player].height + 50 >=
               players[socket.id].x &&
-            players[player].x - 20 <=
+            players[player].x - 50 <=
               players[socket.id].x + players[socket.id].width &&
-            players[player].y + 20 >= players[socket.id].y &&
-            players[player].y - 20 <=
+            players[player].y + 50 >= players[socket.id].y &&
+            players[player].y - 50 <=
               players[socket.id].y + players[socket.id].height &&
             player != socket.id &&
             players[socket.id].team != players[player].team &&
