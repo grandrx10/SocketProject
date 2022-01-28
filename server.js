@@ -3279,11 +3279,11 @@ function newConnection(socket) {
             players[player].hp -= 16;
             bulletsToRemove.push(i);
           } else if (bullets[i].type == "rush") {
-            players[player].hp -= 4.5;
+            players[player].hp -= 7;
           }
           // Tank detection
           if (bullets[i].type == "scatter") {
-            players[player].hp -= 17;
+            players[player].hp -= 14;
             bulletsToRemove.push(i);
           }
           // assassin detection
