@@ -2981,9 +2981,9 @@ function newConnection(socket) {
           bulletsToRemove.push(i);
         }
         if (
-          gameTime - players[player].ultimateDuration > 18 &&
+          gameTime - players[player].ultimateDuration > 10 &&
           bullets[i].type == "freeze" &&
-          gameTime - players[player].ultimateDuration < 20 &&
+          gameTime - players[player].ultimateDuration < 15 &&
           player == bullets[i].shooter &&
           players[player].ultimateDuration != 0
         ) {
