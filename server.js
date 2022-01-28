@@ -3336,7 +3336,7 @@ function newConnection(socket) {
             players[player].stunCooldown = gameTime;
             bulletsToRemove.push(i);
           } else if (bullets[i].type == "beam") {
-            players[player].hp -= 1.5;
+            players[player].hp -= 2;
           }
           if (players[player].hp <= 0) {
             if (players[bullets[i].shooter] == undefined) {
