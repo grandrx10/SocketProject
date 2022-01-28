@@ -1952,7 +1952,7 @@ function newConnection(socket) {
         players[socket.id].stunTime = 12;
         players[socket.id].stunCooldown2 = gameTime;
         players[socket.id].canUltimate = false;
-        players[socket.id].ultTime = 180;
+        players[socket.id].ultTime = 100;
         players[socket.id].canUltimateCooldown = gameTime;
         players[socket.id].ultimateDuration = gameTime;
       }
