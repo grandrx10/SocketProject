@@ -24,7 +24,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "coop";
+var teamMode = "ffa";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none";
@@ -1845,7 +1845,7 @@ function newConnection(socket) {
         );
         bullets.push(b);
         players[socket.id].canShoot = false;
-        players[socket.id].shootTime = 3.5;
+        players[socket.id].shootTime = 2.5;
         players[socket.id].canShootCooldown = gameTime;
       } else if (
         players[socket.id].class == "spellslinger" &&
@@ -1867,7 +1867,7 @@ function newConnection(socket) {
         );
         bullets.push(b);
         players[socket.id].canAbility1 = false;
-        players[socket.id].a1Time = 12;
+        players[socket.id].a1Time = 7;
         players[socket.id].canAbility1Cooldown = gameTime;
       } else if (
         players[socket.id].class == "spellslinger" &&
