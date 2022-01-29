@@ -24,7 +24,7 @@ var gameTime = 0;
 var mapWidth = 6000;
 var mapHeight = 1200;
 var mapDeathWall = 0;
-var teamMode = "ffa";
+var teamMode = "coop";
 var survivalCount = 0;
 var winnerDecided = 0;
 var winner = "none";
@@ -3279,7 +3279,7 @@ function newConnection(socket) {
             players[player].hp -= 16;
             bulletsToRemove.push(i);
           } else if (bullets[i].type == "rush") {
-            players[player].hp -= 7;
+            players[player].hp -= 5.5;
           }
           // Tank detection
           if (bullets[i].type == "scatter") {
