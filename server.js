@@ -530,7 +530,7 @@ function newConnection(socket) {
         );
         bullets.push(b);
         players[socket.id].canShoot = false;
-        players[socket.id].shootTime = 6;
+        players[socket.id].shootTime = 6 - players[socket.id].evil * 0.01;
         players[socket.id].canShootCooldown = gameTime;
       } else if (
         players[socket.id].class == "ae" &&
@@ -552,7 +552,7 @@ function newConnection(socket) {
         );
         bullets.push(b);
         players[socket.id].canAbility1 = false;
-        players[socket.id].a1Time = 30;
+        players[socket.id].a1Time = 30 - players[socket.id].evil * 0.05;
         players[socket.id].canAbility1Cooldown = gameTime;
       } else if (
         players[socket.id].class == "ae" &&
@@ -560,8 +560,7 @@ function newConnection(socket) {
         abilityKey == 76 &&
         players[socket.id].stun == false
       ) {
-        players[socket.id].jump = true;
-        players[socket.id].secondJump = true;
+        players[socket.id].evil += 3;
         players[socket.id].canAbility2 = false;
         players[socket.id].a2Time = 70 - players[socket.id].evil * 0.2;
         players[socket.id].canAbility2Cooldown = gameTime;
