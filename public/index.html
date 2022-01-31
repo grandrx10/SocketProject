@@ -1,66 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
-        <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/addons/p5.sound.min.js"></script>
-        <script src = "https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
-        <link rel = "stylesheet" type = "text/css" href = "style.css">
-        <meta charset = "utf-8"/>
-        <script src = "sketch.js"></script>
-    </head>
-    <body>
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-              <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Type Your User Name</h4>
-                </div>
-                <div class="modal-body">
-                  <p id="defaultUserName">If you don't put one, one will be randomly generated for you.</p>
-                  <input id="userName" type="text" />
-                  <p>Controls: WASD for movement. H - ultimate, J - primary fire, K - ability 1, L - ability 2</p>
-                  <p>Choose a class: (<a href="instructions.html" target="_blank">Instructions</a>)</p>
-                  <input type="radio" id="spellslinger" name="class" value="spellslinger" checked>
-                  <label for="spellslinger">Spellslinger</label><br>
-                  <input type="radio" id="mercenary" name="class" value="mercenary">
-                  <label for="mercenary">Mercenary</label><br>
-                  <input type="radio" id="assassin" name="class" value="assassin">
-                  <label for="assassin">Assassin</label><br>
-                  <input type="radio" id="tank" name="class" value="tank">
-                  <label for="tank">Tank</label><br>
-                  <input type="radio" id="huntsman" name="class" value="huntsman">
-                  <label for="huntsman">Huntsman</label><br>
-                  <input type="radio" id="doc" name="class" value="doc">
-                  <label for="doc">Doc</label><br>
-                  <input type="radio" id="deadeye" name="class" value="deadeye">
-                  <label for="deadeye">Deadeye</label><br>
-                  <input type="radio" id= "necro" name="class" value="necro">
-                  <label for="necro">Necromancer</label><br>
-                  <input type="radio" id= "tt" name="class" value="tt">
-                  <label for="tt">Time Traveller</label><br>
-                  <input type="radio" id= "ae" name="class" value="ae">
-                  <label for="ae">Ancient Evil</label><br>
-                  <input type="radio" id= "watcher" name="class" value="watcher">
-                  <label for="watcher">Watcher</label><br>
-                  <input type="radio" id= "captain" name="class" value="captain">
-                  <label for="captain">Captain</label><br>
-                  <input type="radio" id= "rever" name="class" value="rever">
-                  <label for="rever">Reverdant</label><br>
-                  <input type="radio" id= "spec" name="class" value="spec">
-                  <label for="spec">Spectator</label><br>
-                  <div id = "team"> </div>
-                  
-                </div>
-                <div class="modal-footer">
-                  <button id="theButton" type="button" class="btn btn-default" data-dismiss="modal">Play</button>
-                </div>
-              </div>
-            </div>
-          </div>      
-    </body>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/addons/p5.sound.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="utf-8" />
+  <script src="sketch.js"></script>
+</head>
+
+<body>
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Type Your User Name</h4>
+        </div>
+        <div class="modal-body">
+          <p id="defaultUserName">If you don't put one, one will be randomly generated for you.</p>
+          <input id="userName" type="text" />
+          <p>Controls: WASD for movement. H - ultimate, J - primary fire, K - ability 1, L - ability 2</p>
+          <p>Choose a class: (<a href="instructions.html" target="_blank">Instructions</a>)</p>
+          <input type="radio" id="spellslinger" name="class" value="spellslinger" checked>
+          <label for="spellslinger">Spellslinger</label><br>
+          <input type="radio" id="mercenary" name="class" value="mercenary">
+          <label for="mercenary">Mercenary</label><br>
+          <input type="radio" id="assassin" name="class" value="assassin">
+          <label for="assassin">Assassin</label><br>
+          <input type="radio" id="tank" name="class" value="tank">
+          <label for="tank">Tank</label><br>
+          <input type="radio" id="huntsman" name="class" value="huntsman">
+          <label for="huntsman">Huntsman</label><br>
+          <input type="radio" id="doc" name="class" value="doc">
+          <label for="doc">Doc</label><br>
+          <input type="radio" id="deadeye" name="class" value="deadeye">
+          <label for="deadeye">Deadeye</label><br>
+          <input type="radio" id="necro" name="class" value="necro">
+          <label for="necro">Necromancer</label><br>
+          <input type="radio" id="tt" name="class" value="tt">
+          <label for="tt">Time Traveller</label><br>
+          <input type="radio" id="ae" name="class" value="ae">
+          <label for="ae">Ancient Evil</label><br>
+          <input type="radio" id="watcher" name="class" value="watcher">
+          <label for="watcher">Watcher</label><br>
+          <input type="radio" id="captain" name="class" value="captain">
+          <label for="captain">Captain</label><br>
+          <input type="radio" id="rever" name="class" value="rever">
+          <label for="rever">Reverdant</label><br>
+          <input type="radio" id="samurai" name="class" value="samurai">
+          <label for="samurai">Samurai</label><br>
+          <input type="radio" id="spec" name="class" value="spec">
+          <label for="spec">Spectator</label><br>
+          <div id="team"> </div>
+
+        </div>
+        <div class="modal-footer">
+          <button id="theButton" type="button" class="btn btn-default" data-dismiss="modal">Play</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>

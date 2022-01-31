@@ -45,6 +45,8 @@ function preload(){
     tankSong = createAudio("Assets/doom.mp3");
     docSong = createAudio("Assets/civilWar.mp3")
     captainSong = createAudio("Assets/stillFeel.mp3")
+    samuraiSong = createAudio("Assets/ManInTheMirror.mp3")
+    reverSong = createAudio("Assets/vitaminc.mp3")
 }
 
 
@@ -132,6 +134,12 @@ function loopSong(charClass){
     } else if (charClass == "captain"){
         captainSong.volume(0.05);
         captainSong.loop();
+    } else if (charClass == "samurai"){
+        samuraiSong.volume(0.05);
+        samuraiSong.loop();
+    } else if (charClass == "rever"){
+        reverSong.volume(0.2);
+        reverSong.loop();
     }
 }
 
@@ -294,7 +302,7 @@ function draw() {
                     textAlign(CENTER);
                     fill("black");
                     text(players[player].username, players[player].x + 10 - base, players[player].y - 15-range);
-                    if (players[player].xAcceleration != players[player].xOrigA){
+                    if (players[player].xAcceleration != players[player].xOrigA && players[player].class != "samurai"){
                         fill("white")
                         rect(players[player].x - 5 - base, players[player].y - 40-range, 30, 5);
                         fill(255, 178, 102)
@@ -423,6 +431,33 @@ function draw() {
                         rect(players[player].x - base + 25, players[player].y - range + 15, 5, 25)
                     }
                 }
+                else if (players[player].class == "samurai"){
+                    if (gameTime - players[player].ultimateDuration < players[player].ultDurTime && players[player].ultimateDuration != 0){
+                        fill("WHITE")
+                        rect(players[player].x - 5- base, players[player].y - 35-range, 30, 5);
+                        fill("GOLD")
+                        rect(players[player].x - 5 - base, players[player].y - 35 - range, (gameTime - players[player].ultimateDuration)/players[player].ultDurTime*30, 5)
+                    }
+                    if (players[player].dir == "right"|| players[player].dir == "up"){
+                        fill("rgb(237, 133, 133)")
+                        rect(players[player].x - base - 2, players[player].y - range, 24, 12)
+                        rect(players[player].x - base - 7, players[player].y - range - 5, 10, 10)
+                        rect(players[player].x - base - 13, players[player].y - range - 2, 8, 20)
+                        fill("black")
+                        rect(players[player].x - base + 5, players[player].y - range + 12, 4, 4)
+                        fill("red")
+                        rect(players[player].x - base + 15, players[player].y - range + 12, 4, 4)
+                    } else if (players[player].dir == "left"|| players[player].dir == "down"){
+                        fill("rgb(237, 133, 133)")
+                        rect(players[player].x - base - 2, players[player].y - range, 24, 12)
+                        rect(players[player].x - base + 18, players[player].y - range - 5, 10, 10)
+                        rect(players[player].x - base + 26, players[player].y - range - 2, 8, 20)
+                        fill("black")
+                        rect(players[player].x - base, players[player].y - range + 12, 4, 4)
+                        fill("red")
+                        rect(players[player].x - base + 10, players[player].y - range + 12, 4, 4)
+                    }
+                }
                 else if (players[player].class == "captain"){
                     if (gameTime - players[player].ultimateDuration < players[player].ultDurTime && players[player].ultimateDuration != 0){
                         fill("WHITE")
@@ -451,6 +486,9 @@ function draw() {
                         rect(players[player].x - base - 8 + (i - 1)*2, players[player].y - range - 5, 2, 3)
                     }
                 }else if (players[player].class == "rever"){
+                    fill("black")
+                    rect(players[player].x - base + 7.5, players[player].y -range , 5, 5)
+                    rect(players[player].x - base + 7.5, players[player].y -range + 8 , 5, 5)
                     fill("WHITE")
                     rect(players[player].x - base - 10, players[player].y - range - 5, 40, 3)
                     fill ("cyan")
@@ -578,7 +616,7 @@ function draw() {
                     fill(255, 178, 102)
                     rect(players[player].x - 5- base, players[player].y -range- 40, (gameTime - players[player].ultimateDuration)/players[player].ultDurTime * 30, 5);
                 }
-                if (players[player].xAcceleration > players[player].xOrigA && players[player].class != "juggernaut"){
+                if (players[player].xAcceleration > players[player].xOrigA && players[player].class != "samurai" && players[player].class != "juggernaut"){
                     fill("white")
                     rect(players[player].x - 5- base, players[player].y-range - 40, 30, 5);
                     fill(255, 178, 102)
