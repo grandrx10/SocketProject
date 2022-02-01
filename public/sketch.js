@@ -32,6 +32,7 @@ var watcherSong
 var docSong
 var wave
 var captainSong
+var song
 
 function preload(){
     deadeyeSong = createAudio("Assets/sixShooter.mp3");
@@ -102,44 +103,57 @@ function setup(){
 
 function loopSong(charClass){
     if (charClass == "huntsman"){
-        huntsmanSong.volume(1.0);
-        huntsmanSong.loop();
+        song = huntsmanSong
+        song.volume(1.0);
+        song.loop();
     } else if (charClass == "deadeye"){
-        deadeyeSong.volume(0.1);
-        deadeyeSong.loop();
+        song = deadeyeSong
+        song.volume(0.1);
+        song.loop();
     } else if (charClass == "spellslinger"){
-        spellslingerSong.volume(0.05);
-        spellslingerSong.loop();
+        song = spellslingerSong
+        song.volume(0.05);
+        song.loop();
     } else if (charClass == "ae"){
-        aeSong.volume(0.05);
-        aeSong.loop();
+        song = aeSong
+        song.volume(0.05);
+        song.loop();
     } else if (charClass == "assassin"){
-        assassinSong.volume(0.1);
-        assassinSong.loop();
+        song = assassinSong
+        song.volume(0.1);
+        song.loop();
     } else if (charClass == "necro"){
-        necromancerSong.volume(0.1);
-        necromancerSong.loop();
+        song = necromancerSong
+        song.volume(0.1);
+        song.loop();
     } else if (charClass == "tt"){
-        ttSong.volume(0.1);
-        ttSong.loop();
+        song = ttSong
+        song.volume(0.1);
+        song.loop();
     } else if (charClass == "mercenary"){
-        mercSong.volume(0.1);
-        mercSong.loop();
+        song = mercSong
+        song.volume(0.1);
+        song.loop();
     } else if (charClass == "tank"){
-        tankSong.volume(0.05);
-        tankSong.loop();
+        song = tankSong
+        song.volume(0.05);
+        song.loop();
     } else if (charClass == "doc"){
-        docSong.volume(0.1);
-        docSong.loop();
+        song = docSong;
+        song.volume(0.1);
+        song.loop();
     } else if (charClass == "captain"){
-        captainSong.volume(0.05);
-        captainSong.loop();
+        song = captainSong
+        song.volume(0.05);
+        song.loop();
     } else if (charClass == "samurai"){
-        samuraiSong.volume(0.05);
-        samuraiSong.loop();
+        song = samuraiSong
+        song.volume(0.05);
+        song.loop();
     } else if (charClass == "rever"){
-        reverSong.volume(0.2);
-        reverSong.loop();
+        song = reverSong
+        song.volume(0.2);
+        song.loop();
     }
 }
 
@@ -295,9 +309,9 @@ function draw() {
                     }
                     // healthbars
                     fill("white")
-                    rect(players[player].x - 10 - base, players[player].y - 10-range, 40, 5);
+                    rect(players[player].x - players[player].width/2 - base, players[player].y - 10-range, players[player].origHeight, 5);
                     fill(44, 222, 0)
-                    rect(players[player].x - 10 - base, players[player].y - 10-range, 40 * players[player].hp/100, 5);
+                    rect(players[player].x - players[player].width/2 - base, players[player].y - 10-range, players[player].origHeight * players[player].hp/players[player].maxHp, 5);
                     // usernames
                     textAlign(CENTER);
                     fill("black");
@@ -572,7 +586,7 @@ function draw() {
                 } 
                 else if (players[player].class == "tank"){
                     fill(66, 245, 239)
-                    rect(players[player].x - 2 - base, players[player].y -range+ 5, 24, 10)
+                    rect(players[player].x - 2 - base, players[player].y -range+ 5, 4 + players[player].width, 10)
                 } else if (players[player].class == "aiTank"){
                     fill(66, 245, 239)
                     rect(players[player].x - 2 - base, players[player].y -range+ 5, 24, 10)
@@ -625,9 +639,9 @@ function draw() {
                 // healthbars
                 if (players[player].class != "juggernaut"){
                     fill("white")
-                    rect(players[player].x - 10- base, players[player].y-range - 10, 40, 5);
+                    rect(players[player].x - players[player].width/2- base, players[player].y-range - 10, players[player].origWidth*2, 5);
                     fill(44, 222, 0)
-                    rect(players[player].x - 10- base, players[player].y -range- 10, 40 * players[player].hp/100, 5);
+                    rect(players[player].x - players[player].width/2- base, players[player].y -range- 10, players[player].origWidth*2 * players[player].hp/players[player].maxHp, 5);
                 } else{
                     fill("white")
                     rect(players[player].x - 14- base, players[player].y-range - 10, 60, 5);
@@ -637,7 +651,7 @@ function draw() {
                 // usernames
                 textAlign(CENTER);
                 fill("black");
-                text(players[player].username, players[player].x + 10- base, players[player].y -range- 15);
+                text(players[player].username, players[player].x + players[player].width/2 - base, players[player].y -range- 15);
             }
             // Cooldowns
             if(socket.id == player){
@@ -799,8 +813,8 @@ function update(returnList){
 }
 
 function respawn(){
-    song.stop();
     $('#myModal').appendTo('body').modal('show');
+    song.stop()
 }
 
 function displayTeamRadio(teamMode){
