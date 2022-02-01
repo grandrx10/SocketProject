@@ -289,7 +289,7 @@ function newConnection(socket) {
           players[socket.id].y - 250,
           500,
           20,
-          players[socket.id].dir,
+          "left",
           socket.id,
           0,
           "yellow",
@@ -302,7 +302,7 @@ function newConnection(socket) {
           players[socket.id].y - 250,
           20,
           500,
-          players[socket.id].dir,
+          "left",
           socket.id,
           0,
           "yellow",
@@ -315,7 +315,7 @@ function newConnection(socket) {
           players[socket.id].y - 250,
           20,
           500,
-          players[socket.id].dir,
+          "left",
           socket.id,
           0,
           "yellow",
@@ -328,7 +328,7 @@ function newConnection(socket) {
           players[socket.id].y + 250,
           520,
           20,
-          players[socket.id].dir,
+          "left",
           socket.id,
           0,
           "yellow",
@@ -1727,7 +1727,7 @@ function newConnection(socket) {
             15,
             50,
             socket.id,
-            players[socket.id].dir
+            players[socket.id].dir, 50, 0
           )
         );
         players[socket.id].wall = true;
@@ -3042,7 +3042,7 @@ function newConnection(socket) {
           wallsToRemove.push(i);
           players[player].wallCooldown = 0;
         } 
-        else if (walls[i].user == player && player[i].class == "tank") {
+        else if (walls[i].user == player && players[player].class == "tank") {
           if (walls[i].dir == "left") {
             walls[i].x = players[player].x - 35;
             walls[i].y = players[player].y - 10;
@@ -3171,6 +3171,7 @@ function newConnection(socket) {
             bullets[i].speed = - bullets[i].speed;
             bullets[i].team = players[player].team;
             bullets[i].shooter = player;
+            bullets[i].colour = "rgb(71, 0, 55)"
         }
         else if (
           players[player].x + players[player].width > bullets[i].x &&
@@ -3183,7 +3184,7 @@ function newConnection(socket) {
         ) {
           // Samurai
           if (bullets[i].type == "swordSlash") {
-            players[player].hp -= 9;
+            players[player].hp -= 5;
           } else if (bullets[i].type == "groundStun") {
             players[player].stun = true;
             players[player].stunTime = 1;
