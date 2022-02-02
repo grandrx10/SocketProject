@@ -47,7 +47,8 @@ function preload(){
     docSong = createAudio("Assets/civilWar.mp3")
     captainSong = createAudio("Assets/stillFeel.mp3")
     samuraiSong = createAudio("Assets/ManInTheMirror.mp3")
-    reverSong = createAudio("Assets/vitaminc.mp3")
+    reverSong = createAudio("Assets/HMU.mp3")
+    cardmasterSong = createAudio("Assets/talkaboutyou.mp3")
 }
 
 
@@ -152,7 +153,11 @@ function loopSong(charClass){
         song.loop();
     } else if (charClass == "rever"){
         song = reverSong
-        song.volume(0.2);
+        song.volume(0.05);
+        song.loop();
+    } else if (charClass == "cardmaster"){
+        song = cardmasterSong
+        song.volume(0.1);
         song.loop();
     }
 }
@@ -417,6 +422,21 @@ function draw() {
                         rect(players[player].x - base + 12, players[player].y - range + 15, 8, 5)
                         
                     }
+                } 
+                if (players[player].class == "cardmaster"){
+                    if(players[player].height != 20){
+                        fill("black")
+                        rect(players[player].x - base, players[player].y - range + 30, 20, 10)
+                        fill("brown")
+                        rect(players[player].x - base, players[player].y - range + 25, 20, 5)
+                        fill("blue")
+                        rect(players[player].x - base + 2, players[player].y - range + 23, 4, 8)
+                        fill("red")
+                        rect(players[player].x - base+ 8, players[player].y - range + 23, 4, 8)
+                        fill("yellow")
+                        rect(players[player].x - base + 14, players[player].y - range + 23, 4, 8)
+                        
+                    }
                 }
                 else if (players[player].class == "necro"){
                     if (players[player].dir == "down"){
@@ -565,7 +585,7 @@ function draw() {
                         rect(players[player].x - base - 11, players[player].y-range + 16, 10, 20)
                     }
                 }
-                else if(players[player].class == "assassin"){
+                else if(players[player].class == "assassin" || players[player].class == "aiA"){
                     fill("BLACK")
                     if (players[player].dir == "left"){
                         rect(players[player].x - base, players[player].y + 10-range, 14, 6)
@@ -574,36 +594,12 @@ function draw() {
                     } else {
                         rect(players[player].x + 6 - base, players[player].y -range+ 10, 14, 6)
                     }
-                } else if(players[player].class == "aiA"){
-                    fill("BLACK")
-                    if (players[player].dir == "left"){
-                        rect(players[player].x - base, players[player].y + 10-range, 14, 6)
-                    } else if (players[player].dir == "up"){
-                        rect(players[player].x - base, players[player].y + 10-range, 14, 6)
-                    } else {
-                        rect(players[player].x + 6 - base, players[player].y -range+ 10, 14, 6)
-                    }
-                } 
-                else if (players[player].class == "tank"){
+                }
+                else if (players[player].class == "tank" || players[player].class == "aiTank"){
                     fill(66, 245, 239)
                     rect(players[player].x - 2 - base, players[player].y -range+ 5, 4 + players[player].width, 10)
-                } else if (players[player].class == "aiTank"){
-                    fill(66, 245, 239)
-                    rect(players[player].x - 2 - base, players[player].y -range+ 5, 24, 10)
                 }
-                else if (players[player].class == "mercenary"){
-                    fill(66, 47, 79)
-                    if (players[player].dir == "left"){
-                        rect(players[player].x - base, players[player].y-range, 20, 8)
-                        rect(players[player].x - 6 - base, players[player].y -range+ 8, 26, 8)
-                    } else if (players[player].dir == "up"){
-                        rect(players[player].x- base, players[player].y-range, 20, 8)
-                        rect(players[player].x - 6 - base, players[player].y-range + 8, 26, 8)
-                    } else {
-                        rect(players[player].x- base, players[player].y-range, 20, 8)
-                        rect(players[player].x- base, players[player].y -range+ 8, 26, 8)
-                    }
-                } else if (players[player].class == "aiMerc"){
+                else if (players[player].class == "mercenary" || players[player].class == "aiMerc"){
                     fill(66, 47, 79)
                     if (players[player].dir == "left"){
                         rect(players[player].x - base, players[player].y-range, 20, 8)

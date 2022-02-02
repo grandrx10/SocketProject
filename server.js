@@ -45,6 +45,7 @@ var increaseWave = true;
 var playerX = [];
 var killing = ["none", "none", "none"];
 var killed = ["none", "none", "none"];
+var directions = ["up", "down", "left", "right"]
 
 setInterval(function () {
   gameTime++;
@@ -54,7 +55,9 @@ var names = ["Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Greenwold
 "Lance", "Molly", "Nancy", "Octo", "Prince", "Quintus", "Reaver", "Sally", "Tango", "Vanity", "Underdog", "Wendle", "Xander",
 "Youth", "Zebra", "Arman", "Beta", "Ceter", "Dovomov", "Eliot", "Fang", "Gaul", "Haven", "Io", "Jello", "Karen", "Larry",
 "Maven", "North Star", "Ool", "Patterson", "Queen", "Realter", "Sanguine", "Tommy", "Vindy", "Ursula", "Wehrmacht", "X-Ray", "Youngstan",
-"Zai"];
+"Zai",
+"Alex", "Liam", "Aidan", "Kourosh"
+];
 
 if (map == 1) {
   platforms.push(new Platform(0, 500, 300, 20, 0));
@@ -175,7 +178,138 @@ function newConnection(socket) {
 
   function bulletTravel(abilityKey) {
     if (Object.keys(players).indexOf(socket.id) != -1) {
-      // samurai tech not finished
+      // cardmaster class
+      if (
+        players[socket.id].class == "cardmaster" &&
+        players[socket.id].canShoot &&
+        abilityKey == 74 &&
+        players[socket.id].stun == false &&
+        players[socket.id].invinc != true
+      ) {
+        b = new Bullet(
+          players[socket.id].x + 5,
+          players[socket.id].y + 10,
+          20,
+          30,
+          "left",
+          socket.id,
+          0,
+          "rgb(15, 51, 151)",
+          "card",
+          players[socket.id].team, 100
+        );
+        bullets.push(b);
+        players[socket.id].canShoot = false;
+        players[socket.id].shootTime = 5;
+        players[socket.id].canShootCooldown = gameTime;
+      } else if (
+        players[socket.id].class == "cardmaster" &&
+        players[socket.id].canAbility1 &&
+        abilityKey == 75 &&
+        players[socket.id].stun == false
+      ) {
+        for (var i = bullets.length - 1; i >= 0; i--) {
+          if (
+            bullets[i].shooter == socket.id &&
+            bullets[i].type == "card"
+          ) {
+            for (var c = 0; c < 4; c++){
+              b = new Bullet(
+                bullets[i].x + 5,
+                bullets[i].y,
+                40,
+                20,
+                directions[c],
+                socket.id,
+                10,
+                "red",
+                "redCard",
+                players[socket.id].team, 15
+              );
+              bullets.push(b);
+              b = new Bullet(
+                bullets[i].x+ 5,
+                bullets[i].y,
+                40,
+                20,
+                directions[c],
+                socket.id,
+                5,
+                "red",
+                "redCard",
+                players[socket.id].team, 15
+              );
+              bullets.push(b);
+            }
+            bullets.splice(i, 1);
+          }
+        }
+        players[socket.id].canAbility1 = false;
+        players[socket.id].a1Time = 2;
+        players[socket.id].canAbility1Cooldown = gameTime;
+      } else if (
+        players[socket.id].class == "cardmaster" &&
+        players[socket.id].canAbility2 &&
+        abilityKey == 76 &&
+        players[socket.id].stun == false
+      ) {
+        for (var i = bullets.length - 1; i >= 0; i--) {
+          if (
+            bullets[i].shooter == socket.id &&
+            bullets[i].type == "card"
+          ) {
+            b = new Bullet(
+              bullets[i].x - 30,
+              bullets[i].y - 30,
+              80,
+              80,
+              "left",
+              socket.id,
+              0,
+              "yellow",
+              "yellowCard",
+              players[socket.id].team, 10
+            );
+            bullets.push(b);
+            bullets.splice(i, 1);
+          }
+        }
+        players[socket.id].canAbility2 = false;
+        players[socket.id].a2Time = 2;
+        players[socket.id].canAbility2Cooldown = gameTime;
+      } else if (
+        players[socket.id].class == "cardmaster" &&
+        players[socket.id].canUltimate &&
+        abilityKey == 72 &&
+        players[socket.id].stun == false // orbital lasers
+      ) {
+        for (var i = bullets.length - 1; i >= 0; i--) {
+          if (
+            bullets[i].shooter == socket.id &&
+            bullets[i].type == "card"
+          ) {
+            b = new Bullet(
+              bullets[i].x - 20,
+              -mapHeight, // continue laser here
+              60,
+              3000,
+              "left",
+              socket.id,
+              0,
+              "rgb(18, 28, 41)",
+              "orbitalStrike",
+              players[socket.id].team, 10
+            );
+            bullets.push(b);
+            bullets.splice(i, 1);
+          }
+        }
+        players[socket.id].canUltimate = false;
+        players[socket.id].ultTime = 150;
+        
+        players[socket.id].canUltimateCooldown = gameTime;
+      }
+      // samurai class
       if (
         players[socket.id].class == "samurai" &&
         players[socket.id].canShoot &&
@@ -247,10 +381,10 @@ function newConnection(socket) {
         abilityKey == 75 &&
         players[socket.id].stun == false
       ) {
-        players[socket.id].ultDurTime = 20;
+        players[socket.id].ultDurTime = 5;
         players[socket.id].ultimateDuration = gameTime;
         players[socket.id].canAbility1 = false;
-        players[socket.id].a1Time = 100;
+        players[socket.id].a1Time = 20;
         players[socket.id].canAbility1Cooldown = gameTime;
       } else if (
         players[socket.id].class == "samurai" &&
@@ -3186,6 +3320,9 @@ function newConnection(socket) {
             bullets[i].team = players[player].team;
             bullets[i].shooter = player;
             bullets[i].colour = "rgb(71, 0, 55)"
+            players[player].canAbility1 = true;
+            players[player].a1Time = 0;
+            players[player].canAbility1Cooldown = 0;
         }
         else if (
           players[player].x + players[player].width > bullets[i].x &&
@@ -3196,6 +3333,18 @@ function newConnection(socket) {
           players[player].team != bullets[i].team &&
           players[player].invinc != true
         ) {
+          // Cardmaster
+          if (bullets[i].type == "redCard") {
+            players[player].hp -= 10;
+            bulletsToRemove.push(i);
+          } else if (bullets[i].type == "yellowCard") {
+            players[player].hp -= 0.5;
+            players[player].stun = true;
+            players[player].stunTime = 1;
+            players[player].stunCooldown = gameTime;
+          } else if (bullets[i].type == "orbitalStrike") {
+            players[player].hp -= 3;
+          }
           // Samurai
           if (bullets[i].type == "swordSlash") {
             players[player].hp -= 5;
